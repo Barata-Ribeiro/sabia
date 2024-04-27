@@ -11,21 +11,26 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 @Service
 public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret_key;
 
-    public String generateToken(User user) {
+    public Entry<String, Instant> generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret_key);
+            Instant expirationDate = this.generateExpirationDate();
 
-            return JWT.create()
+            String token = JWT.create()
                     .withIssuer("auth0")
                     .withSubject(user.getUsername())
-                    .withExpiresAt(this.generateExpirationDate())
+                    .withExpiresAt(expirationDate)
                     .sign(algorithm);
+
+            return new SimpleEntry<>(token, expirationDate);
         } catch (JWTCreationException exception) {
          throw new RuntimeException("Error while authenticating.");
         }
