@@ -2,6 +2,8 @@ package com.barataribeiro.sabia.controller;
 
 import com.barataribeiro.sabia.dto.auth.LoginRequestDTO;
 import com.barataribeiro.sabia.dto.auth.LoginResponseDTO;
+import com.barataribeiro.sabia.dto.auth.RegisterRequestDTO;
+import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
@@ -17,6 +19,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -37,7 +40,33 @@ public class AuthController {
             String token = tokenAndExpiration.getKey();
             String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
+            if (user.getRole().equals(Roles.BANNED) || user.getRole().equals(Roles.NONE)) {
+                return ResponseEntity.badRequest().build();
+            }
+
             return ResponseEntity.ok(new LoginResponseDTO(user.getUsername(), token, expirationDate));
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody RegisterRequestDTO body) {
+        var sanitizedUsername = body.username().trim().toLowerCase();
+        Optional<User> user = this.userRepository.findByUsername(sanitizedUsername);
+
+        if(user.isEmpty()) {
+            User newUser = new User();
+
+            newUser.setPassword(passwordEncoder.encode(body.password()));
+            newUser.setUsername(sanitizedUsername);
+            newUser.setDisplay_name(body.display_name().trim());
+            newUser.setEmail(body.email().trim());
+            newUser.setRole(Roles.MEMBER);
+
+            this.userRepository.save(newUser);
+
+            return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.badRequest().build();
