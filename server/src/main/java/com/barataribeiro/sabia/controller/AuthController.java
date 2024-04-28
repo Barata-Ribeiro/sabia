@@ -64,7 +64,7 @@ public class AuthController {
             newUser.setEmail(body.email().trim());
             newUser.setRole(Roles.MEMBER);
 
-            this.userRepository.save(newUser);
+            this.userRepository.saveAndFlush(newUser);
 
             return ResponseEntity.ok().build();
         }

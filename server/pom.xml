@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.barataribeiro</groupId>
-	<artifactId>sabia_network</artifactId>
+	<artifactId>sabia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sabia</name>
 	<description>Rede Social - Sabiá</description>
