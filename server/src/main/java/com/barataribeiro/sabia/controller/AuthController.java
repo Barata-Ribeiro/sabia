@@ -1,13 +1,20 @@
 package com.barataribeiro.sabia.controller;
 
+import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.auth.LoginRequestDTO;
 import com.barataribeiro.sabia.dto.auth.LoginResponseDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterRequestDTO;
+import com.barataribeiro.sabia.dto.auth.RegisterResponseDTO;
+import com.barataribeiro.sabia.exceptions.auth.InvalidCredentials;
+import com.barataribeiro.sabia.exceptions.user.UserAlreadyExists;
+import com.barataribeiro.sabia.exceptions.user.UserIsBanned;
+import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,23 +38,24 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body) {
-        User user = this.userRepository.findByUsername(body.username()).orElseThrow(
-                () -> new RuntimeException("User not found.")
-        );
+        User user = this.userRepository.findByUsername(body.username()).orElseThrow(UserNotFound::new);
 
-        if (passwordEncoder.matches(user.getPassword(), body.password())) {
-            Map.Entry<String, Instant> tokenAndExpiration = this.tokenService.generateToken(user);
-            String token = tokenAndExpiration.getKey();
-            String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        boolean passwordMatches = passwordEncoder.matches(user.getPassword(), body.password());
+        boolean userBannedOrNone = user.getRole().equals(Roles.BANNED) || user.getRole().equals(Roles.NONE);
 
-            if (user.getRole().equals(Roles.BANNED) || user.getRole().equals(Roles.NONE)) {
-                return ResponseEntity.badRequest().build();
-            }
+        if (userBannedOrNone) throw new UserIsBanned();
 
-            return ResponseEntity.ok(new LoginResponseDTO(user.getUsername(), token, expirationDate));
-        }
+        if (!passwordMatches) throw new InvalidCredentials("Password does not match.");
 
-        return ResponseEntity.badRequest().build();
+        Map.Entry<String, Instant> tokenAndExpiration = this.tokenService.generateToken(user);
+        String token = tokenAndExpiration.getKey();
+        String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        LoginResponseDTO data = new LoginResponseDTO(user.getUsername(), token, expirationDate);
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                            HttpStatus.OK.value(),
+                                                            "User logged in successfully.",
+                                                            data));
     }
 
     @PostMapping("/register")
@@ -55,20 +63,28 @@ public class AuthController {
         var sanitizedUsername = body.username().trim().toLowerCase();
         Optional<User> user = this.userRepository.findByUsername(sanitizedUsername);
 
-        if(user.isEmpty()) {
-            User newUser = new User();
+        if(user.isPresent()) throw new UserAlreadyExists();
 
-            newUser.setPassword(passwordEncoder.encode(body.password()));
-            newUser.setUsername(sanitizedUsername);
-            newUser.setDisplay_name(body.display_name().trim());
-            newUser.setEmail(body.email().trim());
-            newUser.setRole(Roles.MEMBER);
+        User newUser = null;
+
+        try {
+            newUser = User.builder()
+                    .password(passwordEncoder.encode(body.password()))
+                    .username(sanitizedUsername)
+                    .display_name(body.display_name().trim())
+                    .email(body.email().trim())
+                    .role(Roles.MEMBER)
+                    .build();
 
             this.userRepository.saveAndFlush(newUser);
-
-            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating user." + e.getMessage());
         }
 
-        return ResponseEntity.badRequest().build();
+        RegisterResponseDTO data = new RegisterResponseDTO(newUser.getId(), newUser.getUsername(), newUser.getDisplay_name());
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
+                                                            HttpStatus.CREATED.value(),
+                                                            "User created successfully.",
+                                                            data));
     }
 }
