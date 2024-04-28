@@ -1,6 +1,5 @@
 package com.barataribeiro.sabia.service.security;
 
-import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
-
-        if (user.getRole() == Roles.BANNED || user.getRole() == Roles.NONE) {
-            throw new UsernameNotFoundException("Access denied for this user.");
-        }
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

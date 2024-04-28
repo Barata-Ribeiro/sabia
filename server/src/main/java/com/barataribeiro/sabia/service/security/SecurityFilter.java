@@ -1,5 +1,6 @@
 package com.barataribeiro.sabia.service.security;
 
+import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -31,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if(login != null){
-            User user = userRepository.findByUsername(login).orElseThrow(() -> new RuntimeException("User Not Found."));
+            User user = userRepository.findByUsername(login).orElseThrow(UserNotFound::new);
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
             var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

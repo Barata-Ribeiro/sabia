@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import com.barataribeiro.sabia.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,8 @@ public class TokenService {
 
             return new SimpleEntry<>(token, expirationDate);
         } catch (JWTCreationException exception) {
-         throw new RuntimeException("Error while authenticating.");
+            System.err.println(exception.getMessage());
+            throw new InternalServerError("Error while authenticating.");
         }
 
     }
@@ -47,6 +49,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
+            System.err.println(exception.getMessage());
             return null;
         }
     }

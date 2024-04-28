@@ -12,6 +12,7 @@ import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,14 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final TokenService tokenService;
 
     public LoginResponseDTO login(String username, String password) {
@@ -49,14 +51,15 @@ public class AuthService {
     public RegisterResponseDTO register(RegisterRequestDTO body) {
         var sanitizedUsername = body.username().trim().toLowerCase();
         var sanitizedDisplayName = body.display_name().trim();
+        var sanitizedEmail = body.email().trim();
         var sanitizedPassword = body.password().trim();
 
-        if (!isEmailValid(body.email())) throw new InvalidCredentials("Invalid Email.");
+        if (!isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email.");
 
-        Optional<User> userByUsername = this.userRepository.findByUsername(sanitizedUsername);
-        Optional<User> userByEmail = this.userRepository.findByEmail(body.email());
+        Boolean userByUsername = this.userRepository.existsByUsername(sanitizedUsername);
+        Boolean userByEmail = this.userRepository.existsByUsername(sanitizedEmail);
 
-        if(userByUsername.isPresent() || userByEmail.isPresent()) throw new UserAlreadyExists();
+        if(userByUsername || userByEmail) throw new UserAlreadyExists();
 
         User newUser;
 
@@ -64,12 +67,14 @@ public class AuthService {
             newUser = User.builder()
                     .username(sanitizedUsername)
                     .display_name(sanitizedDisplayName)
-                    .email(body.email())
+                    .email(sanitizedEmail)
                     .password(passwordEncoder.encode(sanitizedPassword))
-                    .role(Roles.NONE)
                     .build();
 
             this.userRepository.save(newUser);
+        } catch (ConstraintViolationException error) {
+            System.err.println(error.getMessage());
+            throw new InvalidCredentials(error.getMessage());
         } catch (Exception error) {
             System.err.println("Error creating account: " + error.getMessage());
             throw new InternalServerError("Error creating account. Please try again.");
@@ -78,8 +83,7 @@ public class AuthService {
         return new RegisterResponseDTO(newUser.getUsername(), newUser.getDisplay_name(), newUser.getEmail());
     }
 
-    private boolean isEmailValid(String email) {
-        String emailToValidate = email.trim();
+    private boolean isEmailValid(String emailToValidate) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
