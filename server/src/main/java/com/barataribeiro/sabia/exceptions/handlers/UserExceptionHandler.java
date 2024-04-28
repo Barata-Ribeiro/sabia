@@ -1,6 +1,8 @@
-package com.barataribeiro.sabia.exceptions;
+package com.barataribeiro.sabia.exceptions.handlers;
 
+import com.barataribeiro.sabia.exceptions.RestErrorMessage;
 import com.barataribeiro.sabia.exceptions.user.UserAlreadyExists;
+import com.barataribeiro.sabia.exceptions.user.UserIsBanned;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class UserExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFound.class)
     private ResponseEntity<RestErrorMessage> userNotFound(UserNotFound exception) {
@@ -21,5 +23,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> userAlreadyExists(UserAlreadyExists exception) {
         RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.CONFLICT, HttpStatus.CONFLICT.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+    }
+
+    @ExceptionHandler(UserIsBanned.class)
+    private ResponseEntity<RestErrorMessage> userIsBanned(UserIsBanned exception) {
+        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
     }
 }
