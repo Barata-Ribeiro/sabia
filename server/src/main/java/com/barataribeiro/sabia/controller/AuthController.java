@@ -40,7 +40,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody LoginRequestDTO body) {
         User user = this.userRepository.findByUsername(body.username()).orElseThrow(UserNotFound::new);
 
-        boolean passwordMatches = passwordEncoder.matches(user.getPassword(), body.password());
+        boolean passwordMatches = passwordEncoder.matches(body.password(), user.getPassword());
         boolean userBannedOrNone = user.getRole().equals(Roles.BANNED) || user.getRole().equals(Roles.NONE);
 
         if (userBannedOrNone) throw new UserIsBanned();
