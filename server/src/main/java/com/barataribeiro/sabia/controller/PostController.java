@@ -1,7 +1,7 @@
 package com.barataribeiro.sabia.controller;
 
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
-import com.barataribeiro.sabia.model.Post;
+import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity getPostById(@PathVariable String postId) {
-        Post data = postService.getPostById(postId);
+        PostResponseDTO data = postService.getPostById(postId);
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                 HttpStatus.OK.value(),
