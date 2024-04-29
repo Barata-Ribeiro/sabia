@@ -1,5 +1,8 @@
 package com.barataribeiro.sabia.dto.auth;
 
-public record LoginRequestDTO (String username, String password) {
+import jakarta.validation.constraints.NotNull;
+
+public record LoginRequestDTO(@NotNull String username,
+                              @NotNull String password) {
 
 }
