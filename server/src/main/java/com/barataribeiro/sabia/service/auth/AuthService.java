@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -39,7 +41,7 @@ public class AuthService {
 
         if (userBannedOrNone) throw new UserIsBanned();
 
-        if (!passwordMatches) throw new InvalidCredentials("Password does not match.");
+        if (!passwordMatches) throw new InvalidCredentials("You entered the wrong password. Please try again.");
 
         Map.Entry<String, Instant> tokenAndExpiration = this.tokenService.generateToken(user);
         String token = tokenAndExpiration.getKey();
@@ -51,15 +53,22 @@ public class AuthService {
     public RegisterResponseDTO register(RegisterRequestDTO body) {
         var sanitizedUsername = body.username().trim().toLowerCase();
         var sanitizedDisplayName = body.display_name().trim();
+        var sanitizedFullName = body.full_name().trim();
         var sanitizedEmail = body.email().trim();
         var sanitizedPassword = body.password().trim();
+        var birthDate = body.birth_date();
 
-        if (!isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email.");
+        if (!isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email address.");
 
         Boolean userByUsername = this.userRepository.existsByUsername(sanitizedUsername);
         Boolean userByEmail = this.userRepository.existsByUsername(sanitizedEmail);
 
-        if(userByUsername || userByEmail) throw new UserAlreadyExists();
+        if (userByUsername || userByEmail) throw new UserAlreadyExists();
+
+        Period period = Period.between(birthDate, LocalDate.now());
+        if (period.getYears() < 18) {
+            throw new InvalidCredentials("You must be at least 18 years old to register.");
+        }
 
         User newUser;
 
@@ -67,6 +76,8 @@ public class AuthService {
             newUser = User.builder()
                     .username(sanitizedUsername)
                     .display_name(sanitizedDisplayName)
+                    .full_name(sanitizedFullName)
+                    .birth_date(birthDate.toString())
                     .email(sanitizedEmail)
                     .password(passwordEncoder.encode(sanitizedPassword))
                     .build();

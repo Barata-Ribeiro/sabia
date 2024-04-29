@@ -1,8 +1,11 @@
 package com.barataribeiro.sabia.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -30,6 +33,11 @@ public class User {
 
     @Column(nullable = false)
     private String full_name;
+
+    @Column(nullable = false)
+    private String birth_date;
+
+    private String gender;
 
     @Column(nullable = false, unique = true)
     @Email(message = "Use a valid email")
