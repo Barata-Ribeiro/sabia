@@ -5,9 +5,14 @@ import lombok.*;
 import jakarta.validation.constraints.Email;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 @Data
 @Builder
 @AllArgsConstructor
@@ -42,11 +47,18 @@ public class User {
     private String website;
     private String location;
 
+    @Column(columnDefinition = "boolean default false")
     private Boolean is_verified = false;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean is_private = false;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Post> posts = new HashSet<>();
+
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at = LocalDateTime.now();
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated_at = LocalDateTime.now();
 }

@@ -6,10 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "posts", indexes = @Index(name = "idx_author_id", columnList = "author_id"))
 @Data
 @Builder
 @AllArgsConstructor
@@ -20,12 +20,17 @@ public class Post {
     private String id;
 
     @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+    @Column(nullable = false)
     private String content;
+
     private Integer views;
 
-    private Timestamp created_at;
+    @Column(name = "created_at")
+    private LocalDateTime created_at = LocalDateTime.now();
 
-    private Timestamp updated_at;
+    @Column(name = "updated_at")
+    private LocalDateTime updated_at = LocalDateTime.now();
 }
