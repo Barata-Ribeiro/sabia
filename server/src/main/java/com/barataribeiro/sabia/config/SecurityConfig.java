@@ -32,15 +32,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        List<HttpMethod> methods = Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE);
+        List<String> urls = Arrays.asList("/api/v1/posts/**",
+                                          "/api/v1/users/{userId}");
+
+        List<HttpMethod> methods = Arrays.asList(HttpMethod.GET,
+                                                 HttpMethod.POST);
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> {
-                    for (HttpMethod method : methods) {
-                        authorize.requestMatchers(method, "/api/v1/auth/**").permitAll();
-                    }
+                    for (HttpMethod method : methods) authorize.requestMatchers(method, "/api/v1/auth/**").permitAll();
+                    for (String url : urls) authorize.requestMatchers(HttpMethod.GET, url).permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
