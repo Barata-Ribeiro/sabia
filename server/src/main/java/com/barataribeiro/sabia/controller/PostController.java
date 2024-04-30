@@ -28,7 +28,7 @@ public class PostController {
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
-                                                              "User logged in successfully.",
+                                                              "Posts retrieved successfully.",
                                                               data));
     }
 
@@ -38,7 +38,7 @@ public class PostController {
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
-                                                              "User logged in successfully.",
+                                                              "Post retrieved successfully.",
                                                               data));
     }
 
@@ -50,7 +50,19 @@ public class PostController {
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
-                                                              "User logged in successfully.",
+                                                              "Post created successfully.",
                                                               data));
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity deletePost(@PathVariable String postId, Principal principal) {
+        String requesting_user = principal.getName();
+
+        postService.deletePost(postId, requesting_user);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "Post deleted successfully.",
+                                                              null));
     }
 }

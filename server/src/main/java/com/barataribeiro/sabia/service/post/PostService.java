@@ -3,6 +3,7 @@ package com.barataribeiro.sabia.service.post;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
+import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.post.PostInvalidBody;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
@@ -10,6 +11,7 @@ import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,6 +58,7 @@ public class PostService {
         return getPostResponseDTO(post);
     }
 
+    @Transactional
     public PostResponseDTO createPost(PostRequestDTO body, String requesting_user) {
         User author = userRepository.findByUsername(requesting_user)
                 .orElseThrow(UserNotFound::new);
@@ -73,6 +76,18 @@ public class PostService {
         postRepository.save(post);
 
         return getPostResponseDTO(post);
+    }
+
+    @Transactional
+    public void deletePost(String postId, String requesting_user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFound("Post not found."));
+
+        if (!post.getAuthor().getUsername().equals(requesting_user)) {
+            throw new ForbiddenRequest("You are not the author of this post.");
+        }
+
+        postRepository.delete(post);
     }
 
     private static PostResponseDTO getPostResponseDTO(Post post) {
