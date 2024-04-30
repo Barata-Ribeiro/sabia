@@ -27,7 +27,7 @@ public class PostService {
         Pageable paging = PageRequest.of(page, perPage);
 
         Page<Post> postPage = postRepository.findAllByAuthorId(userId, paging);
-        if(postPage.isEmpty()) throw new PostNotFound("No posts found.");
+        if (postPage.isEmpty()) throw new PostNotFound("No posts found.");
 
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
@@ -44,9 +44,11 @@ public class PostService {
                     );
                     return new PostResponseDTO(
                             post.getId(),
-                            post.getContent(),
                             authorDTO,
+                            post.getText(),
                             post.getViews(),
+                            post.getRepost_count(),
+                            post.getLike_count(),
                             post.getCreated_at().toString(),
                             post.getUpdated_at().toString()
                     );
@@ -78,9 +80,11 @@ public class PostService {
 
         return new PostResponseDTO(
                 post.getId(),
-                post.getContent(),
                 authorDTO,
+                post.getText(),
                 post.getViews(),
+                post.getRepost_count(),
+                post.getLike_count(),
                 post.getCreated_at().toString(),
                 post.getUpdated_at().toString()
         );
