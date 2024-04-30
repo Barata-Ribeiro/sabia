@@ -12,6 +12,7 @@ import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +51,7 @@ public class AuthService {
         return new LoginResponseDTO(user.getUsername(), token, expirationDate);
     }
 
+    @Transactional
     public RegisterResponseDTO register(RegisterRequestDTO body) {
         var sanitizedUsername = body.username().trim().toLowerCase();
         var sanitizedDisplayName = body.display_name().trim();

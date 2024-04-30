@@ -1,14 +1,18 @@
 package com.barataribeiro.sabia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,7 +44,6 @@ public class User {
     private String gender;
 
     @Column(nullable = false, unique = true)
-    @Email(message = "Use a valid email")
     private String email;
 
     @Column(nullable = false)
@@ -55,18 +58,31 @@ public class User {
     private String website;
     private String location;
 
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_verified = false;
 
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_private = false;
 
+    @Column(name = "follower_count", columnDefinition = "BIGINT(20) default '0'", nullable = false)
+    private Long follower_count = 0L;
+
+    @Column(name = "following_count", columnDefinition = "BIGINT(20) default '0'", nullable = false)
+    private Long following_count = 0L;
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Post> posts = new HashSet<>();
 
-    @Column(name = "created_at")
-    private LocalDateTime created_at = LocalDateTime.now();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Like> liked_posts = new ArrayList<>();
 
-    @Column(name = "updated_at")
-    private LocalDateTime updated_at = LocalDateTime.now();
+    @Column
+    @CreationTimestamp
+    private Instant created_at;
+
+    @Column
+    @UpdateTimestamp
+    private Instant updated_at;
 }
