@@ -2,15 +2,13 @@ package com.barataribeiro.sabia.controller;
 
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
+import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
 import com.barataribeiro.sabia.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -29,6 +27,17 @@ public class UserController {
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
                                                               "User retrieved successfully.",
+                                                              user));
+    }
+
+    @PutMapping("/me/{userId}")
+    public ResponseEntity updateUser(@PathVariable String userId, @RequestBody ProfileRequestDTO body, Principal principal) {
+        String requesting_user = principal.getName();
+        ContextResponseDTO user = userService.updateOwnAccount(userId, requesting_user, body);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "User updated successfully.",
                                                               user));
     }
 }
