@@ -66,14 +66,14 @@ public class User {
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_private = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Follow> followers = new HashSet<>();
 
     @Column(name = "follower_count", columnDefinition = "BIGINT default '0'", nullable = false)
     private Long follower_count = 0L;
 
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Follow> following = new HashSet<>();
 
