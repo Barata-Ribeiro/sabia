@@ -15,6 +15,7 @@ import com.barataribeiro.sabia.service.security.TokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,12 +54,12 @@ public class AuthService {
 
     @Transactional
     public RegisterResponseDTO register(RegisterRequestDTO body) {
-        var sanitizedUsername = body.username().trim().toLowerCase();
-        var sanitizedDisplayName = body.display_name().trim();
-        var sanitizedFullName = body.full_name().trim();
-        var sanitizedEmail = body.email().trim();
-        var sanitizedPassword = body.password().trim();
-        var birthDate = body.birth_date();
+        var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
+        var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
+        var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());
+        var sanitizedEmail = StringEscapeUtils.escapeHtml4(body.email().strip());
+        var sanitizedPassword = StringEscapeUtils.escapeHtml4(body.password().strip());
+        var birthDate = StringEscapeUtils.escapeHtml4(body.birth_date());
 
         if (!isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email address.");
 
@@ -67,7 +68,7 @@ public class AuthService {
 
         if (userByUsername || userByEmail) throw new UserAlreadyExists();
 
-        Period period = Period.between(birthDate, LocalDate.now());
+        Period period = Period.between(LocalDate.parse(birthDate), LocalDate.now());
         if (period.getYears() < 18) {
             throw new InvalidCredentials("You must be at least 18 years old to register.");
         }
@@ -79,12 +80,14 @@ public class AuthService {
                     .username(sanitizedUsername)
                     .display_name(sanitizedDisplayName)
                     .full_name(sanitizedFullName)
-                    .birth_date(birthDate.toString())
+                    .birth_date(birthDate)
                     .email(sanitizedEmail)
                     .password(passwordEncoder.encode(sanitizedPassword))
                     .build();
 
             this.userRepository.save(newUser);
+
+            return new RegisterResponseDTO(newUser.getUsername(), newUser.getDisplay_name(), newUser.getEmail());
         } catch (ConstraintViolationException error) {
             System.err.println(error.getMessage());
             throw new InvalidCredentials(error.getMessage());
@@ -92,8 +95,6 @@ public class AuthService {
             System.err.println("Error creating account: " + error.getMessage());
             throw new InternalServerError("Error creating account. Please try again.");
         }
-
-        return new RegisterResponseDTO(newUser.getUsername(), newUser.getDisplay_name(), newUser.getEmail());
     }
 
     private boolean isEmailValid(String emailToValidate) {

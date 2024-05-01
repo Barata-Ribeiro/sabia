@@ -10,6 +10,7 @@ import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -167,12 +168,12 @@ public class UserService {
     }
 
     private static Map<String, Object> sanitizeBody(ProfileRequestDTO body) {
-        var sanitizedUsername = body.username().strip();
-        var sanitizedDisplayName = body.display_name().strip();
-        var sanitizedFullName = body.full_name().strip();
-        var sanitizedEmail = body.email().strip();
-        var sanitizedBiography = body.biography().strip();
-        var sanitizedWebsite = body.website().strip();
+        var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
+        var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
+        var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());
+        var sanitizedEmail = StringEscapeUtils.escapeHtml4(body.email().strip());
+        var sanitizedBiography = StringEscapeUtils.escapeHtml4(body.biography().strip());
+        var sanitizedWebsite = StringEscapeUtils.escapeHtml4(body.website().strip());
 
         return Map.of("username", sanitizedUsername,
                       "display_name", sanitizedDisplayName,
