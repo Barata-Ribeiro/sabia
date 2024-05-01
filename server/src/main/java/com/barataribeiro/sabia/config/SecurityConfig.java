@@ -25,15 +25,14 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
     SecurityFilter securityFilter;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         List<String> urls = Arrays.asList("/api/v1/posts/**",
-                                          "/api/v1/users/{userId}");
+                                          "/api/v1/users/public/**");
 
         List<HttpMethod> methods = Arrays.asList(HttpMethod.GET,
                                                  HttpMethod.POST);
