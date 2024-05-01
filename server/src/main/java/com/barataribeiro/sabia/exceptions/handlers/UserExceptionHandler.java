@@ -1,6 +1,7 @@
 package com.barataribeiro.sabia.exceptions.handlers;
 
 import com.barataribeiro.sabia.exceptions.RestErrorMessage;
+import com.barataribeiro.sabia.exceptions.user.InvalidInput;
 import com.barataribeiro.sabia.exceptions.user.UserAlreadyExists;
 import com.barataribeiro.sabia.exceptions.user.UserIsBanned;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
@@ -29,5 +30,11 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> userIsBanned(UserIsBanned exception) {
         RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
+    }
+
+    @ExceptionHandler(InvalidInput.class)
+    private ResponseEntity<RestErrorMessage> invalidInput(InvalidInput exception) {
+        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 }
