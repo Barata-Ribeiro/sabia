@@ -10,9 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -68,10 +66,18 @@ public class User {
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_private = false;
 
-    @Column(name = "follower_count", columnDefinition = "BIGINT(20) default '0'", nullable = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Follow> followers = new HashSet<>();
+
+    @Column(name = "follower_count", columnDefinition = "BIGINT default '0'", nullable = false)
     private Long follower_count = 0L;
 
-    @Column(name = "following_count", columnDefinition = "BIGINT(20) default '0'", nullable = false)
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Follow> following = new HashSet<>();
+
+    @Column(name = "following_count", columnDefinition = "BIGINT default '0'", nullable = false)
     private Long following_count = 0L;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -80,7 +86,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Like> liked_posts = new ArrayList<>();
+    private Set<Like> liked_posts = new HashSet<>();
 
     @Column
     @CreationTimestamp
@@ -89,4 +95,12 @@ public class User {
     @Column
     @UpdateTimestamp
     private Instant updated_at;
+
+    public long incrementFollowerCount() {
+        return ++follower_count;
+    }
+
+    public long decrementFollowerCount() {
+        return --follower_count;
+    }
 }

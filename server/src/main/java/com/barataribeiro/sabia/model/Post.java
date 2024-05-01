@@ -36,10 +36,10 @@ public class Post {
 
     private Integer views;
 
-    @Column(columnDefinition = "BIGINT(20) default '0'", nullable = false)
+    @Column(columnDefinition = "BIGINT default '0'", nullable = false)
     private Long repost_count = 0L;
 
-    @Column(columnDefinition = "BIGINT(20) default '0'", nullable = false)
+    @Column(columnDefinition = "BIGINT default '0'", nullable = false)
     private Long like_count = 0L;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
