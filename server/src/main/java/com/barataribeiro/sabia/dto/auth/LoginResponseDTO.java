@@ -1,4 +1,4 @@
 package com.barataribeiro.sabia.dto.auth;
 
-public record LoginResponseDTO (String username, String expirationDate, String token) {
+public record LoginResponseDTO(String id, String username, String expirationDate, String token) {
 }
