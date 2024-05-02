@@ -1,4 +1,4 @@
-package com.barataribeiro.sabia.service.post;
+package com.barataribeiro.sabia.service;
 
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;

@@ -3,7 +3,7 @@ package com.barataribeiro.sabia.controller;
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
-import com.barataribeiro.sabia.service.user.UserService;
+import com.barataribeiro.sabia.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

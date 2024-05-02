@@ -1,4 +1,4 @@
-package com.barataribeiro.sabia.service.user;
+package com.barataribeiro.sabia.service;
 
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;

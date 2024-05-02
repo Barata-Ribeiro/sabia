@@ -3,7 +3,7 @@ package com.barataribeiro.sabia.controller;
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
-import com.barataribeiro.sabia.service.post.PostService;
+import com.barataribeiro.sabia.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

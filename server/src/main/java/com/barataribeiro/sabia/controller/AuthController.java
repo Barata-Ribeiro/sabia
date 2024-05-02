@@ -5,7 +5,7 @@ import com.barataribeiro.sabia.dto.auth.LoginRequestDTO;
 import com.barataribeiro.sabia.dto.auth.LoginResponseDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterRequestDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterResponseDTO;
-import com.barataribeiro.sabia.service.auth.AuthService;
+import com.barataribeiro.sabia.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,9 +27,9 @@ public class AuthController {
         LoginResponseDTO data = authService.login(body.username(), body.password());
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
-                                                            HttpStatus.OK.value(),
-                                                            "User logged in successfully.",
-                                                            data));
+                                                              HttpStatus.OK.value(),
+                                                              "User logged in successfully.",
+                                                              data));
     }
 
     @PostMapping("/register")
@@ -37,8 +37,8 @@ public class AuthController {
         RegisterResponseDTO data = authService.register(body);
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
-                                                            HttpStatus.CREATED.value(),
-                                                            "Account created successfully.",
-                                                            data));
+                                                              HttpStatus.CREATED.value(),
+                                                              "Account created successfully.",
+                                                              data));
     }
 }

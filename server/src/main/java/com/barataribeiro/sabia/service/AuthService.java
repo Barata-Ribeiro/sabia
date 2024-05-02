@@ -1,4 +1,4 @@
-package com.barataribeiro.sabia.service.auth;
+package com.barataribeiro.sabia.service;
 
 import com.barataribeiro.sabia.dto.auth.LoginResponseDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterRequestDTO;
