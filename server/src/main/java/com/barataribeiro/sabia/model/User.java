@@ -2,10 +2,7 @@ package com.barataribeiro.sabia.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,10 +18,12 @@ import java.util.Set;
         @Index(name = "idx_username", columnList = "username"),
         @Index(name = "idx_email", columnList = "email")
 })
-@Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,6 +50,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.MEMBER;
 
@@ -60,32 +60,44 @@ public class User {
     private String website;
     private String location;
 
+    @Builder.Default
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_verified = false;
 
+    @Builder.Default
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_private = false;
 
+    @Builder.Default
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Follow> followers = new HashSet<>();
 
+    @Builder.Default
     @Column(name = "follower_count", columnDefinition = "BIGINT default '0'", nullable = false)
     private Long follower_count = 0L;
 
+    @Builder.Default
     @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Follow> following = new HashSet<>();
 
+    @Builder.Default
     @Column(name = "following_count", columnDefinition = "BIGINT default '0'", nullable = false)
     private Long following_count = 0L;
 
+    @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Post> posts = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Like> liked_posts = new HashSet<>();
 
     @Column

@@ -1,10 +1,7 @@
 package com.barataribeiro.sabia.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,10 +9,12 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "likes", indexes = @Index(name = "idx_user_id", columnList = "user_id"))
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

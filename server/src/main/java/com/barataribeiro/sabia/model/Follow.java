@@ -1,10 +1,7 @@
 package com.barataribeiro.sabia.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
@@ -18,10 +15,12 @@ import java.time.Instant;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"follower_id", "followed_id"})
         })
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

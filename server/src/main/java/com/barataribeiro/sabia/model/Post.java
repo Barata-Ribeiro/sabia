@@ -2,10 +2,7 @@ package com.barataribeiro.sabia.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
@@ -16,10 +13,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "posts", indexes = @Index(name = "idx_author_id", columnList = "author_id"))
-@Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,14 +35,18 @@ public class Post {
 
     private Integer views;
 
+    @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
     private Long repost_count = 0L;
 
+    @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
     private Long like_count = 0L;
 
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private List<Like> likes = new ArrayList<>();
 
     @Column
