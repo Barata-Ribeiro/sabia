@@ -39,16 +39,17 @@ public class UserService {
 
     @Transactional
     public ContextResponseDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
-
-        if (!Objects.equals(user.getUsername(), requesting_user)) {
-            throw new ForbiddenRequest("You are not allowed to access this user's information.");
-        }
-
-        Map<String, Object> validatedInputData = validateInputData(body, user);
-
         try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(UserNotFound::new);
+
+            if (!Objects.equals(user.getUsername(), requesting_user)) {
+                throw new ForbiddenRequest("You are not allowed to access this user's information.");
+            }
+
+            Map<String, Object> validatedInputData = validateInputData(body, user);
+
+
             user.setUsername(validatedInputData.get("username").toString());
             user.setDisplay_name(validatedInputData.get("display_name").toString());
             user.setFull_name(validatedInputData.get("full_name").toString());
@@ -68,6 +69,24 @@ public class UserService {
         } catch (Exception error) {
             System.err.println("An error occurred while updating the user's account: " + error.getMessage());
             throw new InternalServerError("An error occurred while updating your account. Please try again.");
+        }
+    }
+
+    @Transactional
+    public void deleteOwnAccount(String userId, String requesting_user) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(UserNotFound::new);
+
+            if (!Objects.equals(user.getUsername(), requesting_user)) {
+                throw new ForbiddenRequest("You are not allowed to delete this user's account.");
+            }
+
+
+            userRepository.deleteById(userId);
+        } catch (Exception error) {
+            System.err.println("An error occurred while deleting the user's account: " + error.getMessage());
+            throw new InternalServerError("An error occurred while deleting your account. Please try again.");
         }
     }
 

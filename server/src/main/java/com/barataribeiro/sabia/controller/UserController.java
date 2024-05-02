@@ -40,4 +40,15 @@ public class UserController {
                                                               "User updated successfully.",
                                                               user));
     }
+
+    @DeleteMapping("/me/{userId}")
+    public ResponseEntity deleteUser(@PathVariable String userId, Principal principal) {
+        String requesting_user = principal.getName();
+        userService.deleteOwnAccount(userId, requesting_user);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "User deleted successfully.",
+                                                              null));
+    }
 }
