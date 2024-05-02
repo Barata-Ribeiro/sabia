@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
 
-        if (!Objects.equals(user.getUsername(), requesting_user)) {
+        if (!user.getUsername().equals(requesting_user)) {
             throw new ForbiddenRequest("You are not allowed to access this user's information.");
         }
 
@@ -43,8 +42,9 @@ public class UserService {
             User user = userRepository.findById(userId)
                     .orElseThrow(UserNotFound::new);
 
-            if (!Objects.equals(user.getUsername(), requesting_user)) {
-                throw new ForbiddenRequest("You are not allowed to access this user's information.");
+
+            if (!user.getUsername().equals(requesting_user)) {
+                throw new ForbiddenRequest("You are not allowed to edit this user's information.");
             }
 
             Map<String, Object> validatedInputData = validateInputData(body, user);
@@ -78,10 +78,9 @@ public class UserService {
             User user = userRepository.findById(userId)
                     .orElseThrow(UserNotFound::new);
 
-            if (!Objects.equals(user.getUsername(), requesting_user)) {
-                throw new ForbiddenRequest("You are not allowed to delete this user's account.");
+            if (!user.getUsername().equals(requesting_user)) {
+                throw new ForbiddenRequest("You are not allowed to delete this user's information.");
             }
-
 
             userRepository.deleteById(userId);
         } catch (Exception error) {

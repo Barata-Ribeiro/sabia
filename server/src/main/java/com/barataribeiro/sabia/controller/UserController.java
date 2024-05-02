@@ -21,8 +21,7 @@ public class UserController {
 
     @GetMapping("/me/{userId}")
     public ResponseEntity getUser(@PathVariable String userId, Principal principal) {
-        String requesting_user = principal.getName();
-        ContextResponseDTO user = userService.getUserContext(userId, requesting_user);
+        ContextResponseDTO user = userService.getUserContext(userId, principal.getName());
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
@@ -32,8 +31,7 @@ public class UserController {
 
     @PutMapping("/me/{userId}")
     public ResponseEntity updateUser(@PathVariable String userId, @RequestBody ProfileRequestDTO body, Principal principal) {
-        String requesting_user = principal.getName();
-        ContextResponseDTO user = userService.updateOwnAccount(userId, requesting_user, body);
+        ContextResponseDTO user = userService.updateOwnAccount(userId, principal.getName(), body);
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
@@ -43,8 +41,7 @@ public class UserController {
 
     @DeleteMapping("/me/{userId}")
     public ResponseEntity deleteUser(@PathVariable String userId, Principal principal) {
-        String requesting_user = principal.getName();
-        userService.deleteOwnAccount(userId, requesting_user);
+        userService.deleteOwnAccount(userId, principal.getName());
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
