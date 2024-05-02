@@ -49,7 +49,7 @@ public class AuthService {
         String token = tokenAndExpiration.getKey();
         String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-        return new LoginResponseDTO(user.getUsername(), token, expirationDate);
+        return new LoginResponseDTO(user.getUsername(), expirationDate, token);
     }
 
     @Transactional
