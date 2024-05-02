@@ -2,6 +2,7 @@ package com.barataribeiro.sabia.service;
 
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
+import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import com.barataribeiro.sabia.exceptions.user.InvalidInput;
@@ -20,10 +21,18 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public PublicProfileResponseDTO getPublicProfile(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+
+        return getPublicProfileResponseDTO(user);
+    }
 
     public ContextResponseDTO getUserContext(String userId, String requesting_user) {
         User user = userRepository.findById(userId)
@@ -161,6 +170,26 @@ public class UserService {
         } else {
             throw new InvalidInput("You must provide your current password to update your account.");
         }
+    }
+
+    private static PublicProfileResponseDTO getPublicProfileResponseDTO(User user) {
+        return new PublicProfileResponseDTO(user.getId(),
+                                            user.getUsername(),
+                                            user.getDisplay_name(),
+                                            user.getRole().toString(),
+                                            user.getAvatar_image_url(),
+                                            user.getCover_image_url(),
+                                            user.getBiography(),
+                                            user.getWebsite(),
+                                            user.getLocation(),
+                                            user.getIs_verified(),
+                                            user.getIs_private(),
+                                            Math.toIntExact(user.getFollower_count()),
+                                            Math.toIntExact(user.getFollowing_count()),
+                                            user.getPosts().size(),
+                                            user.getLiked_posts().size(),
+                                            user.getCreated_at().toString(),
+                                            user.getUpdated_at().toString());
     }
 
     private static ContextResponseDTO getContextResponseDTO(User user) {

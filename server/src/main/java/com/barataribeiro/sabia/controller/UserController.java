@@ -3,6 +3,7 @@ package com.barataribeiro.sabia.controller;
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
+import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,16 @@ import java.security.Principal;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/public/{userId}")
+    public ResponseEntity getPublicUser(@PathVariable String userId) {
+        PublicProfileResponseDTO user = userService.getPublicProfile(userId);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "User retrieved successfully.",
+                                                              user));
+    }
 
     @GetMapping("/me/{userId}")
     public ResponseEntity getUser(@PathVariable String userId, Principal principal) {
