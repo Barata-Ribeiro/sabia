@@ -4,4 +4,8 @@ public class PostInvalidBody extends IllegalArgumentException {
     public PostInvalidBody(String message) {
         super(message != null ? message : "Invalid input format.");
     }
+
+    public PostInvalidBody() {
+        this(null);
+    }
 }
