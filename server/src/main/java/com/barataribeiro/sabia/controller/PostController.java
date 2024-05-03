@@ -20,7 +20,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/")
+    @GetMapping("/public")
     public ResponseEntity getAllPostsFromUser(@RequestParam String userId,
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "6") int perPage) {
@@ -32,7 +32,7 @@ public class PostController {
                                                               data));
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/public/{postId}")
     public ResponseEntity getPostById(@PathVariable String postId) {
         PostResponseDTO data = postService.getPostById(postId);
 
@@ -42,27 +42,33 @@ public class PostController {
                                                               data));
     }
 
-    @PostMapping("/")
+    @PostMapping("/me/new-post")
     public ResponseEntity createPost(@RequestBody PostRequestDTO body, Principal principal) {
-        String requesting_user = principal.getName();
+        PostResponseDTO data = postService.createPost(body, principal.getName());
 
-        PostResponseDTO data = postService.createPost(body, requesting_user);
-
-        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
-                                                              HttpStatus.OK.value(),
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
+                                                              HttpStatus.CREATED.value(),
                                                               "Post created successfully.",
                                                               data));
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/me/{postId}")
     public ResponseEntity deletePost(@PathVariable String postId, Principal principal) {
-        String requesting_user = principal.getName();
+        postService.deletePost(postId, principal.getName());
 
-        postService.deletePost(postId, requesting_user);
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.NO_CONTENT,
+                                                              HttpStatus.NO_CONTENT.value(),
+                                                              "Post deleted successfully.",
+                                                              null));
+    }
+
+    @PostMapping("/me/{postId}/toggle-like")
+    public ResponseEntity toggleLike(@PathVariable String postId, Principal principal) {
+        Boolean response = postService.toggleLike(postId, principal.getName());
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
-                                                              "Post deleted successfully.",
+                                                              "Post " + (response ? "liked" : "disliked") + " successfully.",
                                                               null));
     }
 }

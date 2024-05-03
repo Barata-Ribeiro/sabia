@@ -7,8 +7,10 @@ import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.post.PostInvalidBody;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
+import com.barataribeiro.sabia.model.Like;
 import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.repository.LikeRepository;
 import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -34,12 +36,15 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private LikeRepository likeRepository;
+
 
     public Map<String, Object> getAllPosts(String userId, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
         Page<Post> postPage = postRepository.findAllByAuthorId(userId, paging);
-        if (postPage.isEmpty()) throw new PostNotFound("No posts found.");
+        if (postPage.isEmpty()) throw new PostNotFound();
 
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
@@ -58,7 +63,7 @@ public class PostService {
 
     public PostResponseDTO getPostById(String postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFound("Post not found."));
+                .orElseThrow(PostNotFound::new);
 
         return getPostResponseDTO(post);
     }
@@ -86,13 +91,46 @@ public class PostService {
     @Transactional
     public void deletePost(String postId, String requesting_user) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFound("Post not found."));
+                .orElseThrow(PostNotFound::new);
 
         if (!post.getAuthor().getUsername().equals(requesting_user)) {
             throw new ForbiddenRequest("You are not the author of this post.");
         }
 
         postRepository.delete(post);
+    }
+
+    @Transactional
+    public Boolean toggleLike(String postId, String requesting_user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+
+        User user = userRepository.findByUsername(requesting_user)
+                .orElseThrow(UserNotFound::new);
+
+        if (post.getAuthor().getUsername().equals(user.getUsername())) {
+            throw new ForbiddenRequest("You cannot like your own post.");
+        }
+
+        Like like = likeRepository.findByUserIdAndPostId(user.getId(), post.getId()).orElse(null);
+        if (like != null) {
+            likeRepository.delete(like);
+            post.decrementLikeCount();
+            postRepository.save(post);
+
+            return false;
+        } else {
+            Like newLike = Like.builder()
+                    .user(user)
+                    .post(post)
+                    .build();
+
+            likeRepository.save(newLike);
+            post.incrementLikeCount();
+            postRepository.save(post);
+
+            return true;
+        }
     }
 
     private static PostResponseDTO getPostResponseDTO(Post post) {
