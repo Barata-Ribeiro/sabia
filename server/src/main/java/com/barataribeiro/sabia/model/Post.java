@@ -8,8 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "posts", indexes = @Index(name = "idx_author_id", columnList = "author_id"))
@@ -32,6 +31,18 @@ public class Post {
 
     @Column(nullable = false)
     private String text;
+
+    @ElementCollection
+    private Map<String, Date> hashtags = new HashMap<>();
+
+    @Builder.Default
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "post_hashtags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<Hashtag> post_hashtags = new HashSet<>();
 
     private Integer views;
 

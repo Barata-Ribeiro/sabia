@@ -7,9 +7,11 @@ import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.post.PostInvalidBody;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
+import com.barataribeiro.sabia.model.Hashtag;
 import com.barataribeiro.sabia.model.Like;
 import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.repository.HashtagRepository;
 import com.barataribeiro.sabia.repository.LikeRepository;
 import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
@@ -25,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +42,9 @@ public class PostService {
 
     @Autowired
     private LikeRepository likeRepository;
+
+    @Autowired
+    private HashtagRepository hashtagRepository;
 
 
     public Map<String, Object> getAllPosts(String userId, int page, int perPage) {
@@ -78,10 +85,27 @@ public class PostService {
         if (text.isEmpty()) throw new PostInvalidBody("Text cannot be empty.");
         if (text.length() > 280) throw new PostInvalidBody("Text cannot exceed 280 characters.");
 
+        Pattern pattern = Pattern.compile("#\\w+");
+        Matcher matcher = pattern.matcher(text);
+
         Post post = Post.builder()
                 .author(author)
                 .text(text)
                 .build();
+
+        while (matcher.find()) {
+            String tag = matcher.group().substring(1);
+
+            Hashtag hashtag = hashtagRepository.findByTag(tag).orElseGet(() -> {
+                Hashtag newHashtag = Hashtag.builder()
+                        .tag(tag)
+                        .build();
+
+                return hashtagRepository.save(newHashtag);
+            });
+
+            post.getPost_hashtags().add(hashtag);
+        }
 
         postRepository.save(post);
 
