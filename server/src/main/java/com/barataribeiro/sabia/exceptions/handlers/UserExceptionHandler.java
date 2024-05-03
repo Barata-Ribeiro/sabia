@@ -1,10 +1,7 @@
 package com.barataribeiro.sabia.exceptions.handlers;
 
 import com.barataribeiro.sabia.exceptions.RestErrorMessage;
-import com.barataribeiro.sabia.exceptions.user.InvalidInput;
-import com.barataribeiro.sabia.exceptions.user.UserAlreadyExists;
-import com.barataribeiro.sabia.exceptions.user.UserIsBanned;
-import com.barataribeiro.sabia.exceptions.user.UserNotFound;
+import com.barataribeiro.sabia.exceptions.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,6 +31,12 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidInput.class)
     private ResponseEntity<RestErrorMessage> invalidInput(InvalidInput exception) {
+        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(SameUser.class)
+    private ResponseEntity<RestErrorMessage> sameUser(SameUser exception) {
         RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }

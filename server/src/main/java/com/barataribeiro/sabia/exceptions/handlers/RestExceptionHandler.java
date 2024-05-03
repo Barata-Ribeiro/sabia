@@ -1,6 +1,7 @@
 package com.barataribeiro.sabia.exceptions.handlers;
 
 import com.barataribeiro.sabia.exceptions.RestErrorMessage;
+import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import org.springframework.http.HttpStatus;
@@ -22,5 +23,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> forbiddenRequest(ForbiddenRequest exception) {
         RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
+    }
+
+    @ExceptionHandler(BadRequest.class)
+    private ResponseEntity<RestErrorMessage> badRequest(BadRequest exception) {
+        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 }
