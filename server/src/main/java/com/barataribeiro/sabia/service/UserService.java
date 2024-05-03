@@ -3,11 +3,15 @@ package com.barataribeiro.sabia.service;
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
 import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
+import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import com.barataribeiro.sabia.exceptions.user.InvalidInput;
+import com.barataribeiro.sabia.exceptions.user.SameUser;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
+import com.barataribeiro.sabia.model.Follow;
 import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.repository.FollowRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,9 @@ import java.util.Map;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -95,6 +102,85 @@ public class UserService {
         } catch (Exception error) {
             System.err.println("An error occurred while deleting the user's account: " + error.getMessage());
             throw new InternalServerError("An error occurred while deleting your account. Please try again.");
+        }
+    }
+
+    @Transactional
+    public void followUser(String userId, String followedId, String requesting_user) {
+        try {
+            if (userId.equals(followedId)) {
+                throw new SameUser("You cannot follow yourself.");
+            }
+
+            User user = userRepository.findById(userId)
+                    .orElseThrow(UserNotFound::new);
+
+            User followedUser = userRepository.findById(followedId)
+                    .orElseThrow(UserNotFound::new);
+
+            if (!user.getUsername().equals(requesting_user)) {
+                throw new ForbiddenRequest("You are not allowed to follow this user.");
+            }
+
+            var isAlreadyFollowing = user.getFollowings().stream().anyMatch(follow -> follow.getFollowed().getId().equals(followedId)) ||
+                    followRepository.existsByFollowerIdAndFollowedId(userId, followedId);
+
+            if (isAlreadyFollowing) {
+                throw new BadRequest("You are already following this user.");
+            }
+
+            if (followedUser.getIs_private()) {
+                throw new ForbiddenRequest("You are not allowed to follow this user.");
+            }
+
+            Follow newFollow = Follow.builder()
+                    .follower(user)
+                    .followed(followedUser)
+                    .build();
+
+            user.getFollowers().add(newFollow);
+            user.incrementFollowerCount();
+
+            followedUser.getFollowings().add(newFollow);
+            followedUser.incrementFollowingCount();
+
+            userRepository.save(user);
+            userRepository.save(followedUser);
+        } catch (Exception error) {
+            System.err.println("An error occurred while following the user: " + error.getMessage());
+            throw new InternalServerError("An error occurred while following the user. Please try again.");
+        }
+    }
+
+    @Transactional
+    public void unfollowUser(String userId, String followedId, String requesting_user) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(UserNotFound::new);
+
+            User followedUser = userRepository.findById(followedId)
+                    .orElseThrow(UserNotFound::new);
+
+            if (!user.getUsername().equals(requesting_user)) {
+                throw new ForbiddenRequest("You are not allowed to unfollow this user.");
+            }
+
+            var follow = user.getFollowings().stream()
+                    .filter(f -> f.getFollowed().getId().equals(followedId))
+                    .findFirst()
+                    .orElseThrow(() -> new BadRequest("You are not following this user."));
+
+            user.getFollowings().remove(follow);
+            user.decrementFollowingCount();
+
+            followedUser.getFollowers().remove(follow);
+            followedUser.decrementFollowerCount();
+
+            userRepository.save(user);
+            userRepository.save(followedUser);
+        } catch (Exception error) {
+            System.err.println("An error occurred while unfollowing the user: " + error.getMessage());
+            throw new InternalServerError("An error occurred while unfollowing the user. Please try again.");
         }
     }
 

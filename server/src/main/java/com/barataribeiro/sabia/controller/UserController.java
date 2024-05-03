@@ -59,4 +59,24 @@ public class UserController {
                                                               "User deleted successfully.",
                                                               null));
     }
+
+    @PostMapping("/me/{userId}/follow/{followedId}")
+    public ResponseEntity followUser(@PathVariable String userId, @PathVariable String followedId, Principal principal) {
+        userService.followUser(userId, followedId, principal.getName());
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "User followed successfully.",
+                                                              null));
+    }
+
+    @DeleteMapping("/me/{userId}/follow/{followedId}")
+    public ResponseEntity unfollowUser(@PathVariable String userId, @PathVariable String followedId, Principal principal) {
+        userService.unfollowUser(userId, followedId, principal.getName());
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "User unfollowed successfully.",
+                                                              null));
+    }
 }

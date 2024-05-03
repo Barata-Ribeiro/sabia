@@ -82,7 +82,7 @@ public class User {
     @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
-    private Set<Follow> following = new HashSet<>();
+    private Set<Follow> followings = new HashSet<>();
 
     @Builder.Default
     @Column(name = "following_count", columnDefinition = "BIGINT default '0'", nullable = false)
@@ -108,11 +108,19 @@ public class User {
     @UpdateTimestamp
     private Instant updated_at;
 
-    public long incrementFollowerCount() {
-        return ++follower_count;
+    public void incrementFollowerCount() {
+        ++follower_count;
     }
 
-    public long decrementFollowerCount() {
-        return --follower_count;
+    public void decrementFollowerCount() {
+        follower_count = follower_count > 0 ? --follower_count : 0;
+    }
+
+    public void incrementFollowingCount() {
+        ++following_count;
+    }
+
+    public void decrementFollowingCount() {
+        following_count = following_count > 0 ? --following_count : 0;
     }
 }
