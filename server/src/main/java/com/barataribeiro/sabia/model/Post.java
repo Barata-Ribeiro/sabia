@@ -8,8 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts", indexes = @Index(name = "idx_author_id", columnList = "author_id"))
@@ -47,7 +47,7 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
-    private List<Like> likes = new ArrayList<>();
+    private Set<Like> likes = new HashSet<>();
 
     @Column
     @CreationTimestamp
@@ -57,19 +57,19 @@ public class Post {
     @UpdateTimestamp
     private Instant updated_at;
 
-    public long incrementLikeCount() {
-        return ++like_count;
+    public void incrementLikeCount() {
+        ++like_count;
     }
 
-    public long decrementLikeCount() {
-        return --like_count;
+    public void decrementLikeCount() {
+        like_count = like_count > 0 ? --like_count : 0;
     }
 
-    public long incrementRepostCount() {
-        return ++repost_count;
+    public void incrementRepostCount() {
+        ++repost_count;
     }
 
-    public long decrementRepostCount() {
-        return (repost_count > 0) ? --repost_count : 0;
+    public void decrementRepostCount() {
+        repost_count = repost_count > 0 ? --repost_count : 0;
     }
 }

@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        List<String> urls = Arrays.asList("/api/v1/posts/**",
+        List<String> urls = Arrays.asList("/api/v1/posts/public/**",
                                           "/api/v1/users/public/**");
 
         List<HttpMethod> methods = Arrays.asList(HttpMethod.GET,
