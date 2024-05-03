@@ -12,6 +12,7 @@ import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
+import com.barataribeiro.sabia.util.Validation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,9 @@ public class AuthService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private Validation validation;
+
     public LoginResponseDTO login(String username, String password) {
         User user = this.userRepository.findByUsername(username).orElseThrow(UserNotFound::new);
 
@@ -65,7 +69,12 @@ public class AuthService {
         var sanitizedPassword = StringEscapeUtils.escapeHtml4(body.password().strip());
         var birthDate = StringEscapeUtils.escapeHtml4(body.birth_date());
 
-        if (!isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email address.");
+        if (validation.isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email address.");
+        if (validation.isPasswordValid(sanitizedPassword))
+            throw new InvalidCredentials("Password must contain at least 8 characters, " +
+                                                 "one uppercase letter, " +
+                                                 "one lowercase letter, " +
+                                                 "one number and one special character.");
 
         Boolean userByUsername = this.userRepository.existsByUsername(sanitizedUsername);
         Boolean userByEmail = this.userRepository.existsByUsername(sanitizedEmail);
@@ -99,12 +108,5 @@ public class AuthService {
             System.err.println("Error creating account: " + error.getMessage());
             throw new InternalServerError("Error creating account. Please try again.");
         }
-    }
-
-    private boolean isEmailValid(String emailToValidate) {
-        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-
-        return emailToValidate.matches(regexPattern);
     }
 }

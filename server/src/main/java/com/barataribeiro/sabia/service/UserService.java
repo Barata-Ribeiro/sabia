@@ -13,6 +13,7 @@ import com.barataribeiro.sabia.model.Follow;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.FollowRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
+import com.barataribeiro.sabia.util.Validation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
@@ -33,6 +34,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private Validation validation;
 
     public PublicProfileResponseDTO getPublicProfile(String userId) {
         User user = userRepository.findById(userId)
@@ -184,17 +188,19 @@ public class UserService {
         }
     }
 
-    private boolean isEmailValid(String emailToValidate) {
-        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-
-        return emailToValidate.matches(regexPattern);
-    }
-
     private Map<String, Object> validateInputData(ProfileRequestDTO body, User user) {
         if (body.password() != null && !body.password().isEmpty()) {
             if (!passwordEncoder.matches(body.password(), user.getPassword())) {
                 throw new InvalidInput("The provided password is incorrect.");
+            }
+
+            if (body.new_password() != null && !body.new_password().isEmpty()) {
+                if (validation.isPasswordValid(body.new_password())) {
+                    throw new InvalidInput("The new password must contain at least one uppercase letter, " +
+                                                   "one lowercase letter, one digit, " +
+                                                   "one special character, " +
+                                                   "and be at least 8 characters long.");
+                }
             }
 
             Map<String, Object> sanitizedBody = sanitizeBody(body);
@@ -207,7 +213,7 @@ public class UserService {
                 throw new InvalidInput("The provided email is already in use.");
             }
 
-            if (!isEmailValid(sanitizedBody.get("email").toString())) {
+            if (validation.isEmailValid(sanitizedBody.get("email").toString())) {
                 throw new InvalidInput("The provided email is invalid.");
             }
 
@@ -242,7 +248,7 @@ public class UserService {
                 throw new InvalidInput("The website must start with 'http://' or 'https://'.");
             }
 
-            if (!body.new_password().isEmpty()) {
+            if (body.new_password() != null && !body.new_password().isEmpty()) {
                 if (passwordEncoder.matches(body.new_password(), user.getPassword())) {
                     throw new InvalidInput("The new password must be different from the current password.");
                 }
