@@ -43,10 +43,10 @@ public class PostController {
     }
 
     @GetMapping("/public/search")
-    public ResponseEntity searchPostsByHashtag(@RequestParam String hashtag,
-                                               @RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "10") int perPage) {
-        Map<String, Object> data = postService.searchPostsByHashtag(hashtag, page, perPage);
+    public ResponseEntity searchPosts(@RequestParam String q,
+                                      @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int perPage) {
+        Map<String, Object> data = postService.searchPosts(q, page, perPage);
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),

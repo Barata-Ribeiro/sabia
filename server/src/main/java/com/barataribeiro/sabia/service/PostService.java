@@ -3,6 +3,7 @@ package com.barataribeiro.sabia.service;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
+import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.post.PostInvalidBody;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
@@ -46,7 +47,6 @@ public class PostService {
     @Autowired
     private HashtagRepository hashtagRepository;
 
-
     public Map<String, Object> getAllPosts(String userId, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
@@ -75,16 +75,22 @@ public class PostService {
         return getPostResponseDTO(post);
     }
 
-    public Map<String, Object> searchPostsByHashtag(String hashtag, int page, int perPage) {
+    public Map<String, Object> searchPosts(String query, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
-        String tag = hashtag.startsWith("#") ? hashtag.substring(1) : hashtag;
+        String queryParams = query.startsWith("#") ? query.substring(1) : query;
 
-        Page<Post> postPage = postRepository.findAllByHashtag(tag, paging);
+        if (query.isEmpty()) throw new BadRequest("You must provide a term to search for users.");
+        if (query.length() < 3) throw new BadRequest("The search term must be at least 3 characters long.");
+
+        Page<Post> postPage = query.startsWith("#") ?
+                              postRepository.findAllByHashtag(queryParams, paging) :
+                              postRepository.findAllByTextContaining(queryParams, paging);
+
         if (postPage.isEmpty()) throw new PostNotFound();
 
-        List<Post> posts = new ArrayList<>(postPage.getContent());
+        List<Post> postsResult = new ArrayList<>(postPage.getContent());
 
-        List<PostResponseDTO> postsDTOs = posts.stream()
+        List<PostResponseDTO> postsDTOs = postsResult.stream()
                 .map(PostService::getPostResponseDTO)
                 .collect(Collectors.toList());
 
@@ -118,13 +124,14 @@ public class PostService {
         while (matcher.find()) {
             String tag = matcher.group().substring(1);
 
-            Hashtag hashtag = hashtagRepository.findByTag(tag).orElseGet(() -> {
-                Hashtag newHashtag = Hashtag.builder()
-                        .tag(tag)
-                        .build();
+            Hashtag hashtag = hashtagRepository.findByTag(tag)
+                    .orElseGet(() -> {
+                        Hashtag newHashtag = Hashtag.builder()
+                                .tag(tag)
+                                .build();
 
-                return hashtagRepository.save(newHashtag);
-            });
+                        return hashtagRepository.save(newHashtag);
+                    });
 
             post.getPost_hashtags().add(hashtag);
         }
