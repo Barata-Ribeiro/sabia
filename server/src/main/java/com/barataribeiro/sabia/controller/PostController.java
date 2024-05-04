@@ -42,6 +42,18 @@ public class PostController {
                                                               data));
     }
 
+    @GetMapping("/public/search")
+    public ResponseEntity searchPostsByHashtag(@RequestParam String hashtag,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int perPage) {
+        Map<String, Object> data = postService.searchPostsByHashtag(hashtag, page, perPage);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "Posts retrieved successfully.",
+                                                              data));
+    }
+
     @PostMapping("/me/new-post")
     public ResponseEntity createPost(@RequestBody PostRequestDTO body, Principal principal) {
         PostResponseDTO data = postService.createPost(body, principal.getName());

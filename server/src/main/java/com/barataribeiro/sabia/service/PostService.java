@@ -75,6 +75,28 @@ public class PostService {
         return getPostResponseDTO(post);
     }
 
+    public Map<String, Object> searchPostsByHashtag(String hashtag, int page, int perPage) {
+        Pageable paging = PageRequest.of(page, perPage);
+        String tag = hashtag.startsWith("#") ? hashtag.substring(1) : hashtag;
+
+        Page<Post> postPage = postRepository.findAllByHashtag(tag, paging);
+        if (postPage.isEmpty()) throw new PostNotFound();
+
+        List<Post> posts = new ArrayList<>(postPage.getContent());
+
+        List<PostResponseDTO> postsDTOs = posts.stream()
+                .map(PostService::getPostResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", postsDTOs);
+        response.put("current_page", postPage.getNumber());
+        response.put("total_items", postPage.getTotalElements());
+        response.put("total_pages", postPage.getTotalPages());
+
+        return response;
+    }
+
     @Transactional
     public PostResponseDTO createPost(PostRequestDTO body, String requesting_user) {
         User author = userRepository.findByUsername(requesting_user)
