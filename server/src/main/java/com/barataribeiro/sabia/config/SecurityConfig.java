@@ -32,7 +32,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         List<String> urls = Arrays.asList("/api/v1/posts/public/**",
-                                          "/api/v1/users/public/**");
+                                          "/api/v1/users/public/**",
+                                          "/v3/api-docs/**",
+                                          "/api-docs/**",
+                                          "/swagger-resources/**",
+                                          "/swagger-ui/**");
 
         List<HttpMethod> methods = Arrays.asList(HttpMethod.GET,
                                                  HttpMethod.POST);
