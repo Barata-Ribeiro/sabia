@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,6 +29,18 @@ public class UserController {
                                                               HttpStatus.OK.value(),
                                                               "User retrieved successfully.",
                                                               user));
+    }
+
+    @GetMapping("/public/search")
+    public ResponseEntity searchUser(@RequestParam String q,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int perPage) {
+        Map<String, Object> data = userService.searchUser(q, page, perPage);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "Users retrieved successfully.",
+                                                              data));
     }
 
     @GetMapping("/me/{userId}")

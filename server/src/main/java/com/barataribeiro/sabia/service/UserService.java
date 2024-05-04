@@ -18,10 +18,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +50,32 @@ public class UserService {
                 .orElseThrow(UserNotFound::new);
 
         return getPublicProfileResponseDTO(user);
+    }
+
+    public Map<String, Object> searchUser(String query, int page, int perPage) {
+        Pageable paging = PageRequest.of(page, perPage);
+        String searchParams = query.startsWith("@") ? query.substring(1) : query;
+
+        if (query.isEmpty()) throw new BadRequest("You must provide a term to search for users.");
+        if (query.length() < 3) throw new BadRequest("The search term must be at least 3 characters long.");
+
+        Page<User> usersPage = userRepository.searchByQuery(searchParams, paging);
+
+        if (usersPage.isEmpty()) throw new UserNotFound();
+
+        List<User> usersResult = new ArrayList<>(usersPage.getContent());
+
+        List<PublicProfileResponseDTO> usersDTOs = usersResult.stream()
+                .map(UserService::getPublicProfileResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", usersDTOs);
+        response.put("current_page", usersPage.getNumber());
+        response.put("total_items", usersPage.getTotalElements());
+        response.put("total_pages", usersPage.getTotalPages());
+
+        return response;
     }
 
     public ContextResponseDTO getUserContext(String userId, String requesting_user) {
