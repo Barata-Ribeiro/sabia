@@ -35,14 +35,10 @@ public class Post {
     @ElementCollection
     private Map<String, Date> hashtags = new HashMap<>();
 
-    @Builder.Default
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "post_hashtags",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
-    private Set<Hashtag> post_hashtags = new HashSet<>();
+    private List<HashtagPosts> postHashtags = new ArrayList<>();
 
     private Integer views;
 

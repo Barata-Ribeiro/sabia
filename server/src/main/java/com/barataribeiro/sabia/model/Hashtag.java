@@ -7,8 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "hashtags", indexes = @Index(name = "idx_tag", columnList = "tag"))
@@ -24,14 +24,16 @@ public class Hashtag {
     @Column(updatable = false, nullable = false, unique = true)
     private String id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String tag;
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "post_hashtags", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @ToString.Exclude
+    @Column(name = "recent_post_count", columnDefinition = "BIGINT default '1'", nullable = false)
+    private Long recentPostCount = 1L;
+
+    @OneToMany(mappedBy = "hashtags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Post> posts = new HashSet<>();
+    @ToString.Exclude
+    private List<HashtagPosts> hashtagPosts = new ArrayList<>();
 
     @Column
     @CreationTimestamp
