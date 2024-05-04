@@ -27,9 +27,6 @@ public class Hashtag {
     @Column(unique = true, nullable = false)
     private String tag;
 
-    @Column(name = "recent_post_count", columnDefinition = "BIGINT default '1'", nullable = false)
-    private Long recentPostCount = 1L;
-
     @OneToMany(mappedBy = "hashtags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
