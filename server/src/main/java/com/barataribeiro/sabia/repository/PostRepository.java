@@ -10,8 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface PostRepository extends JpaRepository<Post, String> {
     Page<Post> findAllByAuthorId(String authorId, Pageable pageable);
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.post_hashtags h WHERE " +
-            "LOWER(h.tag) = LOWER(:tag)")
+    @Query("SELECT p FROM Post p JOIN p.postHashtags hp WHERE hp.hashtags.tag = :tag")
     Page<Post> findAllByHashtag(@Param("tag") String tag, Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE " +
