@@ -8,14 +8,8 @@ import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.post.PostInvalidBody;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
-import com.barataribeiro.sabia.model.Hashtag;
-import com.barataribeiro.sabia.model.Like;
-import com.barataribeiro.sabia.model.Post;
-import com.barataribeiro.sabia.model.User;
-import com.barataribeiro.sabia.repository.HashtagRepository;
-import com.barataribeiro.sabia.repository.LikeRepository;
-import com.barataribeiro.sabia.repository.PostRepository;
-import com.barataribeiro.sabia.repository.UserRepository;
+import com.barataribeiro.sabia.model.*;
+import com.barataribeiro.sabia.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +40,9 @@ public class PostService {
 
     @Autowired
     private HashtagRepository hashtagRepository;
+
+    @Autowired
+    private HashtagPostsRepository hashtagPostsRepository;
 
     public Map<String, Object> getAllPosts(String userId, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
@@ -121,19 +118,27 @@ public class PostService {
                 .text(text)
                 .build();
 
-        while (matcher.find()) {
-            String tag = matcher.group().substring(1);
+        postRepository.save(post);
 
-            Hashtag hashtag = hashtagRepository.findByTag(tag)
+        while (matcher.find()) {
+            String hashtagText = matcher.group().substring(1);
+            Hashtag hashtag = hashtagRepository.findByTag(hashtagText)
                     .orElseGet(() -> {
                         Hashtag newHashtag = Hashtag.builder()
-                                .tag(tag)
+                                .tag(hashtagText)
                                 .build();
 
                         return hashtagRepository.save(newHashtag);
                     });
 
-            post.getPost_hashtags().add(hashtag);
+            HashtagPosts hashtagPost = HashtagPosts.builder()
+                    .hashtags(hashtag)
+                    .posts(post)
+                    .build();
+            
+            hashtagPostsRepository.save(hashtagPost);
+
+            post.setPostHashtags(List.of(hashtagPost));
         }
 
         postRepository.save(post);
@@ -197,10 +202,15 @@ public class PostService {
                 author.getRole()
         );
 
+        List<String> hashtags = post.getPostHashtags().stream()
+                .map(hashtagPost -> hashtagPost.getHashtags().getTag())
+                .collect(Collectors.toList());
+
         return new PostResponseDTO(
                 post.getId(),
                 authorDTO,
                 post.getText(),
+                hashtags,
                 post.getViews(),
                 post.getRepost_count(),
                 post.getLike_count(),

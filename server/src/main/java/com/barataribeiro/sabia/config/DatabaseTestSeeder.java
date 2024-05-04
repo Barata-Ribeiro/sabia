@@ -1,8 +1,8 @@
 package com.barataribeiro.sabia.config;
 
-import com.barataribeiro.sabia.model.Post;
-import com.barataribeiro.sabia.model.Roles;
-import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.model.*;
+import com.barataribeiro.sabia.repository.HashtagPostsRepository;
+import com.barataribeiro.sabia.repository.HashtagRepository;
 import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -11,12 +11,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Configuration
 public class DatabaseTestSeeder {
 
     @Bean
-    public CommandLineRunner initDatabase(UserRepository userRepository, PostRepository postRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner initDatabase(UserRepository userRepository,
+                                          PostRepository postRepository,
+                                          HashtagRepository hashtagRepository,
+                                          HashtagPostsRepository hashtagPostsRepository,
+                                          PasswordEncoder passwordEncoder) {
         return args -> {
             // Create two users
             User user1 = new User();
@@ -49,7 +56,34 @@ public class DatabaseTestSeeder {
 
                 Post post2 = new Post();
                 post2.setAuthor(user2);
-                post2.setText("Post " + i + " from User Two");
+                post2.setText("Post " + i + " from User Two, #enjoy #hashtag" + i);
+
+                postRepository.save(post2);
+
+                Pattern pattern = Pattern.compile("#\\w+");
+                Matcher matcher = pattern.matcher(post2.getText());
+
+                while (matcher.find()) {
+                    String hashtagText = matcher.group().substring(1); // remove '#'
+                    Hashtag hashtag = hashtagRepository.findByTag(hashtagText)
+                            .orElseGet(() -> {
+                                Hashtag newHashtag = Hashtag.builder()
+                                        .tag(hashtagText)
+                                        .build();
+
+                                return hashtagRepository.save(newHashtag);
+                            });
+
+                    HashtagPosts hashtagPost = HashtagPosts.builder()
+                            .hashtags(hashtag)
+                            .posts(post2)
+                            .build();
+                    
+                    hashtagPostsRepository.save(hashtagPost);
+
+                    post2.setPostHashtags(List.of(hashtagPost));
+                }
+
                 postRepository.save(post2);
             }
         };
