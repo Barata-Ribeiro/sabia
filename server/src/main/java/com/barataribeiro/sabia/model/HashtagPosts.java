@@ -35,11 +35,11 @@ public class HashtagPosts {
             nullable = false)
     private Post posts;
 
-    @Column
+    @Column(name = "created_at")
     @CreationTimestamp
-    private Instant created_at;
+    private Instant createdAt;
 
-    @Column
+    @Column(name = "updated_at")
     @UpdateTimestamp
-    private Instant updated_at;
+    private Instant updatedAt;
 }
