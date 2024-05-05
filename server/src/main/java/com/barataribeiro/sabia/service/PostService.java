@@ -10,13 +10,16 @@ import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.*;
 import com.barataribeiro.sabia.repository.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,8 +47,11 @@ public class PostService {
     @Autowired
     private HashtagPostsRepository hashtagPostsRepository;
 
+    @Cacheable(value = "posts", key = "{#userId, #page, #perPage}")
     public Map<String, Object> getAllPosts(String userId, int page, int perPage) {
-        Pageable paging = PageRequest.of(page, perPage);
+        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
+
+        if (perPage < 1 || perPage > 15) throw new BadRequest("The number of items per page must be between 1 and 15.");
 
         Page<Post> postPage = postRepository.findAllByAuthorId(userId, paging);
         if (postPage.isEmpty()) throw new PostNotFound();
@@ -65,6 +71,7 @@ public class PostService {
         return response;
     }
 
+    @Cacheable(value = "posts", key = "#postId")
     public PostResponseDTO getPostById(String postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
@@ -72,10 +79,12 @@ public class PostService {
         return getPostResponseDTO(post);
     }
 
+    @Cacheable(value = "posts", key = "{#query, #page, #perPage}")
     public Map<String, Object> searchPosts(String query, int page, int perPage) {
-        Pageable paging = PageRequest.of(page, perPage);
+        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
         String queryParams = query.startsWith("#") ? query.substring(1) : query;
 
+        if (perPage < 1 || perPage > 15) throw new BadRequest("The number of items per page must be between 1 and 15.");
         if (query.isEmpty()) throw new BadRequest("You must provide a term to search for users.");
         if (query.length() < 3) throw new BadRequest("The search term must be at least 3 characters long.");
 
@@ -101,6 +110,7 @@ public class PostService {
     }
 
     @Transactional
+    @CacheEvict(value = "posts", allEntries = true)
     public PostResponseDTO createPost(PostRequestDTO body, String requesting_user) {
         User author = userRepository.findByUsername(requesting_user)
                 .orElseThrow(UserNotFound::new);
@@ -135,7 +145,7 @@ public class PostService {
                     .hashtags(hashtag)
                     .posts(post)
                     .build();
-            
+
             hashtagPostsRepository.save(hashtagPost);
 
             post.setPostHashtags(List.of(hashtagPost));
@@ -147,6 +157,7 @@ public class PostService {
     }
 
     @Transactional
+    @CacheEvict(value = "posts", allEntries = true)
     public void deletePost(String postId, String requesting_user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
@@ -214,8 +225,8 @@ public class PostService {
                 post.getViews(),
                 post.getRepost_count(),
                 post.getLike_count(),
-                post.getCreated_at().toString(),
-                post.getUpdated_at().toString()
+                post.getCreatedAt().toString(),
+                post.getUpdatedAt().toString()
         );
     }
 }

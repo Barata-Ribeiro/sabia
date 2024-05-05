@@ -13,13 +13,13 @@ import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
 import com.barataribeiro.sabia.util.Validation;
-import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -44,7 +44,7 @@ public class AuthService {
     private Validation validation;
 
     public LoginResponseDTO login(String username, String password) {
-        User user = this.userRepository.findByUsername(username).orElseThrow(UserNotFound::new);
+        User user = userRepository.findByUsername(username).orElseThrow(UserNotFound::new);
 
         boolean passwordMatches = passwordEncoder.matches(password, user.getPassword());
         boolean userBannedOrNone = user.getRole().equals(Roles.BANNED) || user.getRole().equals(Roles.NONE);
@@ -53,7 +53,7 @@ public class AuthService {
 
         if (!passwordMatches) throw new InvalidCredentials("You entered the wrong password. Please try again.");
 
-        Map.Entry<String, Instant> tokenAndExpiration = this.tokenService.generateToken(user);
+        Map.Entry<String, Instant> tokenAndExpiration = tokenService.generateToken(user);
         String token = tokenAndExpiration.getKey();
         String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
@@ -76,8 +76,8 @@ public class AuthService {
                                                  "one lowercase letter, " +
                                                  "one number and one special character.");
 
-        Boolean userByUsername = this.userRepository.existsByUsername(sanitizedUsername);
-        Boolean userByEmail = this.userRepository.existsByUsername(sanitizedEmail);
+        Boolean userByUsername = userRepository.existsByUsername(sanitizedUsername);
+        Boolean userByEmail = userRepository.existsByUsername(sanitizedEmail);
 
         if (userByUsername || userByEmail) throw new UserAlreadyExists();
 
@@ -98,7 +98,7 @@ public class AuthService {
                     .password(passwordEncoder.encode(sanitizedPassword))
                     .build();
 
-            this.userRepository.save(newUser);
+            userRepository.save(newUser);
 
             return new RegisterResponseDTO(newUser.getUsername(), newUser.getDisplay_name(), newUser.getEmail());
         } catch (ConstraintViolationException error) {

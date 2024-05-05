@@ -14,15 +14,18 @@ import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.FollowRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.util.Validation;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +48,7 @@ public class UserService {
     @Autowired
     private Validation validation;
 
+    @CacheEvict(value = "users", key = "#userId")
     public PublicProfileResponseDTO getPublicProfile(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
@@ -52,10 +56,13 @@ public class UserService {
         return getPublicProfileResponseDTO(user);
     }
 
+    @Cacheable(value = "users", key = "#userId")
     public Map<String, Object> searchUser(String query, int page, int perPage) {
-        Pageable paging = PageRequest.of(page, perPage);
+        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
+
         String searchParams = query.startsWith("@") ? query.substring(1) : query;
 
+        if (perPage < 1 || perPage > 15) throw new BadRequest("The number of items per page must be between 1 and 15.");
         if (query.isEmpty()) throw new BadRequest("You must provide a term to search for users.");
         if (query.length() < 3) throw new BadRequest("The search term must be at least 3 characters long.");
 
@@ -78,6 +85,7 @@ public class UserService {
         return response;
     }
 
+    @CacheEvict(value = "users", key = "#userId")
     public ContextResponseDTO getUserContext(String userId, String requesting_user) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
@@ -90,6 +98,7 @@ public class UserService {
     }
 
     @Transactional
+    @CacheEvict(value = "users", key = "#userId")
     public ContextResponseDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body) {
         try {
             User user = userRepository.findById(userId)
@@ -126,6 +135,7 @@ public class UserService {
     }
 
     @Transactional
+    @CacheEvict(value = "users", key = "#userId")
     public void deleteOwnAccount(String userId, String requesting_user) {
         try {
             User user = userRepository.findById(userId)
@@ -313,8 +323,8 @@ public class UserService {
                                             Math.toIntExact(user.getFollowing_count()),
                                             user.getPosts().size(),
                                             user.getLiked_posts().size(),
-                                            user.getCreated_at().toString(),
-                                            user.getUpdated_at().toString());
+                                            user.getCreatedAt().toString(),
+                                            user.getUpdatedAt().toString());
     }
 
     private static ContextResponseDTO getContextResponseDTO(User user) {
@@ -335,8 +345,8 @@ public class UserService {
                                       user.getIs_private(),
                                       user.getFollower_count(),
                                       user.getFollowing_count(),
-                                      user.getCreated_at().toString(),
-                                      user.getUpdated_at().toString());
+                                      user.getCreatedAt().toString(),
+                                      user.getUpdatedAt().toString());
     }
 
     private static Map<String, Object> sanitizeBody(ProfileRequestDTO body) {
