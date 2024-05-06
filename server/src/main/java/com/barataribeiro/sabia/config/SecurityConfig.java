@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> {
                     for (HttpMethod method : methods) authorize.requestMatchers(method, "/api/v1/auth/**").permitAll();
                     for (String url : urls) authorize.requestMatchers(HttpMethod.GET, url).permitAll();
+                    Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
+                            .forEach(httpMethod -> authorize.requestMatchers(httpMethod, ("/api/v1/admin/**")).hasRole("ADMIN"));
                     authorize.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
