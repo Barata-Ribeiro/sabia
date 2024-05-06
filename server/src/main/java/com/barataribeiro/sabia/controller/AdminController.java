@@ -47,4 +47,15 @@ public class AdminController {
                                                               null));
     }
 
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity deletePost(@PathVariable String postId, Principal principal) {
+        adminService.deletePost(postId, principal.getName());
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "Post deleted successfully.",
+                                                              null));
+    }
+
 }
