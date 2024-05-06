@@ -53,6 +53,22 @@ public class UserController {
                                                               user));
     }
 
+    @GetMapping("/me/{userId}/feed")
+    public ResponseEntity getUserFeed(@PathVariable String userId,
+                                      @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int perPage,
+                                      Principal principal) {
+        Map<String, Object> data = userService.getUserFeed(userId,
+                                                           page,
+                                                           perPage,
+                                                           principal.getName());
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "User feed retrieved successfully.",
+                                                              data));
+    }
+
     @PutMapping("/me/{userId}")
     public ResponseEntity updateUser(@PathVariable String userId, @RequestBody ProfileRequestDTO body, Principal principal) {
         ContextResponseDTO user = userService.updateOwnAccount(userId, principal.getName(), body);

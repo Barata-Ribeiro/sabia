@@ -1,17 +1,22 @@
 package com.barataribeiro.sabia.service;
 
+import com.barataribeiro.sabia.dto.post.PostResponseDTO;
+import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
 import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
 import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.others.InternalServerError;
+import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.InvalidInput;
 import com.barataribeiro.sabia.exceptions.user.SameUser;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.Follow;
+import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.FollowRepository;
+import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.util.Validation;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +45,9 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private FollowRepository followRepository;
 
     @Autowired
@@ -47,6 +55,7 @@ public class UserService {
 
     @Autowired
     private Validation validation;
+
 
     @CacheEvict(value = "users", key = "#userId")
     public PublicProfileResponseDTO getPublicProfile(String userId) {
@@ -95,6 +104,43 @@ public class UserService {
         }
 
         return getContextResponseDTO(user);
+    }
+
+    @Cacheable(value = "users", key = "#userId")
+    public Map<String, Object> getUserFeed(String userId, int page, int perPage, String requesting_user) {
+        Pageable paging = PageRequest.of(page, perPage);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+
+        if (!user.getUsername().equals(requesting_user)) {
+            throw new ForbiddenRequest("You are not allowed to access this user's feed.");
+        }
+
+        if (perPage < 1 || perPage > 20) throw new BadRequest("The number of items per page must be between 1 and 20.");
+
+        List<User> followings = user.getFollowings().stream()
+                .map(Follow::getFollowed)
+                .collect(Collectors.toList());
+
+        followings.add(user);
+
+        Page<Post> postPage = postRepository.findByAuthorInOrderByCreatedAtDesc(followings, paging);
+        if (postPage.isEmpty()) throw new PostNotFound();
+
+        List<Post> posts = new ArrayList<>(postPage.getContent());
+
+        List<PostResponseDTO> mappedPosts = posts.stream()
+                .map(UserService::getPostResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("feed", mappedPosts);
+        response.put("current_page", postPage.getNumber());
+        response.put("total_items", postPage.getTotalElements());
+        response.put("total_pages", postPage.getTotalPages());
+
+        return response;
     }
 
     @Transactional
@@ -347,6 +393,28 @@ public class UserService {
                                       user.getFollowing_count(),
                                       user.getCreatedAt().toString(),
                                       user.getUpdatedAt().toString());
+    }
+
+    private static PostResponseDTO getPostResponseDTO(Post post) {
+        return new PostResponseDTO(
+                post.getId(),
+                new AuthorResponseDTO(
+                        post.getAuthor().getId(),
+                        post.getAuthor().getUsername(),
+                        post.getAuthor().getDisplay_name(),
+                        post.getAuthor().getAvatar_image_url(),
+                        post.getAuthor().getIs_verified(),
+                        post.getAuthor().getRole()
+                ),
+                post.getText(),
+                post.getPostHashtags().stream()
+                        .map(hashtagPost -> hashtagPost.getHashtags().getTag())
+                        .collect(Collectors.toList()),
+                post.getViews(),
+                post.getRepost_count(),
+                post.getLike_count(),
+                post.getCreatedAt().toString(),
+                post.getUpdatedAt().toString());
     }
 
     private static Map<String, Object> sanitizeBody(ProfileRequestDTO body) {
