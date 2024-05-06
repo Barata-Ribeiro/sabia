@@ -1,8 +1,7 @@
 package com.barataribeiro.sabia.service;
 
-import com.barataribeiro.sabia.dto.admin.AdminEditProfileRequestDTO;
-import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.exceptions.others.BadRequest;
+import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
@@ -15,11 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
     @Autowired
     private UserRepository userRepository;
-
-    @Transactional
-    public PublicProfileResponseDTO updateUserProfile(String userId, AdminEditProfileRequestDTO body, String principalName) {
-        return null;
-    }
 
     public Boolean toggleVerifyUser(String userId, String principalName) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
@@ -35,7 +29,7 @@ public class AdminService {
         return user.getIs_verified();
     }
 
-    public Boolean banUser(String userId, String principalName) {
+    public Boolean toggleUserBan(String userId, String principalName) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
 
         if (user.getUsername().equals(principalName)) throw new BadRequest("You can't ban yourself.");
@@ -51,5 +45,18 @@ public class AdminService {
 
     @Transactional
     public void deleteUser(String userId, String principalName) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+
+            if (user.getUsername().equals(principalName))
+                throw new BadRequest("To delete your account, use the 'Delete Account' option in the settings.");
+            if (user.getRole().equals(Roles.ADMIN))
+                throw new BadRequest("Admins can't delete other admins.");
+
+            userRepository.delete(user);
+        } catch (Exception error) {
+            System.err.println("An error occurred while deleting the user's account: " + error.getMessage());
+            throw new InternalServerError("An error occurred while deleting your account. Please try again.");
+        }
     }
 }
