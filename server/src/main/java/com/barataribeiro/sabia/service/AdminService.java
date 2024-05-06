@@ -24,7 +24,7 @@ public class AdminService {
     public Boolean toggleVerifyUser(String userId, String principalName) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
 
-        if (user.getUsername().equals(principalName)) throw new BadRequest("Admins can't verify themselves.");
+        if (user.getUsername().equals(principalName)) throw new BadRequest("You can't verify yourself.");
         if (user.getRole().equals(Roles.ADMIN))
             throw new BadRequest("Admins can't verify other admins. They are already verified.");
 
@@ -36,7 +36,17 @@ public class AdminService {
     }
 
     public Boolean banUser(String userId, String principalName) {
-        return true;
+        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+
+        if (user.getUsername().equals(principalName)) throw new BadRequest("You can't ban yourself.");
+        if (user.getRole().equals(Roles.ADMIN))
+            throw new BadRequest("Admins can't ban other admins.");
+
+        user.setRole(user.getRole().equals(Roles.BANNED) ? Roles.MEMBER : Roles.BANNED);
+
+        userRepository.save(user);
+
+        return user.getRole().equals(Roles.BANNED);
     }
 
     @Transactional
