@@ -40,11 +40,10 @@ public class Post {
     @ToString.Exclude
     private List<HashtagPosts> postHashtags = new ArrayList<>();
 
-    private Integer views;
-
     @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long repost_count = 0L;
+    private Long views_count = 0L;
+
 
     @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
@@ -56,6 +55,35 @@ public class Post {
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 
+
+    @Builder.Default
+    @OneToMany(mappedBy = "repost_off")
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<Post> reposts = new HashSet<>();
+
+    @ManyToOne
+    private Post repost_off;
+
+    @Builder.Default
+    @Column(columnDefinition = "BIGINT default '0'", nullable = false)
+    private Long repost_count = 0L;
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "in_reply_to")
+    @JsonIgnore
+    @ToString.Exclude
+    private Set<Post> replies = new HashSet<>();
+
+    @Builder.Default
+    @Column(columnDefinition = "BIGINT default '0'", nullable = false)
+    private Long reply_count = 0L;
+
+    @ManyToOne
+    private Post in_reply_to;
+
+
     @Column(name = "created_at")
     @CreationTimestamp
     private Instant createdAt;
@@ -63,6 +91,10 @@ public class Post {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private Instant updatedAt;
+
+    public void incrementViewCount() {
+        ++views_count;
+    }
 
     public void incrementLikeCount() {
         ++like_count;
@@ -78,5 +110,13 @@ public class Post {
 
     public void decrementRepostCount() {
         repost_count = repost_count > 0 ? --repost_count : 0;
+    }
+
+    public void incrementReplyCount() {
+        ++reply_count;
+    }
+
+    public void decrementReplyCount() {
+        reply_count = reply_count > 0 ? --reply_count : 0;
     }
 }

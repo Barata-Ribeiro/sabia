@@ -54,7 +54,6 @@ public class PostService {
         if (perPage < 1 || perPage > 15) throw new BadRequest("The number of items per page must be between 1 and 15.");
 
         Page<Post> postPage = postRepository.findAllByAuthorId(userId, paging);
-        if (postPage.isEmpty()) throw new PostNotFound();
 
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
@@ -75,6 +74,9 @@ public class PostService {
     public PostResponseDTO getPostById(String postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
+
+        post.incrementViewCount();
+        postRepository.save(post);
 
         return getPostResponseDTO(post);
     }
@@ -222,7 +224,7 @@ public class PostService {
                 authorDTO,
                 post.getText(),
                 hashtags,
-                post.getViews(),
+                Math.toIntExact(post.getViews_count()),
                 post.getRepost_count(),
                 post.getLike_count(),
                 post.getCreatedAt().toString(),
