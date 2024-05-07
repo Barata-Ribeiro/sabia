@@ -67,6 +67,27 @@ public class UserService {
         return getPublicProfileResponseDTO(user);
     }
 
+    @CacheEvict(value = "users", key = "#userId")
+    public Map<String, Object> getFollowers(String userId, int page, int perPage) {
+        Pageable paging = PageRequest.of(page, perPage);
+
+        Page<Follow> followersPage = followRepository.findByFollowedIdOrderByCreatedAtDesc(userId, paging);
+
+        List<Follow> followers = new ArrayList<>(followersPage.getContent());
+
+        List<PublicProfileResponseDTO> followersDTOs = followers.stream()
+                .map(follow -> getPublicProfileResponseDTO(follow.getFollower()))
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("followers", followersDTOs);
+        response.put("current_page", followersPage.getNumber());
+        response.put("total_items", followersPage.getTotalElements());
+        response.put("total_pages", followersPage.getTotalPages());
+
+        return response;
+    }
+
     @Cacheable(value = "users", key = "#userId")
     public Map<String, Object> searchUser(String query, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());

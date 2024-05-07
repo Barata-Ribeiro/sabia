@@ -31,6 +31,18 @@ public class UserController {
                                                               user));
     }
 
+    @GetMapping("/public/{userId}/followers")
+    public ResponseEntity getFollowers(@PathVariable String userId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int perPage) {
+        Map<String, Object> data = userService.getFollowers(userId, page, perPage);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "Followers retrieved successfully.",
+                                                              data));
+    }
+
     @GetMapping("/public/search")
     public ResponseEntity searchUser(@RequestParam String q,
                                      @RequestParam(defaultValue = "0") int page,
