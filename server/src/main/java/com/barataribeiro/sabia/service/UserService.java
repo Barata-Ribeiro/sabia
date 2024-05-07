@@ -62,6 +62,8 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
 
+        if (user.getIs_private()) throw new ForbiddenRequest("This user's profile is private.");
+
         return getPublicProfileResponseDTO(user);
     }
 
