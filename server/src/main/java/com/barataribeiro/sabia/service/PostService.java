@@ -160,6 +160,31 @@ public class PostService {
 
     @Transactional
     @CacheEvict(value = "posts", allEntries = true)
+    public Post repost(String postId, String requesting_user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+
+        User user = userRepository.findByUsername(requesting_user)
+                .orElseThrow(UserNotFound::new);
+
+        Post repost = Post.builder()
+                .author(user)
+                .text(post.getText())
+                .repost_off(post)
+                .build();
+
+        postRepository.save(repost);
+
+        post.incrementRepostCount();
+        post.incrementViewCount();
+
+        postRepository.save(post);
+
+        return repost;
+    }
+
+    @Transactional
+    @CacheEvict(value = "posts", allEntries = true)
     public void deletePost(String postId, String requesting_user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);

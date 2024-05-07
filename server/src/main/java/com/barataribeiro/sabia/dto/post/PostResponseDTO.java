@@ -9,8 +9,9 @@ public record PostResponseDTO(String id,
                               String text,
                               List<String> hashtags,
                               Integer views,
-                              Long repost_count,
                               Long like_count,
+                              Long repost_count,
+                              Long reply_count,
                               String created_at,
                               String updated_at) {
 }

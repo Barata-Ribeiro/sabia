@@ -3,6 +3,7 @@ package com.barataribeiro.sabia.controller;
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
+import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,16 @@ public class PostController {
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
                                                               HttpStatus.CREATED.value(),
                                                               "Post created successfully.",
+                                                              data));
+    }
+
+    @PostMapping("/me/{postId}/repost")
+    public ResponseEntity repost(@PathVariable String postId, Principal principal) {
+        Post data = postService.repost(postId, principal.getName());
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
+                                                              HttpStatus.CREATED.value(),
+                                                              "Post reposted successfully.",
                                                               data));
     }
 
