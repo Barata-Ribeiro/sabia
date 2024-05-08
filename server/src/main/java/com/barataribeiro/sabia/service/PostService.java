@@ -81,6 +81,29 @@ public class PostService {
         return getPostResponseDTO(post);
     }
 
+    @Cacheable(value = "posts", key = "{#postId, #page, #perPage}")
+    public Map<String, Object> getPostReplies(String postId, int page, int perPage) {
+        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
+
+        if (perPage < 1 || perPage > 10) throw new BadRequest("The number of items per page must be between 1 and 10.");
+
+        Page<Post> postPage = postRepository.findRepliesByPostId(postId, paging);
+
+        List<Post> posts = new ArrayList<>(postPage.getContent());
+
+        List<PostResponseDTO> postsDTOs = posts.stream()
+                .map(PostService::getPostResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("replies", postsDTOs);
+        response.put("current_page", postPage.getNumber());
+        response.put("total_items", postPage.getTotalElements());
+        response.put("total_pages", postPage.getTotalPages());
+
+        return response;
+    }
+
     @Cacheable(value = "posts", key = "{#query, #page, #perPage}")
     public Map<String, Object> searchPosts(String query, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -185,6 +208,32 @@ public class PostService {
 
     @Transactional
     @CacheEvict(value = "posts", allEntries = true)
+    public PostResponseDTO replyToPost(String postId, PostRequestDTO body, String requesting_user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+
+        User user = userRepository.findByUsername(requesting_user)
+                .orElseThrow(UserNotFound::new);
+
+        var text = body.text().trim();
+
+        if (text.isEmpty()) throw new PostInvalidBody("Text cannot be empty.");
+        if (text.length() > 280) throw new PostInvalidBody("Text cannot exceed 280 characters.");
+
+        Post reply = Post.builder()
+                .author(user)
+                .text(text)
+                .in_reply_to(post)
+                .build();
+
+        post.incrementReplyCount();
+        postRepository.save(post);
+
+        return getPostResponseDTO(reply);
+    }
+
+    @Transactional
+    @CacheEvict(value = "posts", allEntries = true)
     public void deletePost(String postId, String requesting_user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
@@ -249,9 +298,10 @@ public class PostService {
                 authorDTO,
                 post.getText(),
                 hashtags,
-                Math.toIntExact(post.getViews_count()),
-                post.getRepost_count(),
+                post.getViews_count(),
                 post.getLike_count(),
+                post.getRepost_count(),
+                post.getReply_count(),
                 post.getCreatedAt().toString(),
                 post.getUpdatedAt().toString()
         );

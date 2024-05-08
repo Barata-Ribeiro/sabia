@@ -433,9 +433,10 @@ public class UserService {
                 post.getPostHashtags().stream()
                         .map(hashtagPost -> hashtagPost.getHashtags().getTag())
                         .collect(Collectors.toList()),
-                post.getViews(),
+                post.getViews_count(),
                 post.getRepost_count(),
                 post.getLike_count(),
+                post.getReply_count(),
                 post.getCreatedAt().toString(),
                 post.getUpdatedAt().toString());
     }

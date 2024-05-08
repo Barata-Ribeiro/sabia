@@ -43,6 +43,18 @@ public class PostController {
                                                               data));
     }
 
+    @GetMapping("/public/{postId}/replies")
+    public ResponseEntity getReplies(@PathVariable String postId,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int perPage) {
+        Map<String, Object> data = postService.getPostReplies(postId, page, perPage);
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              "Replies retrieved successfully.",
+                                                              data));
+    }
+
     @GetMapping("/public/search")
     public ResponseEntity searchPosts(@RequestParam String q,
                                       @RequestParam(defaultValue = "0") int page,
@@ -72,6 +84,16 @@ public class PostController {
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
                                                               HttpStatus.CREATED.value(),
                                                               "Post reposted successfully.",
+                                                              data));
+    }
+
+    @PostMapping("/me/{postId}/reply")
+    public ResponseEntity reply(@PathVariable String postId, @RequestBody PostRequestDTO body, Principal principal) {
+        PostResponseDTO data = postService.replyToPost(postId, body, principal.getName());
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
+                                                              HttpStatus.CREATED.value(),
+                                                              "Post replied successfully.",
                                                               data));
     }
 

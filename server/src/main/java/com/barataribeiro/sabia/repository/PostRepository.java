@@ -13,7 +13,11 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, String> {
     Page<Post> findAllByAuthorId(String authorId, Pageable pageable);
 
-    @Query("SELECT p FROM Post p JOIN p.postHashtags hp WHERE hp.hashtags.tag = :tag")
+    @Query("SELECT p FROM Post p WHERE p.in_reply_to.id = :postId")
+    Page<Post> findRepliesByPostId(@Param("postId") String postId, Pageable pageable);
+
+    @Query("SELECT p FROM Post p JOIN p.postHashtags hp " +
+            "WHERE hp.hashtags.tag = :tag")
     Page<Post> findAllByHashtag(@Param("tag") String tag, Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE " +
