@@ -71,7 +71,7 @@ public class UserService {
     public Map<String, Object> getFollowers(String userId, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
-        Page<Follow> followersPage = followRepository.findByFollowedIdOrderByCreatedAtDesc(userId, paging);
+        Page<Follow> followersPage = followRepository.findByFollowedIdOrderByFollowedAtDesc(userId, paging);
 
         List<Follow> followers = new ArrayList<>(followersPage.getContent());
 

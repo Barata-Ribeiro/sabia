@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FollowRepository extends JpaRepository<Follow, String> {
     Boolean existsByFollowerIdAndFollowedId(String followerId, String followedId);
 
-    Page<Follow> findByFollowedIdOrderByCreatedAtDesc(String followedId, Pageable pageable);
+    Page<Follow> findByFollowedIdOrderByFollowedAtDesc(String followedId, Pageable pageable);
 }
