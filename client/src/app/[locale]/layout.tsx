@@ -1,5 +1,6 @@
 import { locales } from "@/navigation"
 import "./globals.css"
+import tw from "@/utils/tw"
 import { Metadata } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
@@ -46,11 +47,13 @@ export default async function RootLayout({
 
     const messages = await getMessages()
 
+    const body_styles = tw`flex min-h-dvh flex-col`
+
     return (
         <html lang={locale} suppressHydrationWarning>
             <NextIntlClientProvider locale={locale} messages={messages}>
                 <body
-                    className={`flex min-h-dvh flex-col ${open_sans.variable} ${avarage_sans.variable}`}
+                    className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}
                 >
                     <div className="flex-1 md:container">{children}</div>
                 </body>
