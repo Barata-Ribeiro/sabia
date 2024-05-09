@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,27 +27,27 @@ public class SecurityConfig {
 
     @Autowired
     SecurityFilter securityFilter;
+
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        List<String> urls = Arrays.asList("/api/v1/posts/public/**",
-                                          "/api/v1/users/public/**",
-                                          "/v3/api-docs/**",
-                                          "/api-docs/**",
-                                          "/swagger-resources/**",
-                                          "/swagger-ui/**");
-
-        List<HttpMethod> methods = Arrays.asList(HttpMethod.GET,
-                                                 HttpMethod.POST);
+        List<String> public_urls = Arrays.asList("/api/v1/posts/public/**",
+                                                 "/api/v1/users/public/**",
+                                                 "/v3/api-docs/**",
+                                                 "/api-docs/**",
+                                                 "/swagger-resources/**",
+                                                 "/swagger-ui/**");
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(authorize -> {
-                    for (HttpMethod method : methods) authorize.requestMatchers(method, "/api/v1/auth/**").permitAll();
-                    for (String url : urls) authorize.requestMatchers(HttpMethod.GET, url).permitAll();
+                    authorize.requestMatchers("/h2-console/**").permitAll();
+                    Arrays.asList(HttpMethod.GET, HttpMethod.POST).forEach(httpMethod -> authorize.requestMatchers(httpMethod, "/api/v1/auth/**").permitAll());
+                    for (String url : public_urls) authorize.requestMatchers(HttpMethod.GET, url).permitAll();
                     Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
                             .forEach(httpMethod -> authorize.requestMatchers(httpMethod, ("/api/v1/admin/**")).hasRole("ADMIN"));
                     authorize.anyRequest().authenticated();
