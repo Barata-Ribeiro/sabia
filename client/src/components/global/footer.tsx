@@ -1,3 +1,4 @@
+import LocaleSwitcher from "@/components/global/locale-switcher"
 import { useLocale, useTranslations } from "next-intl"
 import Link from "next/link"
 
@@ -34,16 +35,19 @@ export default function Footer() {
                         Barata-Ribeiro
                     </Link>
                 </p>
-                <nav className="-mx-2 mt-4 inline-flex justify-center sm:ml-auto sm:mt-0 sm:justify-start">
+                <nav className="-mx-2 mt-4 flex items-center justify-center max-sm:flex-wrap sm:ml-auto sm:mt-0 sm:inline-flex sm:justify-start">
                     {Object.entries(links).map(([key, value]) => (
                         <Link
                             key={key}
-                            href={localActive + value}
+                            href={
+                                key === "repository" ? value : `/${localActive}${value}`
+                            }
                             className="text-body-500 hover:text-body-900 mx-2"
                         >
                             {t(key)}
                         </Link>
                     ))}
+                    <LocaleSwitcher />
                 </nav>
             </div>
         </footer>
