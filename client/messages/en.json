@@ -4,7 +4,24 @@
         "title": "Sabiá | English",
         "description": "Welcome to Sabiá - a microblogging platform for your thoughts and ideas."
     },
+    "LoginPage": {
+        "PageTitle": "Log in to your account",
+        "PageImageDescription": "Random Thrush bird image",
+        "PageRegisterMessage": "Need an account? ",
+        "PageRegisterLink": "Create an account"
+    },
     "_comment-2": "Components related translations.",
+    "LoginForm": {
+        "InputUsername": "Username",
+        "InputPassword": "Password",
+        "ForgotPassword": "Forgot your password?",
+        "LoginButton": "Sign In",
+        "RememberMe": "Remember me"
+    },
+    "RegisterForm": {
+        "TermsMessage": "I've read and accepted the ",
+        "TermsLink": "Terms of Use"
+    },
     "Footer": {
         "terms": "Terms",
         "privacy": "Privacy",

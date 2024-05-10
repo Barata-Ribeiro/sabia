@@ -4,7 +4,24 @@
         "title": "Sabiá | Brasileiro",
         "description": "Bem-vindo ao Sabiá! Uma plataforma de microblogging para compartilhar seus pensamentos e ideias."
     },
+    "LoginPage": {
+        "PageTitle": "Entre na sua conta",
+        "PageImageDescription": "Imagem aleatória de um Sabiá",
+        "PageRegisterMessage": "Não possui conta? ",
+        "PageRegisterLink": "Crie uma conta"
+    },
     "_comment-2": "Traduções relacionadas aos componentes",
+    "LoginForm": {
+        "InputUsername": "Usuário",
+        "InputPassword": "Senha",
+        "ForgotPassword": "Esqueceu a senha?",
+        "LoginButton": "Entrar",
+        "RememberMe": "Lembrar de mim"
+    },
+    "RegisterForm": {
+        "TermsMessage": "Eu li e aceito os ",
+        "TermsLink": "Termos de Uso"
+    },
     "Footer": {
         "terms": "Termos",
         "privacy": "Privacidade",
