@@ -1,6 +1,13 @@
 {
+    "_comment": "Traduções relacionadas às paginas",
     "LayoutRoot": {
         "title": "Sabiá | Brasileiro",
         "description": "Bem-vindo ao Sabiá! Uma plataforma de microblogging para compartilhar seus pensamentos e ideias."
+    },
+    "_comment-2": "Traduções relacionadas aos componentes",
+    "Footer": {
+        "terms": "Termos",
+        "privacy": "Privacidade",
+        "repository": "Repositório"
     }
 }

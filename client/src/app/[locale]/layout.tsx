@@ -1,3 +1,4 @@
+import Footer from "@/components/global/footer"
 import { locales } from "@/navigation"
 import "./globals.css"
 import tw from "@/utils/tw"
@@ -56,6 +57,7 @@ export default async function RootLayout({
                     className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}
                 >
                     <div className="flex-1 md:container">{children}</div>
+                    <Footer />
                 </body>
             </NextIntlClientProvider>
         </html>
