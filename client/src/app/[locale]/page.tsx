@@ -13,11 +13,10 @@ export default function LoginPage() {
                 <div className="relative hidden h-screen w-full bg-indigo-600 md:w-1/2 lg:block xl:w-2/3">
                     <Image
                         src="https://source.unsplash.com/random/?Thrush"
-                        alt={t("ImageDescription")}
-                        title={t("ImageDescription")}
+                        alt={t("PageImageDescription")}
+                        title={t("PageImageDescription")}
                         className="h-auto w-auto object-cover"
                         sizes="100%"
-                        quality={80}
                         fill
                         priority
                     />
@@ -40,7 +39,7 @@ export default function LoginPage() {
                             {t("PageRegisterMessage")}
                             <Link
                                 href={localActive + "/auth/register"}
-                                className="font-semibold text-blue-500 hover:text-blue-700"
+                                className="font-semibold text-primary-600 transition-colors duration-300 hover:text-secondary-500"
                             >
                                 {t("PageRegisterLink")}
                             </Link>

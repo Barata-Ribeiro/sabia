@@ -56,7 +56,7 @@ export default function LoginForm() {
             <div className="mb-4 mt-1 flex gap-8">
                 <Button
                     type="submit"
-                    className="w-full rounded-lg bg-primary-600 py-2 text-body-50 ring-inset ring-primary-600 transition-all hover:bg-primary-300 hover:text-body-600 hover:ring-2"
+                    className="w-full rounded-lg bg-primary-600 py-2 text-body-50 ring-inset ring-primary-600 transition-all hover:bg-secondary-300 hover:text-body-600 hover:ring-2"
                 >
                     {t("LoginButton")}
                 </Button>
