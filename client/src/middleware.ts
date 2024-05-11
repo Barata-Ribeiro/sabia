@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from "next/server"
 const EXCLUDE_PATHS = [
     "/",
     "/auth/register",
-    "/auth/forgot-password",
-    "/auth/reset-password",
+    "/auth/password-lost",
+    "/auth/password-reset",
     "/terms-of-use",
     "/privacy-policy"
 ]
@@ -17,8 +17,8 @@ const INTL_CONFIG = {
 }
 
 export async function middleware(req: NextRequest) {
-    const auth_token = req.cookies.get("auth_token")?.value
-    const path = req.nextUrl.pathname
+    const authToken = req.cookies.get("auth_token")?.value
+    const reqPath = req.nextUrl.pathname
     let isAuthenticated = false
 
     const inlMiddleware = createIntlMiddleware({
@@ -29,15 +29,12 @@ export async function middleware(req: NextRequest) {
 
     const response = inlMiddleware(req)
 
-    if (auth_token) {
-        const isAuthTokenValid = await verifyToken(auth_token)
+    if (authToken) {
+        const isAuthTokenValid = await verifyToken(authToken)
         if (isAuthTokenValid) isAuthenticated = true
     }
 
-    if (
-        !isAuthenticated &&
-        !EXCLUDE_PATHS.some((path) => req.nextUrl.pathname.includes(path))
-    ) {
+    if (!isAuthenticated && !EXCLUDE_PATHS.some((path) => reqPath.includes(path))) {
         const url = req.nextUrl.clone()
         url.pathname = INTL_CONFIG.defaultLocale + "/"
         return NextResponse.redirect(url)
