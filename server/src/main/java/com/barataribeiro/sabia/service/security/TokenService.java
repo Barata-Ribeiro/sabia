@@ -20,10 +20,10 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret_key;
 
-    public Entry<String, Instant> generateToken(User user) {
+    public Entry<String, Instant> generateToken(User user, Boolean rememberMe) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret_key);
-            Instant expirationDate = this.generateExpirationDate();
+            Instant expirationDate = this.generateExpirationDate(rememberMe ? 365 : 1);
 
             String token = JWT.create()
                     .withIssuer("auth0")
@@ -54,7 +54,7 @@ public class TokenService {
         }
     }
 
-    private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusDays(1).toInstant(ZoneOffset.of("-03:00"));
+    private Instant generateExpirationDate(Integer days) {
+        return LocalDateTime.now().plusDays(days).toInstant(ZoneOffset.of("-03:00"));
     }
 }

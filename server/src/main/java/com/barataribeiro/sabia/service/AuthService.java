@@ -43,7 +43,7 @@ public class AuthService {
     @Autowired
     private Validation validation;
 
-    public LoginResponseDTO login(String username, String password) {
+    public LoginResponseDTO login(String username, String password, Boolean rememberMe) {
         User user = userRepository.findByUsername(username).orElseThrow(UserNotFound::new);
 
         boolean passwordMatches = passwordEncoder.matches(password, user.getPassword());
@@ -53,7 +53,7 @@ public class AuthService {
 
         if (!passwordMatches) throw new InvalidCredentials("You entered the wrong password. Please try again.");
 
-        Map.Entry<String, Instant> tokenAndExpiration = tokenService.generateToken(user);
+        Map.Entry<String, Instant> tokenAndExpiration = tokenService.generateToken(user, rememberMe);
         String token = tokenAndExpiration.getKey();
         String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 

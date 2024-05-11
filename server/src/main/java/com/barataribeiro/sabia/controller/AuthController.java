@@ -24,7 +24,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body) {
-        LoginResponseDTO data = authService.login(body.username(), body.password());
+        LoginResponseDTO data = authService.login(body.username(), body.password(), body.rememberMe());
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
                                                               HttpStatus.OK.value(),
