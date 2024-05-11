@@ -1,5 +1,6 @@
 import LocaleSwitcher from "@/components/global/locale-switcher"
 import { useLocale, useTranslations } from "next-intl"
+import Image from "next/image"
 import Link from "next/link"
 
 export default function Footer() {
@@ -13,20 +14,24 @@ export default function Footer() {
     }
 
     return (
-        <footer className="text-body-600 font-body">
+        <footer className="font-body text-body-600">
             <div className="container mx-auto flex flex-col items-center px-5 py-8 sm:flex-row">
-                <Link
-                    href="/"
-                    className="title-font text-body-900 flex items-center justify-center font-medium md:justify-start"
-                >
-                    {/* LOGO TO BE ADDED */}
-                    <span className="ml-3 text-xl">Sabiá</span>
+                <Link href="/">
+                    <Image
+                        src="/logo.svg"
+                        alt="Sabiá - Logo"
+                        title="Sabiá - Logo"
+                        className="ml-3 h-auto w-32 sm:w-40"
+                        width={512}
+                        height={105}
+                        sizes="100vw"
+                    />
                 </Link>
-                <p className="text-body-500 mt-4 text-sm sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:pl-4">
+                <p className="mt-4 text-sm text-body-500 sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:pl-4">
                     © {new Date().getFullYear()} Sabiá —
                     <Link
                         href="https://barataribeiro.com/"
-                        className="text-body-600 ml-1"
+                        className="ml-1 text-body-600"
                         rel="noopener noreferrer"
                         target="_blank"
                         aria-label="Barata-Ribeiro - Portfolio"
@@ -42,7 +47,7 @@ export default function Footer() {
                             href={
                                 key === "repository" ? value : `/${localActive}${value}`
                             }
-                            className="text-body-500 hover:text-body-900 mx-2"
+                            className="mx-2 text-body-500 hover:text-body-900"
                         >
                             {t(key)}
                         </Link>
