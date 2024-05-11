@@ -7,11 +7,13 @@ export default function Button({
     className,
     ...props
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
-    const sortedClasses = tw`min-h-fit flex-1 select-none focus:outline-none ${
-        props.disabled
-            ? "opacity-50 cursor-not-allowed"
-            : "cursor-pointer" + "hover:opacity-100"
-    }`
+    const sortedClasses = tw`min-h-fit w-full flex-1 select-none
+                                    rounded-lg bg-accent-500 text-body-950 ring-accent-600 transition-all
+                                    hover:bg-accent-600 focus:outline-none active:bg-accent-700 ${
+                                        props.disabled
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : "cursor-pointer" + "hover:opacity-100"
+                                    }`
     const mergedClassName = twMerge(sortedClasses, className)
 
     return (
