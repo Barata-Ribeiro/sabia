@@ -3,7 +3,7 @@ import { State } from "@/interfaces/actions"
 const DEFAULT_MESSAGE_EN = "An error occurred. Please try again."
 const DEFAULT_MESSAGE_BR = "Ocorreu um erro. Por favor, tente novamente."
 
-export default function ApiError(error: unknown, locale: string): State {
+export default function ResponseError(error: unknown, locale: string): State {
     console.error(error)
 
     const state: State = {

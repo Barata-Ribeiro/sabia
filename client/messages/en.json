@@ -16,6 +16,7 @@
         "InputPassword": "Password",
         "ForgotPassword": "Forgot your password?",
         "LoginButton": "Sign In",
+        "LoginButtonLoading": "Loading...",
         "RememberMe": "Remember me"
     },
     "RegisterForm": {
