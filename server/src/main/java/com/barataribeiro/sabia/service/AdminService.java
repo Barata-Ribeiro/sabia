@@ -21,12 +21,26 @@ public class AdminService {
     @Autowired
     private PostRepository postRepository;
 
-    public Boolean toggleVerifyUser(String userId, String principalName) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public Boolean toggleVerifyUser(String userId, String principalName, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
 
-        if (user.getUsername().equals(principalName)) throw new BadRequest("You can't verify yourself.");
-        if (user.getRole().equals(Roles.ADMIN))
-            throw new BadRequest("Admins can't verify other admins. They are already verified.");
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(language));
+
+        String sameUserBadRequestMessage = isEnglishLang
+                                           ? "You can't verify yourself."
+                                           : "Você não pode verificar a si mesmo.";
+
+        String userIsAdminBadRequestMessage = isEnglishLang
+                                              ? "Admins can't verify other admins. They are already verified."
+                                              : "Os administradores não podem verificar outros administradores. Eles já estão verificados.";
+
+        if (user.getUsername().equals(principalName)) {
+            throw new BadRequest(sameUserBadRequestMessage);
+        }
+
+        if (user.getRole().equals(Roles.ADMIN)) {
+            throw new BadRequest(userIsAdminBadRequestMessage);
+        }
 
         user.setIs_verified(!user.getIs_verified());
 
@@ -35,12 +49,26 @@ public class AdminService {
         return user.getIs_verified();
     }
 
-    public Boolean toggleUserBan(String userId, String principalName) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public Boolean toggleUserBan(String userId, String principalName, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
 
-        if (user.getUsername().equals(principalName)) throw new BadRequest("You can't ban yourself.");
-        if (user.getRole().equals(Roles.ADMIN))
-            throw new BadRequest("Admins can't ban other admins.");
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(language));
+
+        String sameUserBadRequestMessage = isEnglishLang
+                                           ? "You can't ban yourself."
+                                           : "Você não pode banir a si mesmo.";
+
+        String userIsAdminBadRequestMessage = isEnglishLang
+                                              ? "Admins can't ban other admins."
+                                              : "Os administradores não podem banir outros administradores.";
+
+        if (user.getUsername().equals(principalName)) {
+            throw new BadRequest(sameUserBadRequestMessage);
+        }
+
+        if (user.getRole().equals(Roles.ADMIN)) {
+            throw new BadRequest(userIsAdminBadRequestMessage);
+        }
 
         user.setRole(user.getRole().equals(Roles.BANNED) ? Roles.MEMBER : Roles.BANNED);
 
@@ -50,36 +78,70 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteUser(String userId, String principalName) {
-        try {
-            User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public void deleteUser(String userId, String principalName, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
 
-            if (user.getUsername().equals(principalName))
-                throw new BadRequest("To delete your account, use the 'Delete Account' option in the settings.");
-            if (user.getRole().equals(Roles.ADMIN))
-                throw new BadRequest("Admins can't delete other admins.");
+        String genericErrorMessage = isEnglishLang
+                                     ? "An error occurred while deleting the user's account. Please try again."
+                                     : "Ocorreu um erro ao excluir a conta do usuário. Por favor, tente novamente.";
+        try {
+
+            User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(language));
+
+            String sameUserBadRequestMessage = isEnglishLang
+                                               ? "To delete your account, use the 'Delete Account' option in the settings."
+                                               : "Para excluir sua conta, use a opção 'Excluir conta' nas configurações.";
+
+            String userIsAdminBadRequestMessage = isEnglishLang
+                                                  ? "Admins can't delete other admins."
+                                                  : "Os administradores não podem excluir outros administradores.";
+
+            if (user.getUsername().equals(principalName)) {
+                throw new BadRequest(sameUserBadRequestMessage);
+            }
+
+            if (user.getRole().equals(Roles.ADMIN)) {
+                throw new BadRequest(userIsAdminBadRequestMessage);
+            }
 
             userRepository.delete(user);
         } catch (Exception error) {
             System.err.println("An error occurred while deleting the user's account: " + error.getMessage());
-            throw new InternalServerError("An error occurred while deleting your account. Please try again.");
+            throw new InternalServerError(genericErrorMessage);
         }
     }
 
     @Transactional
-    public void deletePost(String postId, String principalName) {
-        try {
-            Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
+    public void deletePost(String postId, String principalName, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
 
-            if (post.getAuthor().getUsername().equals(principalName))
-                throw new BadRequest("To delete your post, use the 'Delete' option in the post itself.");
-            if (post.getAuthor().getRole().equals(Roles.ADMIN))
-                throw new BadRequest("Admins can't delete other admins' posts.");
+        String genericErrorMessage = isEnglishLang
+                                     ? "An error occurred while deleting the post. Please try again."
+                                     : "Ocorreu um erro ao excluir a postagem. Por favor, tente novamente.";
+
+        try {
+            Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound(language));
+
+            String sameUserBadRequestMessage = isEnglishLang
+                                               ? "To delete your post, use the 'Delete' option in the post itself."
+                                               : "Para excluir sua postagem, use a opção 'Excluir' na própria postagem.";
+
+            String userIsAdminBadRequestMessage = isEnglishLang
+                                                  ? "Admins can't delete other admins' posts."
+                                                  : "Os administradores não podem excluir postagens de outros administradores.";
+
+            if (post.getAuthor().getUsername().equals(principalName)) {
+                throw new BadRequest(sameUserBadRequestMessage);
+            }
+
+            if (post.getAuthor().getRole().equals(Roles.ADMIN)) {
+                throw new BadRequest(userIsAdminBadRequestMessage);
+            }
 
             postRepository.delete(post);
         } catch (Exception error) {
             System.err.println("An error occurred while deleting the post: " + error.getMessage());
-            throw new InternalServerError("An error occurred while deleting the post. Please try again.");
+            throw new InternalServerError(genericErrorMessage);
         }
     }
 }

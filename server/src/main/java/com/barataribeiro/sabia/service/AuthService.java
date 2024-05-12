@@ -43,25 +43,39 @@ public class AuthService {
     @Autowired
     private Validation validation;
 
-    public LoginResponseDTO login(String username, String password, Boolean rememberMe) {
-        User user = userRepository.findByUsername(username).orElseThrow(UserNotFound::new);
+    public LoginResponseDTO login(String username, String password, Boolean rememberMe, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
+
+        String invalidCredentialsMessage = isEnglishLang
+                                           ? "You entered the wrong password. Please try again."
+                                           : "Você digitou a senha errada. Por favor, tente novamente.";
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFound(language));
 
         boolean passwordMatches = passwordEncoder.matches(password, user.getPassword());
         boolean userBannedOrNone = user.getRole().equals(Roles.BANNED) || user.getRole().equals(Roles.NONE);
 
-        if (userBannedOrNone) throw new UserIsBanned();
+        if (userBannedOrNone) {
+            throw new UserIsBanned(language);
+        }
 
-        if (!passwordMatches) throw new InvalidCredentials("You entered the wrong password. Please try again.");
+        if (!passwordMatches) {
+            throw new InvalidCredentials(invalidCredentialsMessage);
+        }
 
         Map.Entry<String, Instant> tokenAndExpiration = tokenService.generateToken(user, rememberMe);
         String token = tokenAndExpiration.getKey();
         String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-        return new LoginResponseDTO(user.getId(), user.getUsername(), expirationDate, token);
+        return new LoginResponseDTO(user.getId(),
+                                    user.getUsername(),
+                                    expirationDate,
+                                    token);
     }
 
     @Transactional
-    public RegisterResponseDTO register(RegisterRequestDTO body) {
+    public RegisterResponseDTO register(RegisterRequestDTO body, String language) {
         var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
         var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
         var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());
@@ -69,22 +83,47 @@ public class AuthService {
         var sanitizedPassword = StringEscapeUtils.escapeHtml4(body.password().strip());
         var birthDate = StringEscapeUtils.escapeHtml4(body.birth_date());
 
-        if (validation.isEmailValid(sanitizedEmail)) throw new InvalidCredentials("Invalid Email address.");
-        if (validation.isPasswordValid(sanitizedPassword))
-            throw new InvalidCredentials("Password must contain at least 8 characters, " +
-                                                 "one uppercase letter, " +
-                                                 "one lowercase letter, " +
-                                                 "one number and one special character.");
+        String invalidEmailMessage = language == null || language.equals("en")
+                                     ? "Invalid Email address."
+                                     : "Endereço de Email inválido.";
+
+        String invalidPasswordMessage = language == null || language.equals("en")
+                                        ? "Password must contain at least 8 characters, " +
+                                                "one uppercase letter, " +
+                                                "one lowercase letter, " +
+                                                "one number and one special character."
+                                        : "A senha deve conter pelo menos 8 caracteres, " +
+                                                "uma letra maiúscula, " +
+                                                "uma letra minúscula, " +
+                                                "um número e um caractere especial.";
+
+        String invalidBirthday = language == null || language.equals("en")
+                                 ? "You must be at least 18 years old to register."
+                                 : "Você deve ter pelo menos 18 anos para se registrar.";
+
+        String genericErrorMessage = language == null || language.equals("en")
+                                     ? "Error creating account. Please try again."
+                                     : "Erro ao criar conta. Por favor, tente novamente.";
+
+        if (validation.isEmailValid(sanitizedEmail)) {
+            throw new InvalidCredentials(invalidEmailMessage);
+        }
+
+        if (validation.isPasswordValid(sanitizedPassword)) {
+            throw new InvalidCredentials(invalidPasswordMessage);
+        }
 
         Boolean userByUsername = userRepository.existsByUsername(sanitizedUsername);
         Boolean userByEmail = userRepository.existsByUsername(sanitizedEmail);
-
-        if (userByUsername || userByEmail) throw new UserAlreadyExists();
+        if (userByUsername || userByEmail) {
+            throw new UserAlreadyExists(language);
+        }
 
         Period period = Period.between(LocalDate.parse(birthDate), LocalDate.now());
         if (period.getYears() < 18) {
-            throw new InvalidCredentials("You must be at least 18 years old to register.");
+            throw new InvalidCredentials(invalidBirthday);
         }
+
 
         User newUser;
 
@@ -100,13 +139,15 @@ public class AuthService {
 
             userRepository.save(newUser);
 
-            return new RegisterResponseDTO(newUser.getUsername(), newUser.getDisplay_name(), newUser.getEmail());
+            return new RegisterResponseDTO(newUser.getUsername(),
+                                           newUser.getDisplay_name(),
+                                           newUser.getEmail());
         } catch (ConstraintViolationException error) {
             System.err.println(error.getMessage());
             throw new InvalidCredentials(error.getMessage());
         } catch (Exception error) {
             System.err.println("Error creating account: " + error.getMessage());
-            throw new InternalServerError("Error creating account. Please try again.");
+            throw new InternalServerError(genericErrorMessage);
         }
     }
 }
