@@ -1,5 +1,9 @@
 package com.barataribeiro.sabia.exceptions.user;
 
 public class UserNotFound extends RuntimeException {
-    public UserNotFound() { super("User not found."); }
+    public UserNotFound(String language) {
+        super(language == null || language.equals("en")
+              ? "User not found."
+              : "Usuário não encontrado.");
+    }
 }
