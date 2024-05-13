@@ -10,6 +10,11 @@
         "PageRegisterMessage": "Não possui conta? ",
         "PageRegisterLink": "Crie uma conta"
     },
+    "RegisterPage": {
+        "PageLoginMessage": "Já possui conta? ",
+        "PageLoginLink": "Entre agora",
+        "IllutrationDescription": "Ilustração de um pássaro falando, do site unDraw"
+    },
     "_comment-2": "Traduções relacionadas aos componentes",
     "LoginForm": {
         "InputUsername": "Usuário",
@@ -20,8 +25,20 @@
         "RememberMe": "Lembrar de mim"
     },
     "RegisterForm": {
+        "Title": "Crie sua Conta",
+        "InputUsername": "Usuário",
+        "InputDisplayName": "Nome de Exibição",
+        "InputFirstName": "Nome",
+        "InputLastName": "Sobrenome",
+        "InputBirthDate": "Data de Nascimento",
+        "InputEmail": "Email",
+        "InputPassword": "Senha",
+        "InputConfirmPassword": "Confirme a Senha",
+        "PasswordRequirements": "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um símbolo especial e um número.",
         "TermsMessage": "Eu li e aceito os ",
-        "TermsLink": "Termos de Uso"
+        "TermsLink": "Termos de Uso",
+        "RegisterButton": "Criar Conta",
+        "RegisterButtonLoading": "Criando..."
     },
     "Footer": {
         "terms": "Termos",

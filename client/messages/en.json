@@ -10,6 +10,11 @@
         "PageRegisterMessage": "Need an account? ",
         "PageRegisterLink": "Create an account"
     },
+    "RegisterPage": {
+        "PageLoginMessage": "Already have an account? ",
+        "PageLoginLink": "Log in",
+        "IllutrationDescription": "Illustration from unDraw of a bird speaking"
+    },
     "_comment-2": "Components related translations.",
     "LoginForm": {
         "InputUsername": "Username",
@@ -20,8 +25,20 @@
         "RememberMe": "Remember me"
     },
     "RegisterForm": {
+        "Title": "Create your Account",
+        "InputUsername": "Username",
+        "InputDisplayName": "Display Name",
+        "InputFirstName": "First Name",
+        "InputLastName": "Last Name",
+        "InputBirthDate": "Birth Date",
+        "InputEmail": "Email",
+        "InputPassword": "Password",
+        "InputConfirmPassword": "Confirm Password",
+        "PasswordRequirements": "Use at least 8 characters, one uppercase, one lowercase, a special character, and one number.",
         "TermsMessage": "I've read and accepted the ",
-        "TermsLink": "Terms of Use"
+        "TermsLink": "Terms of Use",
+        "RegisterButton": "Sign Up",
+        "RegisterButtonLoading": "Loading..."
     },
     "Footer": {
         "terms": "Terms",
