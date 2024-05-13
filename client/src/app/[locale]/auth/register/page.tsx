@@ -8,9 +8,9 @@ export default function RegisterPage() {
     const t = useTranslations("RegisterPage")
 
     return (
-        <section className="flex items-center gap-24">
+        <section className="flex flex-col items-center gap-24 px-6 md:flex-row">
             {/* Left side - form */}
-            <div>
+            <div className="w-full">
                 <RegisterForm />
                 <hr className="my-6 w-full border-gray-300" />
 
@@ -30,7 +30,7 @@ export default function RegisterPage() {
                 src="/undraw_quick_chat_re_bit5.svg"
                 alt={t("IllutrationDescription")}
                 title={t("IllutrationDescription")}
-                className="h-72 w-fit object-center italic"
+                className="max-h-72 w-fit object-center italic"
                 width={864}
                 height={365}
                 sizes="100vw"

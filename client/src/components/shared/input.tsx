@@ -20,24 +20,23 @@ export default function Input({ label, icon, className, ...props }: InputProps) 
     const lowerCaseLabel = label.toLowerCase()
 
     return (
-        <>
-            <div className="relative h-10 min-w-[200px]">
-                {icon && (
-                    <div className="absolute right-3 top-2/4 grid -translate-y-2/4 place-items-center text-body-500">
-                        {icon}
-                    </div>
-                )}
-                <input
-                    className={mergedClassName}
-                    type={props.type || "text"}
-                    name={props.name || lowerCaseLabel}
-                    id={lowerCaseLabel}
-                    placeholder=" "
-                    {...props}
-                />
-                <label
-                    htmlFor={lowerCaseLabel}
-                    className="before:content[' '] after:content[' '] pointer-events-none absolute
+        <div className="relative h-10 w-full min-w-[200px]">
+            {icon && (
+                <div className="absolute right-3 top-2/4 grid -translate-y-2/4 place-items-center text-body-500">
+                    {icon}
+                </div>
+            )}
+            <input
+                className={mergedClassName}
+                type={props.type || "text"}
+                name={props.name || lowerCaseLabel}
+                id={lowerCaseLabel}
+                placeholder=" "
+                {...props}
+            />
+            <label
+                htmlFor={lowerCaseLabel}
+                className="before:content[' '] after:content[' '] pointer-events-none absolute
                     -top-1.5 left-0 flex h-full w-full select-none !overflow-visible truncate font-heading
                     text-[11px] font-normal leading-tight text-background-500 transition-all before:pointer-events-none before:mr-1
                     before:mt-[6.5px] before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md
@@ -49,10 +48,9 @@ export default function Input({ label, icon, className, ...props }: InputProps) 
                     peer-focus:before:border-l-2 peer-focus:before:border-t-2 peer-focus:before:!border-background-900 peer-focus:after:border-r-2
                     peer-focus:after:border-t-2 peer-focus:after:!border-background-900 peer-disabled:text-transparent peer-disabled:before:border-transparent
                     peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-body-500"
-                >
-                    {label}
-                </label>
-            </div>
-        </>
+            >
+                {label}
+            </label>
+        </div>
     )
 }

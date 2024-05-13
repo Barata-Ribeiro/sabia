@@ -59,7 +59,7 @@ export default function RegisterForm() {
                 aria-required
             />
             <fieldset className="flex flex-col gap-1">
-                <div className="flex w-fit items-start gap-2">
+                <div className="flex items-start gap-2">
                     <Input
                         label={t("InputPassword")}
                         name="password"
