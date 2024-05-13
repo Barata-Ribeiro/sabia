@@ -4,3 +4,9 @@ export interface AuthLoginResponse {
     expirationDate: string
     token: string
 }
+
+export interface AuthRegisterResponse {
+    id: string
+    username: string
+    display_name: string
+}
