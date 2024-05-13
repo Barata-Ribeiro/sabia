@@ -15,14 +15,14 @@ export default function RegisterForm() {
             <Input
                 label={t("InputUsername")}
                 name="username"
-                className="px-3 py-2.5 pr-9"
+                className="px-3 py-2.5"
                 required
                 aria-required
             />
             <Input
                 label={t("InputDisplayName")}
                 name="displayName"
-                className="px-3 py-2.5 pr-9"
+                className="px-3 py-2.5"
                 required
                 aria-required
             />
@@ -30,14 +30,14 @@ export default function RegisterForm() {
                 <Input
                     label={t("InputFirstName")}
                     name="firstName"
-                    className="px-3 py-2.5 pr-9"
+                    className="px-3 py-2.5"
                     required
                     aria-required
                 />
                 <Input
                     label={t("InputLastName")}
                     name="lastName"
-                    className="px-3 py-2.5 pr-9"
+                    className="px-3 py-2.5"
                     required
                     aria-required
                 />
@@ -46,7 +46,7 @@ export default function RegisterForm() {
                 label={t("InputBirthDate")}
                 name="birthDate"
                 type="date"
-                className="px-3 py-2.5 pr-9"
+                className="px-3 py-2.5"
                 required
                 aria-required
             />
@@ -54,7 +54,7 @@ export default function RegisterForm() {
                 label={t("InputEmail")}
                 name="email"
                 type="email"
-                className="px-3 py-2.5 pr-9"
+                className="px-3 py-2.5"
                 required
                 aria-required
             />
@@ -65,7 +65,7 @@ export default function RegisterForm() {
                         name="password"
                         type="password"
                         autoComplete="new-password"
-                        className="px-3 py-2.5 pr-9"
+                        className="px-3 py-2.5"
                         required
                         aria-required
                     />
@@ -74,12 +74,12 @@ export default function RegisterForm() {
                         name="confirmPassword"
                         type="password"
                         autoComplete="off"
-                        className="px-3 py-2.5 pr-9"
+                        className="px-3 py-2.5"
                         required
                         aria-required
                     />
                 </div>
-                <p className="flex w-fit items-center gap-1 self-center text-sm font-normal leading-normal text-primary-700 antialiased">
+                <p className="flex w-fit items-center gap-2 self-center text-sm text-primary-700 antialiased">
                     <FaCircleExclamation size={14} />
                     <span className="w-[55ch]">{t("PasswordRequirements")}</span>
                 </p>

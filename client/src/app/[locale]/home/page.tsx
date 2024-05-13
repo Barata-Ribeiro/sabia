@@ -2,5 +2,9 @@
 interface Props {}
 
 export default function HomePage(props: Props) {
-    return <div></div>
+    return (
+        <main>
+            <h1>Home when Logged</h1>
+        </main>
+    )
 }

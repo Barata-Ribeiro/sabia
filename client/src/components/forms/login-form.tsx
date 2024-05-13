@@ -23,7 +23,7 @@ export default function LoginForm() {
 
     useEffect(() => {
         if (state.ok) window.location.href = localActive + "/home"
-    }, [state.ok])
+    }, [state.ok, localActive])
 
     return (
         <form className="mt-6 space-y-6" action={action}>
