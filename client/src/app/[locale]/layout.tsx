@@ -56,7 +56,7 @@ export default async function RootLayout({
                 <body
                     className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}
                 >
-                    <div className="flex-1 md:container">{children}</div>
+                    <div className="flex flex-1 flex-col md:container">{children}</div>
                     <Footer />
                 </body>
             </NextIntlClientProvider>
