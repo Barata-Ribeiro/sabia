@@ -1,4 +1,7 @@
+import getUserContext from "@/actions/user/get-user-context"
 import Footer from "@/components/global/footer"
+import { UserContextProvider } from "@/context/user-context-provider"
+import { UserContextResponse } from "@/interfaces/user"
 import { locales } from "@/navigation"
 import "./globals.css"
 import tw from "@/utils/tw"
@@ -48,6 +51,10 @@ export default async function RootLayout({
 
     const messages = await getMessages()
 
+    const context = await getUserContext()
+    let user: UserContextResponse | null = null
+    if (context && context.ok) user = context.response?.data as UserContextResponse
+
     const body_styles = tw`flex min-h-dvh flex-col`
 
     return (
@@ -56,8 +63,12 @@ export default async function RootLayout({
                 <body
                     className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}
                 >
-                    <div className="flex flex-1 flex-col md:container">{children}</div>
-                    <Footer />
+                    <UserContextProvider user={user}>
+                        <div className="flex flex-1 flex-col md:container">
+                            {children}
+                        </div>
+                        <Footer />
+                    </UserContextProvider>
                 </body>
             </NextIntlClientProvider>
         </html>
