@@ -27,7 +27,7 @@ public class DatabaseTestSeeder {
                                           HashtagPostsRepository hashtagPostsRepository,
                                           PasswordEncoder passwordEncoder) {
         return args -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             // Create two users
             User user1 = new User();
