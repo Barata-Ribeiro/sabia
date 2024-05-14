@@ -1,15 +1,31 @@
+"use client"
+
+import register from "@/actions/auth/register"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
 import { useLocale, useTranslations } from "next-intl"
 import Link from "next/link"
+import { useEffect } from "react"
+import { useFormState, useFormStatus } from "react-dom"
 import { FaCircleExclamation } from "react-icons/fa6"
 
 export default function RegisterForm() {
     const t = useTranslations("RegisterForm")
     const localActive = useLocale()
 
+    const { pending } = useFormStatus()
+    const [state, action] = useFormState(register, {
+        ok: false,
+        client_error: null,
+        response: null
+    })
+
+    useEffect(() => {
+        if (state.ok) window.location.href = localActive + "/"
+    }, [state.ok, localActive])
+
     return (
-        <form className="space-y-6" action="#">
+        <form className="space-y-6" action={action}>
             <h1 className="font-heading text-2xl leading-6">{t("Title")}</h1>
 
             <Input
@@ -108,8 +124,13 @@ export default function RegisterForm() {
                     .
                 </label>
             </div>
-            <Button type="submit" className="py-2">
-                {t("RegisterButton")}
+            <Button
+                type="submit"
+                className="py-2"
+                disabled={pending}
+                aria-disabled={pending}
+            >
+                {pending ? t("RegisterButtonLoading") : t("RegisterButton")}
             </Button>
         </form>
     )

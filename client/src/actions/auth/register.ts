@@ -66,8 +66,23 @@ export default async function register(state: State, formData: FormData) {
         }
 
         const fullName = `${String(mappedFormData.at(2)).trim()} ${String(mappedFormData.at(3)).trim()}`
+
         const newDateFromData = new Date(String(mappedFormData.at(4)).trim())
-        const birthDate = newDateFromData.toLocaleDateString("en-GB")
+        const day = String(newDateFromData.getUTCDate()).padStart(2, "0")
+        const month = String(newDateFromData.getUTCMonth() + 1).padStart(2, "0")
+        const year = newDateFromData.getUTCFullYear()
+        const birthDate = `${day}/${month}/${year}`
+
+        console.log(
+            JSON.stringify({
+                username: String(mappedFormData.at(0)).trim(),
+                display_name: String(mappedFormData.at(1)).trim(),
+                full_name: fullName,
+                birth_date: birthDate,
+                email: String(mappedFormData.at(5)).trim(),
+                password: String(mappedFormData.at(6)).trim()
+            })
+        )
 
         const response = await fetch(URL, {
             method: "POST",
@@ -77,9 +92,9 @@ export default async function register(state: State, formData: FormData) {
             },
             body: JSON.stringify({
                 username: String(mappedFormData.at(0)).trim(),
-                displayName: String(mappedFormData.at(1)).trim(),
-                fullName,
-                birthDate,
+                display_name: String(mappedFormData.at(1)).trim(),
+                full_name: fullName,
+                birth_date: birthDate,
                 email: String(mappedFormData.at(5)).trim(),
                 password: String(mappedFormData.at(6)).trim()
             })
@@ -89,14 +104,15 @@ export default async function register(state: State, formData: FormData) {
 
         if (!response.ok) throw new Error(responseData.message)
 
-        const registerResponse = responseData.data as AuthRegisterResponse
+        const data = responseData.data as AuthRegisterResponse
 
         return {
             ok: true,
             client_error: null,
-            response: { ...responseData, registerResponse }
+            response: { ...responseData, data }
         }
     } catch (error) {
+        console.error(error)
         return ResponseError(error, locale)
     }
 }
