@@ -3,8 +3,8 @@
 import login from "@/actions/auth/login"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
+import { Link, redirect } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
-import Link from "next/link"
 import { useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 import { FaLock } from "react-icons/fa"
@@ -22,8 +22,8 @@ export default function LoginForm() {
     })
 
     useEffect(() => {
-        if (state.ok) window.location.href = localActive + "/home"
-    }, [state.ok, localActive])
+        if (state.ok) redirect("/home")
+    }, [state.ok])
 
     return (
         <form className="mt-6 space-y-6" action={action}>
@@ -52,7 +52,8 @@ export default function LoginForm() {
                 <div className="text-right">
                     {" "}
                     <Link
-                        href={localActive + "/auth/password-lost"}
+                        locale={localActive}
+                        href={"/auth/password-lost"}
                         className="text-body-600 transition-colors duration-300 hover:text-accent-500 hover:underline dark:text-body-400 dark:hover:text-accent-200"
                     >
                         {t("ForgotPassword")}

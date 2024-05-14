@@ -3,8 +3,8 @@
 import register from "@/actions/auth/register"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
+import { Link, redirect } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
-import Link from "next/link"
 import { useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 import { FaCircleExclamation } from "react-icons/fa6"
@@ -21,7 +21,7 @@ export default function RegisterForm() {
     })
 
     useEffect(() => {
-        if (state.ok) window.location.href = "/" + localActive + "/home"
+        if (state.ok) redirect("/home")
     }, [state.ok, localActive])
 
     return (
@@ -116,7 +116,8 @@ export default function RegisterForm() {
                 >
                     {t("TermsMessage")}
                     <Link
-                        href={"/" + localActive + "/terms-of-use"}
+                        locale={localActive}
+                        href={"/terms-of-use"}
                         className="font-heading text-body-600 transition-colors duration-300 hover:text-accent-500 hover:underline dark:text-body-400 dark:hover:text-accent-200"
                     >
                         {t("TermsLink")}
