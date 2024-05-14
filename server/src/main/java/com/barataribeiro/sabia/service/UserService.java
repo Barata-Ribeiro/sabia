@@ -142,21 +142,12 @@ public class UserService {
         return response;
     }
 
-    @CacheEvict(value = "users", key = "#userId")
-    public ContextResponseDTO getUserContext(String userId, String requesting_user, String language) {
+    @CacheEvict(value = "users", key = "#requesting_user")
+    public ContextResponseDTO getUserContext(String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByUsername(requesting_user)
                 .orElseThrow(() -> new UserNotFound(language));
-
-        String notAllowedMessage = isEnglishLang
-                                   ? "You are not allowed to access this user's feed."
-                                   : "Você não tem permissão para acessar o contexto deste usuário.";
-
-        if (!user.getUsername().equals(requesting_user)) {
-            throw new ForbiddenRequest(notAllowedMessage);
-        }
-
 
         return getContextResponseDTO(user);
     }

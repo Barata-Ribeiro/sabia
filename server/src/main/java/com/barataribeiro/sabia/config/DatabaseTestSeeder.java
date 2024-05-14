@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,12 +27,14 @@ public class DatabaseTestSeeder {
                                           HashtagPostsRepository hashtagPostsRepository,
                                           PasswordEncoder passwordEncoder) {
         return args -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
             // Create two users
             User user1 = new User();
             user1.setUsername("user1");
             user1.setDisplay_name("User One");
             user1.setFull_name("User One Full Name");
-            user1.setBirth_date("2001-01-01");
+            user1.setBirth_date(LocalDate.of(2001, 1, 1).format(formatter));
             user1.setEmail("user1@example.com");
             user1.setPassword(passwordEncoder.encode("password1"));
             user1.setRole(Roles.MEMBER);
@@ -39,7 +43,7 @@ public class DatabaseTestSeeder {
             user2.setUsername("user2");
             user2.setDisplay_name("User Two");
             user2.setFull_name("User Two Full name");
-            user2.setBirth_date("2000-01-01");
+            user2.setBirth_date(LocalDate.of(2000, 1, 1).format(formatter));
             user2.setEmail("user2@example.com");
             user2.setPassword(passwordEncoder.encode("password2"));
             user2.setRole(Roles.MEMBER);
@@ -78,7 +82,7 @@ public class DatabaseTestSeeder {
                             .hashtags(hashtag)
                             .posts(post2)
                             .build();
-                    
+
                     hashtagPostsRepository.save(hashtagPost);
 
                     post2.setPostHashtags(List.of(hashtagPost));

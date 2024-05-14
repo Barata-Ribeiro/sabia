@@ -71,11 +71,10 @@ public class UserController {
                                                               data));
     }
 
-    @GetMapping("/me/{userId}")
-    public ResponseEntity getUser(@PathVariable String userId,
-                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+    @GetMapping("/me")
+    public ResponseEntity getUser(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
                                   Principal principal) {
-        ContextResponseDTO user = userService.getUserContext(userId, principal.getName(), language);
+        ContextResponseDTO user = userService.getUserContext(principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Context retrieved successfully."

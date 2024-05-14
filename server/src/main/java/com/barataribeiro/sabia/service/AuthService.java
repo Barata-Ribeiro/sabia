@@ -119,7 +119,9 @@ public class AuthService {
             throw new UserAlreadyExists(language);
         }
 
-        Period period = Period.between(LocalDate.parse(birthDate), LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate birthDateLocal = LocalDate.parse(birthDate, formatter);
+        Period period = Period.between(birthDateLocal, LocalDate.now());
         if (period.getYears() < 18) {
             throw new InvalidCredentials(invalidBirthday);
         }
