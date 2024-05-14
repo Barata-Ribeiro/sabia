@@ -16,6 +16,11 @@
         "IllutrationDescription": "Ilustração de um pássaro falando, do site unDraw"
     },
     "_comment-2": "Traduções relacionadas aos componentes",
+    "LocaleSwitcher": {
+        "SelectLanguage": "Selecione o Idioma",
+        "OptionEnglish": "Inglês",
+        "OptionPortuguese": "Português"
+    },
     "LoginForm": {
         "InputUsername": "Usuário",
         "InputPassword": "Senha",

@@ -16,6 +16,11 @@
         "IllutrationDescription": "Illustration from unDraw of a bird speaking"
     },
     "_comment-2": "Components related translations.",
+    "LocaleSwitcher": {
+        "SelectLanguage": "Select Language",
+        "OptionEnglish": "English",
+        "OptionPortuguese": "Brazilian Portuguese"
+    },
     "LoginForm": {
         "InputUsername": "Username",
         "InputPassword": "Password",
