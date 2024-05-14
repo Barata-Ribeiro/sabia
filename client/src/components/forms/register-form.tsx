@@ -21,7 +21,7 @@ export default function RegisterForm() {
     })
 
     useEffect(() => {
-        if (state.ok) window.location.href = localActive + "/"
+        if (state.ok) window.location.href = "/" + localActive + "/home"
     }, [state.ok, localActive])
 
     return (

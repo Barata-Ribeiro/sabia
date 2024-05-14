@@ -1,7 +1,7 @@
 "use server"
 
+import login from "@/actions/auth/login"
 import { ApiResponse, State } from "@/interfaces/actions"
-import { AuthRegisterResponse } from "@/interfaces/auth"
 import { AUTH_REGISTER } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import {
@@ -104,12 +104,17 @@ export default async function register(state: State, formData: FormData) {
 
         if (!response.ok) throw new Error(responseData.message)
 
-        const data = responseData.data as AuthRegisterResponse
+        const loginResponseFormData = new FormData()
+        loginResponseFormData.set("username", String(mappedFormData.at(0)).trim())
+        loginResponseFormData.set("password", String(mappedFormData.at(6)).trim())
+        loginResponseFormData.set("rememberMe", "on")
+
+        await login(state, loginResponseFormData)
 
         return {
             ok: true,
             client_error: null,
-            response: { ...responseData, data }
+            response: responseData
         }
     } catch (error) {
         console.error(error)

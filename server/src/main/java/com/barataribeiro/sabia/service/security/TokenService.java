@@ -23,7 +23,7 @@ public class TokenService {
     public Entry<String, Instant> generateToken(User user, Boolean rememberMe) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret_key);
-            Instant expirationDate = this.generateExpirationDate(rememberMe ? 365 : 1);
+            Instant expirationDate = this.generateExpirationDate(rememberMe != null && rememberMe ? 365 : 1);
 
             String token = JWT.create()
                     .withIssuer("auth0")

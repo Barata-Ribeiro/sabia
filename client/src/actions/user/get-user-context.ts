@@ -14,7 +14,7 @@ export default async function getUserContext() {
 
     try {
         const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) return null
+        if (!auth_token) return { ok: false, client_error: null, response: null }
 
         const response = await fetch(URL, {
             method: "GET",

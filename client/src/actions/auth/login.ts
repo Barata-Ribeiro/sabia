@@ -16,7 +16,7 @@ export default async function login(state: State, formData: FormData) {
 
     const username = formData.get("username") as string | null
     const password = formData.get("password") as string | null
-    const remember_me = formData.get("rememberMe") === "on"
+    const rememberMe = formData.get("rememberMe") === "on"
 
     try {
         const errorMessage =
@@ -26,13 +26,19 @@ export default async function login(state: State, formData: FormData) {
 
         if (!username || !password) throw new Error(errorMessage)
 
+        console.log("formData", formData)
+
         const response = await fetch(URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },
-            body: formData
+            body: JSON.stringify({
+                username,
+                password,
+                rememberMe
+            })
         })
 
         const responseData = (await response.json()) as ApiResponse
@@ -45,7 +51,7 @@ export default async function login(state: State, formData: FormData) {
             httpOnly: true,
             secure: true,
             sameSite: "lax",
-            expires: Date.now() + (remember_me ? THIRTY_DAYS : ONE_DAY)
+            expires: Date.now() + (rememberMe ? THIRTY_DAYS : ONE_DAY)
         })
 
         return {
