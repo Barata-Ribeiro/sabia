@@ -3,7 +3,7 @@
 import register from "@/actions/auth/register"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
-import { Link, redirect } from "@/navigation"
+import { Link, useRouter } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
@@ -12,6 +12,7 @@ import { FaCircleExclamation } from "react-icons/fa6"
 export default function RegisterForm() {
     const t = useTranslations("RegisterForm")
     const localActive = useLocale()
+    const router = useRouter()
 
     const { pending } = useFormStatus()
     const [state, action] = useFormState(register, {
@@ -21,8 +22,8 @@ export default function RegisterForm() {
     })
 
     useEffect(() => {
-        if (state.ok) redirect("/home")
-    }, [state.ok, localActive])
+        if (state.ok) router.push("/home")
+    }, [state.ok, router])
 
     return (
         <form className="space-y-6" action={action}>

@@ -1,7 +1,7 @@
 import LocaleSwitcher from "@/components/global/locale-switcher"
+import { Link } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function Footer() {
     const t = useTranslations("Footer")
@@ -16,7 +16,7 @@ export default function Footer() {
     return (
         <footer className="font-body text-body-600">
             <div className="container mx-auto flex flex-col items-center px-5 py-8 sm:flex-row">
-                <Link href="/">
+                <Link locale={localActive} href="/">
                     <Image
                         src="/logo.svg"
                         alt="Sabiá - Logo"
@@ -44,9 +44,10 @@ export default function Footer() {
                     {Object.entries(links).map(([key, value]) => (
                         <Link
                             key={key}
-                            href={
-                                key === "repository" ? value : `/${localActive}${value}`
-                            }
+                            locale={localActive}
+                            href={value}
+                            rel={key === "repository" ? "noopener noreferrer" : ""}
+                            target={key === "repository" ? "_blank" : ""}
                             className="mx-2 text-body-500 hover:text-body-900"
                         >
                             {t(key)}

@@ -3,7 +3,7 @@
 import login from "@/actions/auth/login"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
-import { Link, redirect } from "@/navigation"
+import { Link, useRouter } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
@@ -13,6 +13,7 @@ import { FaCircleUser } from "react-icons/fa6"
 export default function LoginForm() {
     const t = useTranslations("LoginForm")
     const localActive = useLocale()
+    const router = useRouter()
 
     const { pending } = useFormStatus()
     const [state, action] = useFormState(login, {
@@ -22,8 +23,8 @@ export default function LoginForm() {
     })
 
     useEffect(() => {
-        if (state.ok) redirect("/home")
-    }, [state.ok])
+        if (state.ok) router.push("/home")
+    }, [state.ok, router])
 
     return (
         <form className="mt-6 space-y-6" action={action}>
