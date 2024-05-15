@@ -26,8 +26,6 @@ export default async function login(state: State, formData: FormData) {
 
         if (!username || !password) throw new Error(errorMessage)
 
-        console.log("formData", formData)
-
         const response = await fetch(URL, {
             method: "POST",
             headers: {

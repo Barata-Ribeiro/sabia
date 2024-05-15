@@ -1,24 +1,50 @@
+import { locales } from "@/navigation"
 import verifyToken from "@/utils/validate-token"
 import createIntlMiddleware from "next-intl/middleware"
-import { NextRequest } from "next/server"
-
-const inlMiddleware = createIntlMiddleware({
-    locales: ["en", "pt-BR"],
-    defaultLocale: "en",
-    localePrefix: "always"
-})
+import { NextRequest, NextResponse } from "next/server"
 
 export async function middleware(req: NextRequest) {
-    const response = inlMiddleware(req)
     const authToken = req.cookies.get("auth_token")?.value
+    const localePref = req.cookies.get("NEXT_LOCALE")?.value || "en"
+    const [, locale, ...segments] = req.nextUrl.pathname.split("/")
     let isAuthenticated = false
+    const isRedirectionUrl = req.nextUrl.pathname === `/${localePref}`
+
+    const inlMiddleware = createIntlMiddleware({
+        locales,
+        defaultLocale: "en",
+        localePrefix: "always"
+    })
+
+    const response = inlMiddleware(req)
 
     if (authToken) {
         const isAuthTokenValid = await verifyToken(authToken)
         if (isAuthTokenValid) isAuthenticated = true
     }
 
-    // TODO... AUTH REDIRECT LOGIC
+    if (
+        locale != null &&
+        (segments.includes("terms-of-service") || segments.includes("privacy-policy"))
+    ) {
+        return response
+    }
+
+    if (
+        !isAuthenticated &&
+        !isRedirectionUrl &&
+        (!segments.includes("auth") || segments.length === 0)
+    ) {
+        const url = req.nextUrl.clone()
+        url.pathname = `/${localePref}`
+        return NextResponse.redirect(new URL(url, req.url))
+    }
+
+    if (isAuthenticated && (segments.includes("auth") || segments.length === 0)) {
+        const url = req.nextUrl.clone()
+        url.pathname = `/${localePref}/home`
+        return NextResponse.redirect(new URL(url, req.url))
+    }
 
     return response
 }

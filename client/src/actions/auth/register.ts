@@ -73,17 +73,6 @@ export default async function register(state: State, formData: FormData) {
         const year = newDateFromData.getUTCFullYear()
         const birthDate = `${day}/${month}/${year}`
 
-        console.log(
-            JSON.stringify({
-                username: String(mappedFormData.at(0)).trim(),
-                display_name: String(mappedFormData.at(1)).trim(),
-                full_name: fullName,
-                birth_date: birthDate,
-                email: String(mappedFormData.at(5)).trim(),
-                password: String(mappedFormData.at(6)).trim()
-            })
-        )
-
         const response = await fetch(URL, {
             method: "POST",
             headers: {
