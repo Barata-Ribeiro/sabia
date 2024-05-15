@@ -49,5 +49,245 @@
         "terms": "Termos",
         "privacy": "Privacidade",
         "repository": "Repositório"
+    },
+    "_comment-3": "Traduções relacionadas à Política de Privacidade",
+    "PrivacyPolicy": {
+        "PolicyTitle": "Política de Privacidade",
+        "PolicyLastUpdated": "Última atualização: 15 de maio de 2024",
+        "PrivacyDescription-1": "Esta Política de Privacidade descreve nossas políticas e procedimentos sobre a coleta, uso e divulgação de suas informações quando você usa o serviço e informa sobre seus direitos de privacidade e como a lei protege você.",
+        "PrivacyDescription-2": "Usamos seus dados pessoais para fornecer e melhorar o serviço. Ao usar o serviço, você concorda com a coleta e o uso de informações de acordo com esta Política de Privacidade.",
+        "SectionTitle-0": "Início da Privacidade",
+        "Section-1": {
+            "title": "Interpretação e Definições",
+            "subtitles": {
+                "SubSectionTitle-1_1": "Interpretação",
+                "SubSectionTitle-1_2": "Definições"
+            },
+            "paragraphs": {
+                "paragraph-1": "As palavras cujas letras iniciais estão em maiúsculas têm significados definidos nas seguintes condições. As seguintes definições terão o mesmo significado, independentemente de aparecerem no singular ou no plural.",
+                "paragraph-2": "Para os fins desta Política de Privacidade:"
+            },
+            "list": {
+                "item-1": {
+                    "term": "Conta ",
+                    "definition": "significa uma conta exclusiva criada para você acessar nosso serviço ou partes do nosso serviço."
+                },
+                "item-2": {
+                    "term": "Afiliada ",
+                    "definition": "significa uma entidade que controla, é controlada ou está sob controle comum com uma parte, onde \"controle\" significa a propriedade de 50% ou mais das ações, participações acionárias ou outros títulos com direito a voto para eleição de diretores ou outra autoridade gerencial."
+                },
+                "item-3": {
+                    "term": "Empresa ",
+                    "definition": "(referida como \"a Empresa\", \"Nós\" ou \"Nosso\" neste Acordo) refere-se ao Sabiá."
+                },
+                "item-4": {
+                    "term": "Cookies ",
+                    "definition": "são pequenos arquivos que são colocados em seu computador, dispositivo móvel ou qualquer outro dispositivo por um site, contendo detalhes do seu histórico de navegação nesse site, entre seus vários usos."
+                },
+                "item-5": {
+                    "term": "País ",
+                    "definition": "refere-se a: Brasil"
+                },
+                "item-6": {
+                    "term": "Dispositivo ",
+                    "definition": "significa qualquer dispositivo que possa acessar o serviço, como um computador, um celular ou um tablet digital."
+                },
+                "item-7": {
+                    "term": "Dados Pessoais ",
+                    "definition": "é qualquer informação que se relacione a um indivíduo identificado ou identificável."
+                },
+                "item-8": {
+                    "term": "Serviço ",
+                    "definition": "refere-se ao site."
+                },
+                "item-9": {
+                    "term": "Provedor de Serviços ",
+                    "definition": "significa qualquer pessoa física ou jurídica que processe os dados em nome da Empresa. Refere-se a empresas ou indivíduos terceirizados empregados pela Empresa para facilitar o serviço, fornecer o serviço em nome da Empresa, realizar serviços relacionados ao serviço ou auxiliar a Empresa na análise de como o serviço é usado."
+                },
+                "item-10": {
+                    "term": "Dados de Uso ",
+                    "definition": "refere-se a dados coletados automaticamente, gerados pelo uso do serviço ou pela própria infraestrutura do serviço (por exemplo, a duração de uma visita a uma página)."
+                },
+                "item-11": {
+                    "term": "Site ",
+                    "definition": "refere-se ao Sabiá, acessível a partir de "
+                },
+                "item-12": {
+                    "term": "Você ",
+                    "definition": "significa o indivíduo que acessa ou usa o serviço, ou a empresa, ou outra entidade jurídica em nome da qual esse indivíduo está acessando ou usando o serviço, conforme aplicável."
+                }
+            }
+        },
+        "Section-2": {
+            "title": "Coletando e Usando Seus Dados Pessoais",
+            "subtitles": {
+                "SubSectionTitle-2_1": "Tipos de Dados Coletados",
+                "SubSectionTitle-2_1_1": "Dados Pessoais",
+                "SubSectionTitle-2_1_2": "Dados de Uso",
+                "SubSectionTitle-2_1_3": "Tecnologias de Rastreamento e Cookies",
+                "SubSectionTitle-2_2": "Uso de Seus Dados Pessoais",
+                "SubSectionTitle-2_3": "Retenção de Seus Dados Pessoais",
+                "SubSectionTitle-2_4": "Transferência de Seus Dados Pessoais",
+                "SubSectionTitle-2_5": "Excluir Seus Dados Pessoais",
+                "SubSectionTitle-2_6": "Divulgação de Seus Dados Pessoais",
+                "SubSectionTitle-2_6_1": "Transações Comerciais",
+                "SubSectionTitle-2_6_2": "Aplicação da Lei",
+                "SubSectionTitle-2_6_3": "Outros Requisitos Legais",
+                "SubSectionTitle-2_7": "Segurança de Seus Dados Pessoais"
+            },
+            "paragraphs": {
+                "paragraph-2_1": "Enquanto utiliza nosso Serviço, podemos solicitar que você nos forneça certas informações de identificação pessoal que podem ser usadas para contatá-lo ou identificá-lo. Informações de identificação pessoal podem incluir, mas não se limitam a:",
+                "paragraph-2_2": "Dados de Uso são coletados automaticamente ao usar o Serviço.",
+                "paragraph-2_3": "Os Dados de Uso podem incluir informações como o endereço IP do seu dispositivo, tipo de navegador, versão do navegador, as páginas do nosso Serviço que você visita, a data e hora da sua visita, o tempo gasto nessas páginas, identificadores únicos de dispositivos e outros dados de diagnóstico.",
+                "paragraph-2_4": "Quando você acessa o Serviço por meio de um dispositivo móvel, podemos coletar certas informações automaticamente, incluindo, mas não se limitando ao tipo de dispositivo móvel que você usa, seu ID exclusivo de dispositivo móvel, o endereço IP do seu dispositivo móvel, seu sistema operacional móvel, o tipo de navegador de Internet móvel que você usa, identificadores exclusivos de dispositivos e outros dados de diagnóstico.",
+                "paragraph-2_5": "Também podemos coletar informações que seu navegador envia sempre que você visita nosso Serviço ou quando você acessa o Serviço por meio de um dispositivo móvel.",
+                "paragraph-2_6": "Usamos Cookies e tecnologias de rastreamento semelhantes para rastrear a atividade em nosso Serviço e armazenar certas informações. As tecnologias de rastreamento usadas são beacons, tags e scripts para coletar e rastrear informações e para melhorar e analisar nosso Serviço. As tecnologias que usamos podem incluir:",
+                "paragraph-2_7": "Os Cookies podem ser Cookies \"Persistentes\" ou \"de Sessão\". Cookies Persistentes permanecem no seu computador pessoal ou dispositivo móvel quando você fica offline, enquanto Cookies de Sessão são excluídos assim que você fecha seu navegador da web. Saiba mais sobre cookies no artigo da Kaspersky - O que são Cookies?",
+                "paragraph-2_8": "Usamos Cookies de Sessão e Cookies Persistentes para os seguintes propósitos:",
+                "paragraph-2_9": "Para mais informações sobre os cookies que usamos e suas escolhas em relação aos cookies, visite nossa Política de Cookies ou a seção de Cookies da nossa Política de Privacidade.",
+                "paragraph-2_10": "A Empresa pode usar Dados Pessoais para os seguintes propósitos:",
+                "paragraph-2_11": "Podemos compartilhar suas informações pessoais nas seguintes situações:",
+                "paragraph-2_12": "A Empresa reterá seus Dados Pessoais apenas pelo tempo necessário para os propósitos estabelecidos nesta Política de Privacidade. Reteremos e usaremos seus Dados Pessoais na medida necessária para cumprir com nossas obrigações legais (por exemplo, se formos obrigados a reter seus dados para cumprir com leis aplicáveis), resolver disputas e fazer cumprir nossos acordos e políticas legais.",
+                "paragraph-2_13": "A Empresa também reterá Dados de Uso para fins de análise interna. Dados de Uso geralmente são retidos por um período mais curto, exceto quando esses dados são usados para fortalecer a segurança ou para melhorar a funcionalidade do nosso Serviço, ou se formos legalmente obrigados a reter esses dados por períodos mais longos.",
+                "paragraph-2_14": "Suas informações, incluindo Dados Pessoais, são processadas nos escritórios operacionais da Empresa e em quaisquer outros lugares onde as partes envolvidas no processamento estejam localizadas. Isso significa que essas informações podem ser transferidas para — e mantidas em — computadores localizados fora do seu estado, província, país ou outra jurisdição governamental onde as leis de proteção de dados podem ser diferentes das da sua jurisdição.",
+                "paragraph-2_15": "Seu consentimento para esta Política de Privacidade seguido pelo envio de tais informações representa seu acordo com essa transferência.",
+                "paragraph-2_16": "A Empresa tomará todas as medidas razoavelmente necessárias para garantir que seus dados sejam tratados com segurança e de acordo com esta Política de Privacidade e nenhuma transferência de seus Dados Pessoais ocorrerá para uma organização ou país, a menos que haja controles adequados em vigor, incluindo a segurança de seus dados e outras informações pessoais.",
+                "paragraph-2_17": "Você tem o direito de excluir ou solicitar que auxiliemos na exclusão dos Dados Pessoais que coletamos sobre você.",
+                "paragraph-2_18": "Nosso Serviço pode permitir que você exclua certas informações sobre você dentro do Serviço.",
+                "paragraph-2_19": "Você pode atualizar, emendar ou excluir suas informações a qualquer momento ao fazer login na sua conta, se tiver uma, e visitar a seção de configurações da conta que permite gerenciar suas informações pessoais. Você também pode nos contatar para solicitar acesso, corrigir ou excluir quaisquer informações pessoais que você nos forneceu.",
+                "paragraph-2_20": "Observe, no entanto, que podemos precisar reter certas informações quando tivermos uma obrigação legal ou base legal para fazê-lo.",
+                "paragraph-2_21": "Se a Empresa estiver envolvida em uma fusão, aquisição ou venda de ativos, seus Dados Pessoais podem ser transferidos. Forneceremos aviso antes que seus Dados Pessoais sejam transferidos e se tornem sujeitos a uma Política de Privacidade diferente.",
+                "paragraph-2_22": "Em determinadas circunstâncias, a Empresa pode ser obrigada a divulgar seus Dados Pessoais se exigido por lei ou em resposta a solicitações válidas por autoridades públicas (por exemplo, um tribunal ou uma agência governamental).",
+                "paragraph-2_23": "A Empresa pode divulgar seus Dados Pessoais de boa fé, acreditando que tal ação é necessária para:",
+                "paragraph-2_24": "A segurança de seus Dados Pessoais é importante para nós, mas lembre-se de que nenhum método de transmissão pela Internet ou método de armazenamento eletrônico é 100% seguro. Embora nos esforcemos para usar meios comercialmente aceitáveis para proteger seus Dados Pessoais, não podemos garantir sua segurança absoluta."
+            },
+            "list": {
+                "item-2_1_1": "Endereço de email",
+                "item-2_1_2": "Dados de Uso",
+                "item-2_3_1": {
+                    "term": "Cookies ou Cookies do Navegador.",
+                    "definition": "Um cookie é um pequeno arquivo colocado em seu dispositivo. Você pode instruir seu navegador a recusar todos os Cookies ou a indicar quando um Cookie está sendo enviado. No entanto, se você não aceitar Cookies, pode não ser capaz de usar algumas partes do nosso Serviço. A menos que você tenha ajustado a configuração do seu navegador para recusar Cookies, nosso Serviço pode usar Cookies."
+                },
+                "item-2_3_2": {
+                    "term": "Web Beacons.",
+                    "definition": "Certas seções do nosso Serviço e nossos emails podem conter pequenos arquivos eletrônicos conhecidos como web beacons (também referidos como clear gifs, pixel tags e gifs de um único pixel) que permitem à Empresa, por exemplo, contar os usuários que visitaram essas páginas ou abriram um email e para outras estatísticas relacionadas ao site (por exemplo, registrar a popularidade de uma seção específica e verificar a integridade do sistema e do servidor)."
+                },
+                "item-2_4_1": {
+                    "term": "Cookies Necessários / Essenciais",
+                    "type": "Tipo: Cookies de Sessão",
+                    "administered": "Administrado por: Nós",
+                    "purpose": "Propósito: Esses Cookies são essenciais para fornecer serviços disponíveis através do site e para permitir que você use alguns de seus recursos. Eles ajudam a autenticar usuários e prevenir o uso fraudulento de contas de usuário. Sem esses Cookies, os serviços que você solicitou não podem ser fornecidos, e nós usamos esses Cookies apenas para fornecer esses serviços."
+                },
+                "item-2_4_2": {
+                    "term": "Cookies de Política de Cookies / Aviso de Aceitação de Cookies",
+                    "type": "Tipo: Cookies Persistentes",
+                    "administered": "Administrado por: Nós",
+                    "purpose": "Propósito: Esses Cookies identificam se os usuários aceitaram o uso de cookies no site."
+                },
+                "item-2_4_3": {
+                    "term": "Cookies de Funcionalidade",
+                    "type": "Tipo: Cookies Persistentes",
+                    "administered": "Administrado por: Nós",
+                    "purpose": "Propósito: Esses Cookies permitem que lembremos as escolhas que você faz quando usa o site, como lembrar seus detalhes de login ou preferência de idioma. O objetivo desses Cookies é fornecer a você uma experiência mais pessoal e evitar que você tenha que reintroduzir suas preferências sempre que usar o site."
+                },
+                "item-2_5_1": {
+                    "term": "Para fornecer e manter nosso Serviço",
+                    "definition": ", incluindo monitorar o uso do nosso Serviço."
+                },
+                "item-2_5_2": {
+                    "term": "Para gerenciar sua Conta",
+                    "definition": ": para gerenciar seu registro como usuário do Serviço. Os Dados Pessoais que você fornece podem lhe dar acesso a diferentes funcionalidades do Serviço que estão disponíveis para você como um usuário registrado."
+                },
+                "item-2_5_3": {
+                    "term": "Para a execução de um contrato",
+                    "definition": ": o desenvolvimento, conformidade e execução do contrato de compra dos produtos, itens ou serviços que você comprou ou de qualquer outro contrato conosco através do Serviço."
+                },
+                "item-2_5_4": {
+                    "term": "Para contatá-lo",
+                    "definition": ": para contatá-lo por email, chamadas telefônicas, SMS, ou outras formas equivalentes de comunicação eletrônica, como notificações push de um aplicativo móvel em relação a atualizações ou comunicações informativas relacionadas às funcionalidades, produtos ou serviços contratados, incluindo as atualizações de segurança, quando necessário ou razoável para sua implementação."
+                },
+                "item-2_5_5": {
+                    "term": "Para fornecer a você",
+                    "definition": " notícias, ofertas especiais e informações gerais sobre outros bens, serviços e eventos que oferecemos que são semelhantes àqueles que você já comprou ou sobre os quais perguntou, a menos que você tenha optado por não receber essas informações."
+                },
+                "item-2_5_6": {
+                    "term": "Para gerenciar seus pedidos",
+                    "definition": ": para atender e gerenciar seus pedidos para nós."
+                },
+                "item-2_5_7": {
+                    "term": "Para transferências comerciais",
+                    "definition": ": podemos usar suas informações para avaliar ou conduzir uma fusão, desinvestimento, reestruturação, reorganização, dissolução, ou outra venda ou transferência de alguns ou todos os nossos ativos, seja como uma empresa em funcionamento ou como parte de falência, liquidação, ou processo similar, no qual os Dados Pessoais mantidos por nós sobre nossos usuários de Serviço estão entre os ativos transferidos."
+                },
+                "item-2_5_8": {
+                    "term": "Para outros propósitos",
+                    "definition": ": podemos usar suas informações para outros propósitos, como análise de dados, identificação de tendências de uso, determinação da eficácia de nossas campanhas promocionais e para avaliar e melhorar nosso Serviço, produtos, serviços, marketing e sua experiência."
+                },
+                "item-2_6_1": {
+                    "term": "Com Provedores de Serviços",
+                    "definition": ": podemos compartilhar suas informações pessoais com Provedores de Serviços para monitorar e analisar o uso de nosso Serviço, para contatá-lo."
+                },
+                "item-2_6_2": {
+                    "term": "Para transferências comerciais",
+                    "definition": ": podemos compartilhar ou transferir suas informações pessoais em conexão com, ou durante negociações de, qualquer fusão, venda de ativos da Empresa, financiamento, ou aquisição de todo ou uma parte de nosso negócio para outra empresa."
+                },
+                "item-2_6_3": {
+                    "term": "Com Afiliadas",
+                    "definition": ": podemos compartilhar suas informações com nossas afiliadas, caso em que exigiremos que essas afiliadas respeitem esta Política de Privacidade. Afiliadas incluem nossa empresa controladora e quaisquer outras subsidiárias, parceiros de joint venture ou outras empresas que controlamos ou que estão sob controle comum conosco."
+                },
+                "item-2_6_4": {
+                    "term": "Com parceiros de negócios",
+                    "definition": ": podemos compartilhar suas informações com nossos parceiros de negócios para oferecer a você certos produtos, serviços ou promoções."
+                },
+                "item-2_6_5": {
+                    "term": "Com outros usuários",
+                    "definition": ": quando você compartilha informações pessoais ou interage de outra forma nas áreas públicas com outros usuários, essas informações podem ser vistas por todos os usuários e podem ser distribuídas publicamente fora."
+                },
+                "item-2_6_6": {
+                    "term": "Com seu consentimento",
+                    "definition": ": podemos divulgar suas informações pessoais para qualquer outro propósito com o seu consentimento."
+                },
+                "item-2_7_1": "Cumprir uma obrigação legal",
+                "item-2_7_2": "Proteger e defender os direitos ou propriedade da Empresa",
+                "item-2_7_3": "Prevenir ou investigar possíveis transgressões em conexão com o Serviço",
+                "item-2_7_4": "Proteger a segurança pessoal dos usuários do Serviço ou do público",
+                "item-2_7_5": "Proteger contra responsabilidade legal"
+            }
+        },
+        "Section-3": {
+            "title": "Privacidade das Crianças",
+            "paragraphs": {
+                "paragraph-1": "Nosso serviço não se destina a ninguém com menos de 18 anos. Não coletamos intencionalmente informações de identificação pessoal de ninguém com menos de 18 anos. Se você é pai ou responsável e sabe que seu filho nos forneceu Dados Pessoais, entre em contato conosco. Se tomarmos conhecimento de que coletamos Dados Pessoais de alguém com menos de 18 anos sem verificação do consentimento dos pais, tomamos medidas para remover essas informações de nossos servidores.",
+                "paragraph-2": "Se precisarmos confiar no consentimento como base legal para processar suas informações e seu país exigir o consentimento dos pais, podemos exigir o consentimento dos seus pais antes de coletar e usar essas informações.",
+                "paragraph-3": "ESTE SITE NÃO FORNECE SEUS SERVIÇOS A INDIVÍDUOS MENORES DE 18 ANOS! SE SUSPEITARMOS QUE VOCÊ É UM MENOR, ENCERRAREMOS SUA CONTA IMEDIATAMENTE! (Por encerrar, queremos dizer exclusão completa)."
+            }
+        },
+        "Section-4": {
+            "title": "Links para Outros Sites",
+            "paragraphs": {
+                "paragraph-1": "Nosso serviço pode conter links para outros sites que não são operados por nós. Se você clicar em um link de terceiros, será direcionado para o site desse terceiro. Aconselhamos fortemente que você revise a Política de Privacidade de todos os sites que visitar.",
+                "paragraph-2": "Não temos controle e não assumimos responsabilidade pelo conteúdo, políticas de privacidade ou práticas de quaisquer sites ou serviços de terceiros."
+            }
+        },
+        "Section-5": {
+            "title": "Alterações a Esta Política de Privacidade",
+            "paragraphs": {
+                "paragraph-1": "Podemos atualizar nossa Política de Privacidade de tempos em tempos. Notificaremos você sobre quaisquer mudanças postando a nova Política de Privacidade nesta página.",
+                "paragraph-2": "Informaremos você por email e/ou um aviso em destaque em nosso serviço, antes da alteração entrar em vigor e atualizaremos a data de \"Última atualização\" no topo desta Política de Privacidade.",
+                "paragraph-3": "Você é aconselhado a revisar esta Política de Privacidade periodicamente para quaisquer mudanças. As mudanças a esta Política de Privacidade são efetivas quando publicadas nesta página."
+            }
+        },
+        "Section-6": {
+            "title": "Fale Conosco",
+            "paragraphs": {
+                "paragraph": "Se você tiver alguma dúvida sobre esta Política de Privacidade, você pode nos contatar:"
+            },
+            "list": {
+                "item-1": {
+                    "term": "Visitando esta página em nosso site: ",
+                    "link": "A SER ADICIONADO..."
+                }
+            }
+        },
+        "GoBackScreenReader": "Voltar à navegação"
     }
 }
