@@ -22,7 +22,7 @@ export default function LocaleSwitcherSelect({
     }
 
     return (
-        <label className="rounded-md shadow max-sm:mt-2">
+        <label className="ml-2 rounded-md bg-white shadow max-sm:mt-2">
             <p className="sr-only">Change Language</p>
             <select
                 defaultValue={defaultValue}

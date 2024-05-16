@@ -1,11 +1,14 @@
 "use client"
 
+import logout from "@/actions/auth/logout"
+import { useUser } from "@/context/user-context-provider"
 import { UserContextResponse } from "@/interfaces/user"
-import { Link, usePathname } from "@/navigation"
+import { Link, usePathname, useRouter } from "@/navigation"
 import { useLocale } from "next-intl"
 import Image from "next/image"
 import { useState } from "react"
-import { HiBars3BottomLeft, HiMiniPencilSquare, HiXMark } from "react-icons/hi2"
+import { HiBars3BottomLeft, HiXMark } from "react-icons/hi2"
+import { TbPencilPlus } from "react-icons/tb"
 import { twMerge } from "tailwind-merge"
 
 export default function Header({ user }: { user: UserContextResponse | null }) {
@@ -13,6 +16,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const localActive = useLocale()
     const pathname = usePathname()
+    const router = useRouter()
 
     const menuLinksStyle = twMerge(
         `rounded-md px-3 py-2 text-sm font-medium`,
@@ -24,6 +28,19 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
         `${pathname === "/home" ? "bg-background-900 text-body-50" : "text-body-300 hover:bg-background-700"}`
     )
 
+    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
+
+    const { setUser } = useUser()
+
+    async function handleLogout() {
+        await logout()
+        setUser(null)
+        router.push("/")
+        router.refresh()
+    }
+
+    console.log(user)
+
     return (
         <header className="font-body text-body-600">
             <nav className="bg-background-800">
@@ -32,7 +49,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             <button
                                 type="button"
-                                className="relative inline-flex items-center justify-center rounded-md p-2 text-body-400 hover:bg-background-700 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                className="relative inline-flex items-center justify-center rounded-md p-2 text-body-400 hover:bg-background-700 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-background-50"
                                 aria-controls="mobile-menu"
                                 aria-expanded="false"
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -50,7 +67,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                         <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                             <div className="flex flex-shrink-0 items-center">
                                 <Image
-                                    src="/logo-bird.svg"
+                                    src="/assets/logo-bird.svg"
                                     alt="Mini logo"
                                     className="h-8 w-auto"
                                     width={120}
@@ -75,18 +92,18 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                             <button
                                 type="button"
-                                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
                             >
                                 <span className="absolute -inset-1.5"></span>
                                 <span className="sr-only">New Post</span>
-                                <HiMiniPencilSquare size={24} />
+                                <TbPencilPlus size={24} />
                             </button>
 
                             <div className="relative ml-3">
                                 <div>
                                     <button
                                         type="button"
-                                        className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                        className="relative flex rounded-full bg-background-800 text-sm focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-background-800"
                                         id="user-menu-button"
                                         aria-expanded="false"
                                         aria-haspopup="true"
@@ -98,11 +115,12 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         <span className="sr-only">Open user menu</span>
                                         <Image
                                             className="h-8 w-8 rounded-full object-cover"
-                                            src="https://source.unsplash.com/random/?portrait&w=256&h=256&q=50"
-                                            alt="Avatar placeholder"
+                                            src={user?.avatar_image_url ?? null_image}
+                                            alt={`Avatar of ${user?.username}`}
+                                            title={`Avatar of ${user?.username}`}
                                             width={256}
                                             height={256}
-                                            sizes="100vw"
+                                            quality={50}
                                         />
                                     </button>
                                 </div>
@@ -112,26 +130,40 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                     aria-orientation="vertical"
                                     aria-labelledby="user-menu-button"
                                 >
+                                    <div>
+                                        <p className="block select-none px-4 py-2 text-sm text-body-700">
+                                            Welcome, @{user?.username}
+                                        </p>
+
+                                        <hr className="bg-background-100" />
+                                    </div>
                                     <Link
+                                        locale={localActive}
                                         href="#"
-                                        className="block px-4 py-2 text-sm text-gray-700"
+                                        className="block px-4 py-2 text-sm text-body-700"
                                         role="menuitem"
+                                        tabIndex={-1}
                                         id="user-menu-item-0"
                                     >
                                         Your Profile
                                     </Link>
                                     <Link
+                                        locale={localActive}
                                         href="#"
-                                        className="block px-4 py-2 text-sm text-gray-700"
+                                        className="block px-4 py-2 text-sm text-body-700"
                                         role="menuitem"
+                                        tabIndex={-1}
                                         id="user-menu-item-1"
                                     >
                                         Settings
                                     </Link>
                                     <Link
-                                        href="#"
-                                        className="block px-4 py-2 text-sm text-gray-700"
+                                        locale={localActive}
+                                        href="/"
+                                        onClick={handleLogout}
+                                        className="block px-4 py-2 text-sm text-body-700"
                                         role="menuitem"
+                                        tabIndex={-1}
                                         id="user-menu-item-2"
                                     >
                                         Sign out
