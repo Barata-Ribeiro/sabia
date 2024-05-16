@@ -55,10 +55,14 @@ export default async function RootLayout({
     let user: UserContextResponse | null = null
     if (context && context.ok) user = context.response?.data as UserContextResponse
 
-    const body_styles = tw`flex min-h-dvh flex-col`
+    const body_styles = tw`flex h-full min-h-dvh flex-col`
 
     return (
-        <html lang={locale} suppressHydrationWarning={true}>
+        <html
+            lang={locale}
+            suppressHydrationWarning={true}
+            className="h-full bg-background-50 dark:bg-background-950"
+        >
             <NextIntlClientProvider locale={locale} messages={messages}>
                 <body
                     className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}

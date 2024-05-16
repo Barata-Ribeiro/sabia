@@ -9,7 +9,7 @@ interface InputProps extends ComponentProps<"input"> {
 
 export default function Input({ label, icon, className, ...props }: InputProps) {
     const sortedClasses = tw`peer h-full w-full rounded-[7px] border border-background-200
-                                    border-t-transparent bg-transparent font-sans text-sm
+                                    border-t-transparent bg-white font-sans text-sm
                                     font-normal text-body-700 outline outline-0 transition-all placeholder-shown:border
                                     placeholder-shown:border-background-200 placeholder-shown:border-t-background-200
                                     focus:border-2 focus:border-background-900 focus:border-t-transparent

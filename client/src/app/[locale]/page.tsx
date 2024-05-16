@@ -8,14 +8,14 @@ export default function LoginPage() {
     const localActive = useLocale()
 
     return (
-        <main className="font-body">
-            <section className="flex h-screen flex-col items-center md:flex-row">
-                <div className="relative hidden h-screen w-full bg-indigo-600 md:w-1/2 lg:block xl:w-2/3">
+        <main className="shadow-accent-900/5 font-body lg:rounded-b-2xl lg:shadow-xl">
+            <section className=" flex h-screen flex-col items-center md:flex-row lg:rounded-b-2xl">
+                <div className="relative hidden h-screen w-full bg-background-950 md:w-1/2 lg:block lg:rounded-bl-2xl xl:w-2/3">
                     <Image
                         src="https://source.unsplash.com/random/?Thrush"
                         alt={t("PageImageDescription")}
                         title={t("PageImageDescription")}
-                        className="h-auto w-auto object-cover"
+                        className="h-auto w-auto object-cover lg:rounded-bl-2xl"
                         sizes="100%"
                         fill
                         priority
@@ -23,8 +23,8 @@ export default function LoginPage() {
                 </div>
 
                 <div
-                    className="flex h-screen w-full items-center justify-center bg-white px-6 md:mx-auto md:w-1/2 md:max-w-md lg:max-w-full
-        lg:px-16 xl:w-1/3 xl:px-12"
+                    className="flex h-screen w-full items-center justify-center bg-background-100 px-6 md:mx-auto md:w-1/2 md:max-w-md lg:max-w-full
+        lg:rounded-br-2xl lg:px-16 xl:w-1/3 xl:px-12"
                 >
                     <div className="h-100 w-full">
                         <h1 className="mt-12 font-heading text-2xl font-bold leading-tight md:text-2xl">
