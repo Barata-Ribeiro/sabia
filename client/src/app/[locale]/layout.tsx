@@ -1,5 +1,6 @@
 import getUserContext from "@/actions/user/get-user-context"
 import Footer from "@/components/global/footer"
+import Header from "@/components/global/header"
 import { UserContextProvider } from "@/context/user-context-provider"
 import { UserContextResponse } from "@/interfaces/user"
 import { locales } from "@/navigation"
@@ -68,6 +69,7 @@ export default async function RootLayout({
                     className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}
                 >
                     <UserContextProvider user={user}>
+                        {user && <Header user={user} />}
                         <div className="flex flex-1 flex-col md:container">
                             {children}
                         </div>
