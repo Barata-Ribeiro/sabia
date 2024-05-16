@@ -18,7 +18,7 @@ export default function Footer() {
             <div className="container mx-auto flex flex-col items-center px-5 py-8 sm:flex-row">
                 <Link locale={localActive} href="/">
                     <Image
-                        src="/logo.svg"
+                        src="/assets/logo.svg"
                         alt="Sabiá - Logo"
                         title="Sabiá - Logo"
                         className="ml-3 h-auto w-32 sm:w-40"
