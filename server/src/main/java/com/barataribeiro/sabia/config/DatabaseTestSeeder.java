@@ -48,8 +48,19 @@ public class DatabaseTestSeeder {
             user2.setPassword(passwordEncoder.encode("password2"));
             user2.setRole(Roles.MEMBER);
 
+            User jason = new User();
+            jason.setUsername("jasonbourne");
+            jason.setDisplay_name("Jason Bourne");
+            jason.setFull_name("Jason Bourne");
+            jason.setBirth_date(LocalDate.of(1969, 8, 21).format(formatter));
+            jason.setEmail("jasonbourne@cia.com");
+            jason.setAvatar_image_url("https://avatarfiles.alphacoders.com/153/153804.jpg");
+            jason.setCover_image_url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?fm=jpg&fit=crop&w=1920&q=80&fit=max");
+            jason.setPassword(passwordEncoder.encode("25)9vteIYzPYLivd"));
+            jason.setRole(Roles.ADMIN);
+
             // Save users to UserRepository
-            userRepository.saveAll(Arrays.asList(user1, user2));
+            userRepository.saveAll(Arrays.asList(user1, user2, jason));
 
             // Create posts
             for (int i = 1; i <= 10; i++) {
