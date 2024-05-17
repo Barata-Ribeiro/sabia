@@ -11,7 +11,7 @@ import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
 import { Average_Sans, Open_Sans } from "next/font/google"
 import { notFound } from "next/navigation"
-import type { ReactNode } from "react"
+import { type ReactNode } from "react"
 
 const open_sans = Open_Sans({
     subsets: ["latin"],
@@ -28,14 +28,13 @@ const avarage_sans = Average_Sans({
 
 interface LocaleLayoutProps {
     children: ReactNode
+    modal: ReactNode
     params: { locale: string }
 }
 
 export async function generateMetadata({
     params
-}: {
-    params: { locale: string }
-}): Promise<Metadata> {
+}: LocaleLayoutProps): Promise<Metadata> {
     const t = await getTranslations({ locale: params.locale, namespace: "LayoutRoot" })
 
     return {
@@ -46,6 +45,7 @@ export async function generateMetadata({
 
 export default async function RootLayout({
     children,
+    modal = null,
     params: { locale }
 }: Readonly<LocaleLayoutProps>) {
     if (!locales.includes(locale)) notFound()
@@ -74,6 +74,7 @@ export default async function RootLayout({
                             {children}
                         </div>
                         <Footer />
+                        {modal}
                     </UserContextProvider>
                 </body>
             </NextIntlClientProvider>

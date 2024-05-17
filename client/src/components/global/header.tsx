@@ -89,14 +89,15 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <button
-                                type="button"
+                            <Link
+                                locale={localActive}
+                                href={"/p/" + user?.username + "/new-post"}
                                 className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
                             >
                                 <span className="absolute -inset-1.5"></span>
                                 <span className="sr-only">{t("NavSRNewPost")}</span>
                                 <TbPencilPlus size={24} />
-                            </button>
+                            </Link>
 
                             <div className="relative ml-3">
                                 <div>
