@@ -45,6 +45,17 @@
         "RegisterButton": "Criar Conta",
         "RegisterButtonLoading": "Criando..."
     },
+    "Header": {
+        "NavMenuHome": "Início",
+        "NavUserGreet": "Bem vindo,",
+        "NavSRMainMenu": "Abrir menu principal",
+        "NavSRNewPost": "Criar nova postagem",
+        "NavSRUseMenu": "Abrir menu de usuário",
+        "NavUserImageAlt": "Avatar de ",
+        "NavUserMenuProfile": "Seu Perfil",
+        "NavUserMenuSettings": "Configurações",
+        "NavUserMenuLogout": "Sair"
+    },
     "Footer": {
         "terms": "Termos",
         "privacy": "Privacidade",

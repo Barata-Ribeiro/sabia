@@ -45,6 +45,17 @@
         "RegisterButton": "Sign Up",
         "RegisterButtonLoading": "Loading..."
     },
+    "Header": {
+        "NavMenuHome": "Home",
+        "NavUserGreet": "Welcome,",
+        "NavSRMainMenu": "Open main menu",
+        "NavSRNewPost": "Create a new post",
+        "NavSRUseMenu": "Open user menu",
+        "NavUserImageAlt": "Avatar of ",
+        "NavUserMenuProfile": "Your profile",
+        "NavUserMenuSettings": "Settings",
+        "NavUserMenuLogout": "Sign Out"
+    },
     "Footer": {
         "terms": "Terms",
         "privacy": "Privacy",

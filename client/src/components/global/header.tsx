@@ -4,7 +4,7 @@ import logout from "@/actions/auth/logout"
 import { useUser } from "@/context/user-context-provider"
 import { UserContextResponse } from "@/interfaces/user"
 import { Link, usePathname, useRouter } from "@/navigation"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import Image from "next/image"
 import { useState } from "react"
 import { HiBars3BottomLeft, HiXMark } from "react-icons/hi2"
@@ -14,6 +14,7 @@ import { twMerge } from "tailwind-merge"
 export default function Header({ user }: { user: UserContextResponse | null }) {
     const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const t = useTranslations("Header")
     const localActive = useLocale()
     const pathname = usePathname()
     const router = useRouter()
@@ -39,12 +40,10 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
         router.refresh()
     }
 
-    console.log(user)
-
     return (
         <header className="font-body text-body-600">
             <nav className="bg-background-800">
-                <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                <div className="container mx-auto px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                             <button
@@ -55,7 +54,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             >
                                 <span className="absolute -inset-0.5"></span>
-                                <span className="sr-only">Open main menu</span>
+                                <span className="sr-only">{t("NavSRMainMenu")}</span>
 
                                 {isMobileMenuOpen ? (
                                     <HiXMark size={24} />
@@ -84,7 +83,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         className={menuLinksStyle}
                                         aria-current="page"
                                     >
-                                        Home
+                                        {t("NavMenuHome")}
                                     </Link>
                                 </div>
                             </div>
@@ -95,7 +94,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                 className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
                             >
                                 <span className="absolute -inset-1.5"></span>
-                                <span className="sr-only">New Post</span>
+                                <span className="sr-only">{t("NavSRNewPost")}</span>
                                 <TbPencilPlus size={24} />
                             </button>
 
@@ -112,12 +111,14 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         }
                                     >
                                         <span className="absolute -inset-1.5"></span>
-                                        <span className="sr-only">Open user menu</span>
+                                        <span className="sr-only">
+                                            {t("NavSRUseMenu")}
+                                        </span>
                                         <Image
                                             className="h-8 w-8 rounded-full object-cover"
                                             src={user?.avatar_image_url ?? null_image}
-                                            alt={`Avatar of ${user?.username}`}
-                                            title={`Avatar of ${user?.username}`}
+                                            alt={`${t("NavUserImageAlt")} ${user?.username}`}
+                                            title={`${t("NavUserImageAlt")} ${user?.username}`}
                                             width={256}
                                             height={256}
                                             quality={50}
@@ -132,7 +133,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                 >
                                     <div>
                                         <p className="block select-none px-4 py-2 text-sm text-body-700">
-                                            Welcome, @{user?.username}
+                                            {t("NavUserGreet")} @{user?.username}
                                         </p>
 
                                         <hr className="bg-background-100" />
@@ -145,7 +146,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         tabIndex={-1}
                                         id="user-menu-item-0"
                                     >
-                                        Your Profile
+                                        {t("NavUserMenuProfile")}
                                     </Link>
                                     <Link
                                         locale={localActive}
@@ -155,7 +156,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         tabIndex={-1}
                                         id="user-menu-item-1"
                                     >
-                                        Settings
+                                        {t("NavUserMenuSettings")}
                                     </Link>
                                     <Link
                                         locale={localActive}
@@ -166,7 +167,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         tabIndex={-1}
                                         id="user-menu-item-2"
                                     >
-                                        Sign out
+                                        {t("NavUserMenuLogout")}
                                     </Link>
                                 </div>
                             </div>
@@ -185,7 +186,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                             className={mobileMenuLinksStyle}
                             aria-current="page"
                         >
-                            Home
+                            {t("NavMenuHome")}
                         </Link>
                     </div>
                 </div>
