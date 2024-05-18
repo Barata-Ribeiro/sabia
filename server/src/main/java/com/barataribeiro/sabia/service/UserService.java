@@ -102,8 +102,8 @@ public class UserService {
         String searchParams = query.startsWith("@") ? query.substring(1) : query;
 
         String invalidParamsMessage = isEnglishLang
-                                      ? "The number of items per page must be between 1 and 15."
-                                      : "O número de itens por página deve estar entre 1 e 15.";
+                                      ? "The number of items per page must be between 0 and 15."
+                                      : "O número de itens por página deve estar entre 0 e 15.";
 
         String emptyQueryMessage = isEnglishLang
                                    ? "You must provide a term to search for usuário."
@@ -113,7 +113,7 @@ public class UserService {
                                    ? "The search term must be at least 3 characters long."
                                    : "O termo de pesquisa deve ter pelo menos 3 caracteres.";
 
-        if (perPage < 1 || perPage > 15) {
+        if (perPage < 0 || perPage > 15) {
             throw new BadRequest(invalidParamsMessage);
         }
 
@@ -173,7 +173,7 @@ public class UserService {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
-        if (perPage < 1 || perPage > 20) {
+        if (perPage < 0 || perPage > 20) {
             throw new BadRequest(invalidParamsMessage);
         }
 

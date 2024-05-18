@@ -55,10 +55,10 @@ public class PostService {
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
 
         String invalidParamsMessage = isEnglishLang
-                                      ? "The number of items per page must be between 1 and 15."
-                                      : "O número de itens por página deve estar entre 1 e 15.";
+                                      ? "The number of items per page must be between 0 and 15."
+                                      : "O número de itens por página deve estar entre 0 e 15.";
 
-        if (perPage < 1 || perPage > 15) {
+        if (perPage < 0 || perPage > 15) {
             throw new BadRequest(invalidParamsMessage);
         }
 
@@ -97,10 +97,10 @@ public class PostService {
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
 
         String invalidParamsMessage = isEnglishLang
-                                      ? "The number of items per page must be between 1 and 10."
-                                      : "O número de itens por página deve estar entre 1 e 10.";
+                                      ? "The number of items per page must be between 0 and 10."
+                                      : "O número de itens por página deve estar entre 0 e 10.";
 
-        if (perPage < 1 || perPage > 10) {
+        if (perPage < 0 || perPage > 10) {
             throw new BadRequest(invalidParamsMessage);
         }
 
@@ -129,8 +129,8 @@ public class PostService {
         String queryParams = query.startsWith("#") ? query.substring(1) : query;
 
         String invalidParamsMessage = isEnglishLang
-                                      ? "The number of items per page must be between 1 and 15."
-                                      : "O número de itens por página deve estar entre 1 e 15.";
+                                      ? "The number of items per page must be between 0 and 15."
+                                      : "O número de itens por página deve estar entre 0 e 15.";
 
         String emptyQueryMessage = isEnglishLang
                                    ? "You must provide a term to search for posts."
@@ -140,7 +140,7 @@ public class PostService {
                                    ? "The search term must be at least 3 characters long."
                                    : "O termo de pesquisa deve ter pelo menos 3 caracteres.";
 
-        if (perPage < 1 || perPage > 15) {
+        if (perPage < 0 || perPage > 15) {
             throw new BadRequest(invalidParamsMessage);
         }
 
