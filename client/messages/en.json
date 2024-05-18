@@ -45,6 +45,16 @@
         "RegisterButton": "Sign Up",
         "RegisterButtonLoading": "Loading..."
     },
+    "NewPostModal": {
+        "NewPostTitle": "New Post",
+        "NewPostSubtitle": "Share your thoughts and ideas with the world.",
+        "NewPostCloseButton": "Close"
+    },
+    "NewPostForm": {
+        "TextAreaLabel": "New Post",
+        "NewPostButtonLoading": "Posting...",
+        "NewPostButtonSubmit": "Post"
+    },
     "Header": {
         "NavMenuHome": "Home",
         "NavUserGreet": "Welcome,",

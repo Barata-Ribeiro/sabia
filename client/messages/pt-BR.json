@@ -45,6 +45,16 @@
         "RegisterButton": "Criar Conta",
         "RegisterButtonLoading": "Criando..."
     },
+    "NewPostModal": {
+        "NewPostTitle": "Nova Postagem",
+        "NewPostSubtitle": "Compartilhe seus pensamentos e ideias com o mundo!",
+        "NewPostCloseButton": "Fechar"
+    },
+    "NewPostForm": {
+        "TextAreaLabel": "Nova Postagem",
+        "NewPostButtonLoading": "Publicando...",
+        "NewPostButtonSubmit": "Publicar"
+    },
     "Header": {
         "NavMenuHome": "Início",
         "NavUserGreet": "Bem vindo,",

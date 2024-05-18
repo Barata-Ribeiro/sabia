@@ -14,14 +14,20 @@ export default async function postNewPost(state: State, formData: FormData) {
     const locale = await getLocale()
     const isEnglish = locale === "en"
 
-    const text = formData.get("text") as string | null
+    const text = formData.get("newPost") as string | null
 
     try {
         const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) return { ok: false, client_error: null, response: null }
+        if (!auth_token) {
+            await logout()
+            throw new Error(isEnglish ? "Unauthorized." : "Não autorizado.")
+        }
 
         const isTokenValid = verifyToken(auth_token)
-        if (!isTokenValid) return await logout()
+        if (!isTokenValid) {
+            await logout()
+            throw new Error(isEnglish ? "Unauthorized." : "Não autorizado.")
+        }
 
         if (!text)
             throw new Error(isEnglish ? "Text is required." : "Texto é obrigatório.")
