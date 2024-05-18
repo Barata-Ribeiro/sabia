@@ -22,7 +22,8 @@ export default async function getUserContext() {
                 Authorization: "Bearer " + auth_token,
                 "Content-Type": "application/json",
                 "Content-Language": locale
-            }
+            },
+            next: { tags: ["context", "profile"] }
         })
 
         const responseData = (await response.json()) as ApiResponse

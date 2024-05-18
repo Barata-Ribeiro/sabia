@@ -5,6 +5,7 @@ import { AuthLoginResponse } from "@/interfaces/auth"
 import { AUTH_LOGIN } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import { getLocale } from "next-intl/server"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 export default async function login(state: State, formData: FormData) {
@@ -51,6 +52,8 @@ export default async function login(state: State, formData: FormData) {
             sameSite: "lax",
             expires: Date.now() + (rememberMe ? THIRTY_DAYS : ONE_DAY)
         })
+
+        revalidateTag("context")
 
         return {
             ok: true,

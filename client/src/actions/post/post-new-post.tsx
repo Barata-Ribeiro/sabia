@@ -7,6 +7,7 @@ import { POST_NEW_POST } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import verifyToken from "@/utils/validate-token"
 import { getLocale } from "next-intl/server"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 export default async function postNewPost(state: State, formData: FormData) {
@@ -59,6 +60,8 @@ export default async function postNewPost(state: State, formData: FormData) {
         if (!response.ok) throw new Error(responseData.message)
 
         const data = responseData.data as PostResponse
+
+        revalidateTag("feed")
 
         return { ok: true, client_error: null, response: { ...responseData, data } }
     } catch (error) {
