@@ -44,7 +44,7 @@ public class AdminService {
 
         user.setIs_verified(!user.getIs_verified());
 
-        userRepository.save(user);
+        user = userRepository.saveAndFlush(user);
 
         return user.getIs_verified();
     }
@@ -72,7 +72,7 @@ public class AdminService {
 
         user.setRole(user.getRole().equals(Roles.BANNED) ? Roles.MEMBER : Roles.BANNED);
 
-        userRepository.save(user);
+        user = userRepository.saveAndFlush(user);
 
         return user.getRole().equals(Roles.BANNED);
     }

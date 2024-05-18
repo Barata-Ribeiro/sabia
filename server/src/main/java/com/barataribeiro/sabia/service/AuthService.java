@@ -126,11 +126,8 @@ public class AuthService {
             throw new InvalidCredentials(invalidBirthday);
         }
 
-
-        User newUser;
-
         try {
-            newUser = User.builder()
+            User newUser = User.builder()
                     .username(sanitizedUsername)
                     .display_name(sanitizedDisplayName)
                     .full_name(sanitizedFullName)
@@ -139,7 +136,7 @@ public class AuthService {
                     .password(passwordEncoder.encode(sanitizedPassword))
                     .build();
 
-            userRepository.save(newUser);
+            newUser = userRepository.saveAndFlush(newUser);
 
             return new RegisterResponseDTO(newUser.getUsername(),
                                            newUser.getDisplay_name(),

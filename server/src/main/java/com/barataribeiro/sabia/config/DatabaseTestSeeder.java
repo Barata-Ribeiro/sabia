@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -73,10 +74,10 @@ public class DatabaseTestSeeder {
                 post2.setAuthor(user2);
                 post2.setText("Post " + i + " from User Two, #enjoy #hashtag" + i);
 
-                postRepository.save(post2);
+                Post savedPost2 = postRepository.saveAndFlush(post2);
 
                 Pattern pattern = Pattern.compile("#\\w+");
-                Matcher matcher = pattern.matcher(post2.getText());
+                Matcher matcher = pattern.matcher(savedPost2.getText());
 
                 while (matcher.find()) {
                     String hashtagText = matcher.group().substring(1); // remove '#'
@@ -91,15 +92,17 @@ public class DatabaseTestSeeder {
 
                     HashtagPosts hashtagPost = HashtagPosts.builder()
                             .hashtags(hashtag)
-                            .posts(post2)
+                            .posts(savedPost2)
                             .build();
 
-                    hashtagPostsRepository.save(hashtagPost);
+                    hashtagPostsRepository.saveAndFlush(hashtagPost);
 
-                    post2.setPostHashtags(List.of(hashtagPost));
+                    ArrayList<HashtagPosts> postHashtags = new ArrayList<>(List.of(hashtagPost));
+
+                    savedPost2.setPostHashtags(postHashtags);
                 }
 
-                postRepository.save(post2);
+                postRepository.save(savedPost2);
             }
         };
     }

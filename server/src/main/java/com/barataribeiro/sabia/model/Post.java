@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Entity
@@ -84,13 +84,15 @@ public class Post {
     private Post in_reply_to;
 
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
-    private Instant createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
-    private Instant updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
 
     public void incrementViewCount() {
         ++views_count;

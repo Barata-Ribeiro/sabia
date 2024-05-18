@@ -79,13 +79,13 @@ public class PostService {
         return response;
     }
 
-    @Cacheable(value = "posts", key = "{#postId, #language}")
+    @CacheEvict(value = "posts", key = "{#postId, #language}")
     public PostResponseDTO getPostById(String postId, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
         post.incrementViewCount();
-        postRepository.save(post);
+        post = postRepository.saveAndFlush(post);
 
         return getPostResponseDTO(post);
     }
@@ -189,7 +189,7 @@ public class PostService {
                 .text(text)
                 .build();
 
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
 
         while (matcher.find()) {
             String hashtagText = matcher.group().substring(1);
@@ -204,17 +204,19 @@ public class PostService {
 
             HashtagPosts hashtagPost = HashtagPosts.builder()
                     .hashtags(hashtag)
-                    .posts(post)
+                    .posts(savedPost)
                     .build();
 
             hashtagPostsRepository.save(hashtagPost);
 
-            post.setPostHashtags(List.of(hashtagPost));
+            ArrayList<HashtagPosts> postHashtags = new ArrayList<>(List.of(hashtagPost));
+
+            savedPost.setPostHashtags(postHashtags);
         }
 
-        postRepository.save(post);
+        savedPost = postRepository.saveAndFlush(post);
 
-        return getPostResponseDTO(post);
+        return getPostResponseDTO(savedPost);
     }
 
     @Transactional
@@ -232,7 +234,7 @@ public class PostService {
                 .repost_off(post)
                 .build();
 
-        postRepository.save(repost);
+        repost = postRepository.saveAndFlush(repost);
 
         post.incrementRepostCount();
         post.incrementViewCount();
@@ -276,6 +278,8 @@ public class PostService {
                 .text(text)
                 .in_reply_to(post)
                 .build();
+
+        reply = postRepository.saveAndFlush(reply);
 
         post.incrementReplyCount();
         postRepository.save(post);
@@ -375,7 +379,13 @@ public class PostService {
                 author.getRole()
         );
 
-        List<String> hashtags = post.getPostHashtags().stream()
+        List<HashtagPosts> postHashtags = post.getPostHashtags();
+
+        if (postHashtags == null) {
+            postHashtags = new ArrayList<>();
+        }
+
+        List<String> hashtags = postHashtags.stream()
                 .map(hashtagPost -> hashtagPost.getHashtags().getTag())
                 .collect(Collectors.toList());
 

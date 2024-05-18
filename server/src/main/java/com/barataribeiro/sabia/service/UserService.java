@@ -238,7 +238,7 @@ public class UserService {
             user.setWebsite(validatedInputData.get("website").toString());
             user.setLocation(body.location());
 
-            userRepository.save(user);
+            user = userRepository.saveAndFlush(user);
 
             return getContextResponseDTO(user);
         } catch (Exception error) {
@@ -326,6 +326,8 @@ public class UserService {
                     .follower(user)
                     .followed(followedUser)
                     .build();
+
+            followRepository.save(newFollow);
 
             user.getFollowers().add(newFollow);
             user.incrementFollowerCount();
