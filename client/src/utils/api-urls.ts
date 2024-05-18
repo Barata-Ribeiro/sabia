@@ -9,3 +9,7 @@ export const AUTH_RESETPASSWORD = (userId: string, token: string) =>
 
 // User
 export const USER_GET_CONTEXT = () => `${BACKEND_URL}/api/v1/users/me`
+
+// Post
+
+export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`

@@ -19,3 +19,12 @@ export interface UserContextResponse {
     created_at: string
     updated_at: string
 }
+
+export interface AuthorResponse {
+    id: string
+    username: string
+    display_name: string
+    avatar_image_url: string
+    is_verified: boolean
+    role: string
+}
