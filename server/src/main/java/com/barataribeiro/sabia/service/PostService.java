@@ -15,6 +15,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -79,7 +80,7 @@ public class PostService {
         return response;
     }
 
-    @CacheEvict(value = "posts", key = "{#postId, #language}")
+    @Cacheable(value = "post", key = "{#postId, #language}")
     public PostResponseDTO getPostById(String postId, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
@@ -172,7 +173,12 @@ public class PostService {
     }
 
     @Transactional
-    @CacheEvict(value = "posts", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", allEntries = true),
+            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true)
+    })
     public PostResponseDTO createPost(PostRequestDTO body, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -220,7 +226,12 @@ public class PostService {
     }
 
     @Transactional
-    @CacheEvict(value = "posts", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", allEntries = true),
+            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true)
+    })
     public Post repost(String postId, String requesting_user, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
@@ -245,7 +256,12 @@ public class PostService {
     }
 
     @Transactional
-    @CacheEvict(value = "posts", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", allEntries = true),
+            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true)
+    })
     public PostResponseDTO replyToPost(String postId, PostRequestDTO body, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -288,7 +304,10 @@ public class PostService {
     }
 
     @Transactional
-    @CacheEvict(value = "posts", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true)
+    })
     public void deletePost(String postId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -308,6 +327,12 @@ public class PostService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", allEntries = true),
+            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true)
+    })
     public Boolean toggleLike(String postId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 

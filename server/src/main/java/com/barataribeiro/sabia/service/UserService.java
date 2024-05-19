@@ -23,6 +23,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,24 +56,7 @@ public class UserService {
     @Autowired
     private Validation validation;
 
-
-    @CacheEvict(value = "users", key = "#userId")
-    public PublicProfileResponseDTO getPublicProfile(String userId, String language) {
-        boolean isEnglishLang = language == null || language.equals("en");
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFound(language));
-
-        String privateProfileMessage = isEnglishLang ? "This user's profile is private." : "O perfil deste usuário é privado.";
-
-        if (user.getIs_private()) {
-            throw new ForbiddenRequest(privateProfileMessage);
-        }
-
-        return getPublicProfileResponseDTO(user);
-    }
-
-    @CacheEvict(value = "users", key = "#userId")
+    @Cacheable(value = "user", key = "{#userId, #page, #perPage, #language}")
     public Map<String, Object> getFollowers(String userId, int page, int perPage, String language) {
         Pageable paging = PageRequest.of(page, perPage);
 
@@ -91,6 +75,22 @@ public class UserService {
         response.put("total_pages", followersPage.getTotalPages());
 
         return response;
+    }
+
+    @Cacheable(value = "user", key = "{#userId, #language}")
+    public PublicProfileResponseDTO getPublicProfile(String userId, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(language));
+
+        String privateProfileMessage = isEnglishLang ? "This user's profile is private." : "O perfil deste usuário é privado.";
+
+        if (user.getIs_private()) {
+            throw new ForbiddenRequest(privateProfileMessage);
+        }
+
+        return getPublicProfileResponseDTO(user);
     }
 
     @Cacheable(value = "users", key = "{#query, #page, #perPage, #language}")
@@ -142,7 +142,7 @@ public class UserService {
         return response;
     }
 
-    @CacheEvict(value = "users", key = "#requesting_user")
+    @Cacheable(value = "user", key = "{#requesting_user, #language}")
     public ContextResponseDTO getUserContext(String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -152,7 +152,7 @@ public class UserService {
         return getContextResponseDTO(user);
     }
 
-    @Cacheable(value = "users", key = "{#userId, #page, #perPage, #requesting_user, #language}")
+    @Cacheable(value = "userFeed", key = "{#userId, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getUserFeed(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -201,7 +201,10 @@ public class UserService {
     }
 
     @Transactional
-    @CacheEvict(value = "users", key = "#userId")
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public ContextResponseDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -248,7 +251,10 @@ public class UserService {
     }
 
     @Transactional
-    @CacheEvict(value = "users", key = "#userId")
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public void deleteOwnAccount(String userId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -277,6 +283,10 @@ public class UserService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public void followUser(String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -344,6 +354,10 @@ public class UserService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public void unfollowUser(String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 

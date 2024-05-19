@@ -10,6 +10,8 @@ import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,10 @@ public class AdminService {
     @Autowired
     private PostRepository postRepository;
 
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public Boolean toggleVerifyUser(String userId, String principalName, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -49,6 +55,10 @@ public class AdminService {
         return user.getIs_verified();
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public Boolean toggleUserBan(String userId, String principalName, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -78,6 +88,10 @@ public class AdminService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#userId"),
+            @CacheEvict(value = "users", key = "#userId")
+    })
     public void deleteUser(String userId, String principalName, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -112,6 +126,12 @@ public class AdminService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "posts", allEntries = true),
+            @CacheEvict(value = "post", allEntries = true),
+            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true)
+    })
     public void deletePost(String postId, String principalName, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
