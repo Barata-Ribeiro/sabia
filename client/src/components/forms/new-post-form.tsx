@@ -35,12 +35,8 @@ export default function NewPostForm() {
     })
 
     useEffect(() => {
-        if (state.ok) {
-            console.log("Post created successfully")
-            console.log(state.response)
-            router.push("/home")
-        }
-    }, [state.ok])
+        if (state.ok) router.push("/home")
+    }, [state.ok, router])
 
     return (
         <form action={action}>
