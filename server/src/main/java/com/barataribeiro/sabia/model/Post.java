@@ -29,7 +29,7 @@ public class Post {
     @CreatedBy
     private User author;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 280)
     private String text;
 
     @ElementCollection
