@@ -1,3 +1,5 @@
+import { PostResponse } from "@/interfaces/post"
+
 export interface UserContextResponse {
     id: string
     username: string
@@ -27,4 +29,17 @@ export interface AuthorResponse {
     avatar_image_url: string
     is_verified: boolean
     role: string
+}
+
+export interface FeedRequestParams {
+    perPage?: number
+    page?: number
+    userId: string
+}
+
+export interface FeedResponse {
+    feed: PostResponse[]
+    total_pages: number
+    total_items: number
+    current_page: number
 }

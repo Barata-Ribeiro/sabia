@@ -1,3 +1,5 @@
+import { FeedRequestParams } from "@/interfaces/user"
+
 const BACKEND_URL = process.env.BACKEND_ORIGIN || "http://localhost:8080"
 
 // Auth
@@ -9,7 +11,10 @@ export const AUTH_RESETPASSWORD = (userId: string, token: string) =>
 
 // User
 export const USER_GET_CONTEXT = () => `${BACKEND_URL}/api/v1/users/me`
+export const USER_GET_FEED = (params: FeedRequestParams) => {
+    const { perPage, page, userId } = params
+    return `${BACKEND_URL}/api/v1/users/me/${userId}/feed?perPage=${perPage}&page=${page}`
+}
 
 // Post
-
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
