@@ -4,7 +4,7 @@ import getUserFeed from "@/actions/user/get-user-feed"
 import LinkButton from "@/components/shared/link-button"
 import { FeedResponse } from "@/interfaces/user"
 import { dateToHowLongAgo } from "@/utils/date-format"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 
@@ -22,6 +22,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
 
     const fetching = useRef(false)
     const t = useTranslations("PrivateFeed")
+    const localeActive = useLocale()
 
     const null_image = "/assets/default/profile-default-svgrepo-com.svg"
 
@@ -113,7 +114,10 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
                                         className="text-body-500 hover:underline"
                                     >
                                         <time dateTime={post.created_at}>
-                                            {dateToHowLongAgo(post.created_at)}
+                                            {dateToHowLongAgo(
+                                                post.created_at,
+                                                localeActive
+                                            )}
                                         </time>
                                     </LinkButton>
                                 </div>
