@@ -3,8 +3,25 @@ import getUserFeed from "@/actions/user/get-user-feed"
 import PrivateFeed from "@/components/feed/private-feed"
 import AsideMenu from "@/components/menu/aside-menu"
 import { FeedResponse, UserContextResponse } from "@/interfaces/user"
+import { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 
-export default async function HomePage() {
+export async function generateMetadata({
+    params
+}: {
+    params: { locale: string }
+}): Promise<Metadata> {
+    const t = await getTranslations({ locale: params.locale, namespace: "HomePage" })
+
+    return {
+        title: t("title"),
+        description: t("description")
+    }
+}
+
+export default async function HomePage({ params }: { params: { locale: string } }) {
+    const t = await getTranslations({ locale: params.locale, namespace: "HomePage" })
+
     const context = await getUserContext()
     const user: UserContextResponse =
         (context.response?.data as UserContextResponse) ?? ""
@@ -13,17 +30,24 @@ export default async function HomePage() {
     const feed = feedState.response?.data as FeedResponse
 
     return (
-        <main role="main" className="flex h-full">
+        <main role="main" className="flex h-full" aria-label={t("AriaLabelMain")}>
             <AsideMenu />
-            <section id="content" className="flex flex-col gap-4 divide-y border-l">
-                <div id="new-post">
-                    <h2 className="font-heading text-xl">Your Feed</h2>
+            <section
+                id="content"
+                className="flex w-full flex-col gap-4 divide-y border-l"
+            >
+                <div id="new-post" className="p-4" aria-label={t("AriaLabelNewPost")}>
+                    <h2 className="font-heading text-xl">{t("PageTitle")}</h2>
                 </div>
-                <div id="feed" className="w-full flex-1 overflow-y-scroll">
+                <div
+                    id="feed"
+                    className="max-w-[37.5rem] flex-1 overflow-y-scroll"
+                    aria-label={t("AriaLabelFeed")}
+                >
                     {feed && feed.feed.length > 0 ? (
                         <PrivateFeed feedResponse={feed} userId={user.id} />
                     ) : (
-                        <p className="text-center">No posts to display</p>
+                        <p className="text-center">{t("PageEmptyPosts")}</p>
                     )}
                 </div>
             </section>

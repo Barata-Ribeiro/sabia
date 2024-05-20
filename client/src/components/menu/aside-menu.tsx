@@ -4,19 +4,20 @@ import logout from "@/actions/auth/logout"
 import Input from "@/components/shared/input"
 import { useUser } from "@/context/user-context-provider"
 import { Link, useRouter } from "@/navigation"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { FaCircleUser, FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6"
 import { HiWrenchScrewdriver } from "react-icons/hi2"
 
 export default function AsideMenu() {
     const { user } = useUser()
     const localeActive = useLocale()
+    const t = useTranslations("AsideMenu")
     const router = useRouter()
 
     return (
         <aside
             id="sidebar"
-            className="relative flex h-full w-full max-w-[20rem] flex-col divide-y bg-clip-border text-gray-700"
+            className="relative hidden h-full w-full max-w-[20rem] flex-col divide-y bg-clip-border text-gray-700 md:flex"
         >
             <form action="" className="my-4 py-2 sm:mx-6 lg:mx-8">
                 <Input
@@ -37,7 +38,7 @@ export default function AsideMenu() {
                     <div className="mr-4 grid place-items-center">
                         <FaCircleUser size={20} />
                     </div>
-                    Profile
+                    {t("ButtonProfile")}
                 </Link>
                 <Link
                     locale={localeActive}
@@ -47,7 +48,7 @@ export default function AsideMenu() {
                     <div className="mr-4 grid place-items-center">
                         <HiWrenchScrewdriver size={20} />
                     </div>
-                    Settings
+                    {t("ButtonSettings")}
                 </Link>
                 <button
                     type="button"
@@ -58,7 +59,7 @@ export default function AsideMenu() {
                     <div className="mr-4 grid place-items-center">
                         <FaPowerOff size={20} />
                     </div>
-                    Log Out
+                    {t("ButtonLogout")}
                 </button>
             </nav>
         </aside>

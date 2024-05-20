@@ -1,7 +1,10 @@
 "use client"
 
 import getUserFeed from "@/actions/user/get-user-feed"
+import LinkButton from "@/components/shared/link-button"
 import { FeedResponse } from "@/interfaces/user"
+import { dateToHowLongAgo } from "@/utils/date-format"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 
@@ -18,6 +21,9 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
     const [infinite, setInfinite] = useState(posts.length >= 20)
 
     const fetching = useRef(false)
+    const t = useTranslations("PrivateFeed")
+
+    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
 
     function infiniteScroll() {
         if (fetching.current) return
@@ -67,38 +73,61 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
 
     return (
         <>
-            <ul className="flex flex-col gap-4">
+            <ul
+                className="flex flex-col divide-y"
+                role="list"
+                aria-label={t("AriaLabelList")}
+            >
                 {posts.map((post) => (
-                    <li key={post.id} className="flex flex-col gap-2">
-                        <div className="flex gap-2">
+                    <li
+                        key={post.id}
+                        onClick={() =>
+                            window.location.assign(
+                                post.author.username + "/status/" + post.id
+                            )
+                        }
+                        className="flex w-full cursor-pointer flex-col gap-2 overflow-hidden p-4 hover:bg-background-100"
+                    >
+                        <div className="flex w-full items-start gap-5">
                             <Image
-                                src={post.author.avatar_image_url}
+                                src={post.author.avatar_image_url ?? null_image}
                                 alt={post.author.username}
-                                className="h-10 w-10 rounded-full"
-                                width={40}
-                                height={40}
+                                className="aspect-square h-10 w-10 rounded-full object-cover"
+                                width={128}
+                                height={128}
                                 quality={50}
                             />
-                            <div className="flex flex-col gap-1">
-                                <span className="font-body text-body-300">
-                                    {post.author.display_name}
-                                </span>
-                                <span className="font-body text-body-400">
-                                    @{post.author.username}
-                                </span>
-                            </div>
+                            <article className="flex flex-col gap-1">
+                                <div className="flex w-max gap-1">
+                                    <p className="font-heading font-bold text-body-900">
+                                        {post.author.display_name}
+                                    </p>
+                                    <p className="font-body text-body-500">
+                                        @{post.author.username}
+                                    </p>
+                                    <span className="text-body-300">·</span>
+                                    <LinkButton
+                                        href={
+                                            post.author.username + "/status/" + post.id
+                                        }
+                                        className="text-body-500 hover:underline"
+                                    >
+                                        <time dateTime={post.created_at}>
+                                            {dateToHowLongAgo(post.created_at)}
+                                        </time>
+                                    </LinkButton>
+                                </div>
+                                <p className="text-pretty text-body-900">{post.text}</p>
+                            </article>
                         </div>
-                        <p className="font-body text-body-300">{post.text}</p>
                     </li>
                 ))}
             </ul>
-            <div className="mx-auto my-1 flex h-24">
+            <div className="mx-auto mt-auto flex h-max w-max pt-4">
                 {infinite ? (
                     loading && <p>Loading...</p>
                 ) : (
-                    <p className="text-center font-body text-body-300">
-                        You have reached the end of the feed.
-                    </p>
+                    <p className="text-body-300">{t("EndOfFeed")}</p>
                 )}
             </div>
         </>
