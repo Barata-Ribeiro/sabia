@@ -15,6 +15,15 @@
         "PageLoginLink": "Log in",
         "IllutrationDescription": "Illustration from unDraw of a bird speaking"
     },
+    "HomePage": {
+        "title": "Home | Sabiá",
+        "description": "Welcome to your home feed on Sabiá. Share your thoughts and ideas with the world.",
+        "PageTitle": "Your Feed",
+        "AriaLabelMain": "Main content",
+        "AriaLabelNewPost": "New post Section",
+        "AriaLabelFeed": "Feed Section",
+        "PageEmptyPosts": "No posts to display. How about creating one?"
+    },
     "_comment-2": "Components related translations.",
     "LocaleSwitcher": {
         "SelectLanguage": "Select Language",
@@ -54,6 +63,15 @@
         "TextAreaLabel": "New Post",
         "NewPostButtonLoading": "Posting...",
         "NewPostButtonSubmit": "Post"
+    },
+    "AsideMenu": {
+        "ButtonProfile": "Profile",
+        "ButtonSettings": "Settings",
+        "ButtonLogout": "Log out"
+    },
+    "PrivateFeed": {
+        "AriaLabelList": "Your posts feed",
+        "EndOfFeed": "You have reached the end of the feed."
     },
     "Header": {
         "NavMenuHome": "Home",

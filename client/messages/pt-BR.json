@@ -15,6 +15,15 @@
         "PageLoginLink": "Entre agora",
         "IllutrationDescription": "Ilustração de um pássaro falando, do site unDraw"
     },
+    "HomePage": {
+        "title": "Início | Sabiá",
+        "description": "Bem vindo(a) ao seu feed no Sabiá! Compartilhe seus pensamentos e ideias com o mundo.",
+        "PageTitle": "Seu Feed",
+        "AriaLabelMain": "Conteúdo Principal",
+        "AriaLabelNewPost": "Seção de Nova Postagem",
+        "AriaLabelFeed": "Seção de Feed",
+        "PageEmptyPosts": "Você ainda não possui postagens. Que tal criar uma agora?"
+    },
     "_comment-2": "Traduções relacionadas aos componentes",
     "LocaleSwitcher": {
         "SelectLanguage": "Selecione o Idioma",
@@ -54,6 +63,15 @@
         "TextAreaLabel": "Nova Postagem",
         "NewPostButtonLoading": "Publicando...",
         "NewPostButtonSubmit": "Publicar"
+    },
+    "AsideMenu": {
+        "ButtonProfile": "Perfil",
+        "ButtonSettings": "Configurações",
+        "ButtonLogout": "Sair"
+    },
+    "PrivateFeed": {
+        "AriaLabelList": "Seu feed de postagens",
+        "EndOfFeed": "Você chegou ao final do seu feed."
     },
     "Header": {
         "NavMenuHome": "Início",
