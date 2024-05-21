@@ -2,6 +2,7 @@ package com.barataribeiro.sabia.service.security;
 
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomUserDetailsService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

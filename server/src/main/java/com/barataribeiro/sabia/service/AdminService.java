@@ -9,6 +9,7 @@ import com.barataribeiro.sabia.model.Roles;
 import com.barataribeiro.sabia.model.User;
 import com.barataribeiro.sabia.repository.PostRepository;
 import com.barataribeiro.sabia.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
@@ -16,12 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AdminService {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Caching(evict = {
             @CacheEvict(value = "user", key = "#userId"),

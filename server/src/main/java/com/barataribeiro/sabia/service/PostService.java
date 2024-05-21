@@ -5,11 +5,11 @@ import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
 import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
-import com.barataribeiro.sabia.exceptions.post.PostInvalidBody;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.*;
 import com.barataribeiro.sabia.repository.*;
+import com.barataribeiro.sabia.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +32,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PostService {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private LikeRepository likeRepository;
-
-    @Autowired
-    private HashtagRepository hashtagRepository;
-
-    @Autowired
-    private HashtagPostsRepository hashtagPostsRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
+    private final HashtagRepository hashtagRepository;
+    private final HashtagPostsRepository hashtagPostsRepository;
+    private final Validation validation;
 
     @Cacheable(value = "posts", key = "{#userId, #page, #perPage, #language}")
     public Map<String, Object> getAllPosts(String userId, int page, int perPage, String language) {
@@ -65,19 +57,7 @@ public class PostService {
 
         Page<Post> postPage = postRepository.findAllByAuthorId(userId, paging);
 
-        List<Post> posts = new ArrayList<>(postPage.getContent());
-
-        List<PostResponseDTO> postsDTOs = posts.stream()
-                .map(PostService::getPostResponseDTO)
-                .collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("posts", postsDTOs);
-        response.put("current_page", postPage.getNumber());
-        response.put("total_items", postPage.getTotalElements());
-        response.put("total_pages", postPage.getTotalPages());
-
-        return response;
+        return createPostPageResponse(postPage);
     }
 
     @Cacheable(value = "post", key = "{#postId, #language}")
@@ -137,39 +117,15 @@ public class PostService {
                                    ? "You must provide a term to search for posts."
                                    : "Você deve fornecer um termo para pesquisar por posts.";
 
-        String shortQueryMessage = isEnglishLang
-                                   ? "The search term must be at least 3 characters long."
-                                   : "O termo de pesquisa deve ter pelo menos 3 caracteres.";
 
-        if (perPage < 0 || perPage > 15) {
-            throw new BadRequest(invalidParamsMessage);
-        }
+        validation.validateSearchParameters(query, perPage, isEnglishLang, invalidParamsMessage, emptyQueryMessage);
 
-        if (query.isEmpty()) {
-            throw new BadRequest(emptyQueryMessage);
-        }
-
-        if (query.length() < 3) {
-            throw new BadRequest(shortQueryMessage);
-        }
 
         Page<Post> postPage = query.startsWith("#") ?
                               postRepository.findAllByHashtag(queryParams, paging) :
                               postRepository.findAllByTextContaining(queryParams, paging);
 
-        List<Post> postsResult = new ArrayList<>(postPage.getContent());
-
-        List<PostResponseDTO> postsDTOs = postsResult.stream()
-                .map(PostService::getPostResponseDTO)
-                .collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("posts", postsDTOs);
-        response.put("current_page", postPage.getNumber());
-        response.put("total_items", postPage.getTotalElements());
-        response.put("total_pages", postPage.getTotalPages());
-
-        return response;
+        return createPostPageResponse(postPage);
     }
 
     @Transactional
@@ -273,21 +229,7 @@ public class PostService {
 
         var text = getSanitizedText(body, isEnglishLang);
 
-        String emptyPostMessage = isEnglishLang
-                                  ? "Text cannot be empty."
-                                  : "O texto não pode estar vazio.";
-
-        String invalidPostMessage = isEnglishLang
-                                    ? "Text cannot exceed 280 characters."
-                                    : "O texto não pode exceder 280 caracteres.";
-
-        if (text.isEmpty()) {
-            throw new PostInvalidBody(emptyPostMessage);
-        }
-
-        if (text.length() > 280) {
-            throw new PostInvalidBody(invalidPostMessage);
-        }
+        validation.validateBodyText(isEnglishLang, text);
 
         Post reply = Post.builder()
                 .author(user)
@@ -372,24 +314,26 @@ public class PostService {
         }
     }
 
-    private static String getSanitizedText(PostRequestDTO body, boolean isEnglishLang) {
+    private Map<String, Object> createPostPageResponse(Page<Post> postPage) {
+        List<Post> postsResult = new ArrayList<>(postPage.getContent());
+
+        List<PostResponseDTO> postsDTOs = postsResult.stream()
+                .map(PostService::getPostResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", postsDTOs);
+        response.put("current_page", postPage.getNumber());
+        response.put("total_items", postPage.getTotalElements());
+        response.put("total_pages", postPage.getTotalPages());
+
+        return response;
+    }
+
+    private String getSanitizedText(PostRequestDTO body, boolean isEnglishLang) {
         var text = StringEscapeUtils.escapeHtml4(body.text().strip());
 
-        String emptyPostMessage = isEnglishLang
-                                  ? "Text cannot be empty."
-                                  : "O texto não pode estar vazio.";
-
-        String invalidPostMessage = isEnglishLang
-                                    ? "Text cannot exceed 280 characters."
-                                    : "O texto não pode exceder 280 caracteres.";
-
-        if (text.isEmpty()) {
-            throw new PostInvalidBody(emptyPostMessage);
-        }
-
-        if (text.length() > 280) {
-            throw new PostInvalidBody(invalidPostMessage);
-        }
+        validation.validateBodyText(isEnglishLang, text);
         return text;
     }
 

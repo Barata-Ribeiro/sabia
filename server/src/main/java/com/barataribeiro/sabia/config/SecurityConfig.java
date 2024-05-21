@@ -2,6 +2,7 @@ package com.barataribeiro.sabia.config;
 
 import com.barataribeiro.sabia.service.security.CustomUserDetailsService;
 import com.barataribeiro.sabia.service.security.SecurityFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,13 +24,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SecurityConfig {
-
-    @Autowired
-    SecurityFilter securityFilter;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final SecurityFilter securityFilter;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

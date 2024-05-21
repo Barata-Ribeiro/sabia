@@ -7,6 +7,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,17 +20,15 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SecurityFilter extends OncePerRequestFilter {
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(final @NonNull HttpServletRequest request,
+                                    final @NonNull HttpServletResponse response,
+                                    final @NonNull FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
 
         if (token != null) {

@@ -39,25 +39,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final FollowRepository followRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final Validation validation;
 
-    @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private FollowRepository followRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private Validation validation;
-
-    @Cacheable(value = "user", key = "{#userId, #page, #perPage, #language}")
-    public Map<String, Object> getFollowers(String userId, int page, int perPage, String language) {
+    @Cacheable(value = "user", key = "{#userId, #page, #perPage}")
+    public Map<String, Object> getFollowers(String userId, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
         Page<Follow> followersPage = followRepository.findByFollowedIdOrderByFollowedAtDesc(userId, paging);
@@ -109,21 +100,7 @@ public class UserService {
                                    ? "You must provide a term to search for usuário."
                                    : "Você deve fornecer um termo para pesquisar usuários.";
 
-        String shortQueryMessage = isEnglishLang
-                                   ? "The search term must be at least 3 characters long."
-                                   : "O termo de pesquisa deve ter pelo menos 3 caracteres.";
-
-        if (perPage < 0 || perPage > 15) {
-            throw new BadRequest(invalidParamsMessage);
-        }
-
-        if (query.isEmpty()) {
-            throw new BadRequest(emptyQueryMessage);
-        }
-
-        if (query.length() < 3) {
-            throw new BadRequest(shortQueryMessage);
-        }
+        validation.validateSearchParameters(query, perPage, isEnglishLang, invalidParamsMessage, emptyQueryMessage);
 
         Page<User> usersPage = userRepository.searchByQuery(searchParams, paging);
 
@@ -144,8 +121,6 @@ public class UserService {
 
     @Cacheable(value = "user", key = "{#requesting_user, #language}")
     public ContextResponseDTO getUserContext(String requesting_user, String language) {
-        boolean isEnglishLang = language == null || language.equals("en");
-
         User user = userRepository.findByUsername(requesting_user)
                 .orElseThrow(() -> new UserNotFound(language));
 
@@ -185,19 +160,29 @@ public class UserService {
 
         Page<Post> postPage = postRepository.findByAuthorInOrderByCreatedAtDesc(followings, paging);
 
-        List<Post> posts = new ArrayList<>(postPage.getContent());
+        return createResponseFromPostPage(postPage);
+    }
 
-        List<PostResponseDTO> mappedPosts = posts.stream()
-                .map(UserService::getPostResponseDTO)
-                .collect(Collectors.toList());
+    @Cacheable(value = "userPublicFeed", key = "{#userId, #page, #perPage, #language}")
+    public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("feed", mappedPosts);
-        response.put("current_page", postPage.getNumber());
-        response.put("total_items", postPage.getTotalElements());
-        response.put("total_pages", postPage.getTotalPages());
+        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
 
-        return response;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(language));
+
+        String privateProfileMessage = isEnglishLang
+                                       ? "This user's profile is private."
+                                       : "O perfil deste usuário é privado.";
+
+        if (user.getIs_private()) {
+            throw new ForbiddenRequest(privateProfileMessage);
+        }
+
+        Page<Post> postPage = postRepository.findAllByAuthorId(user.getId(), paging);
+
+        return createResponseFromPostPage(postPage);
     }
 
     @Transactional
@@ -401,6 +386,22 @@ public class UserService {
             System.err.println("An error occurred while unfollowing the user: " + error.getMessage());
             throw new InternalServerError(genericErrorMessage);
         }
+    }
+
+    private Map<String, Object> createResponseFromPostPage(Page<Post> postPage) {
+        List<Post> posts = new ArrayList<>(postPage.getContent());
+
+        List<PostResponseDTO> mappedPosts = posts.stream()
+                .map(UserService::getPostResponseDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("feed", mappedPosts);
+        response.put("current_page", postPage.getNumber());
+        response.put("total_items", postPage.getTotalElements());
+        response.put("total_pages", postPage.getTotalPages());
+
+        return response;
     }
 
     private Map<String, Object> validateInputData(ProfileRequestDTO body, User user, boolean isEnglishLang) {

@@ -29,19 +29,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthService {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private Validation validation;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
+    private final Validation validation;
 
     public LoginResponseDTO login(String username, String password, Boolean rememberMe, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
