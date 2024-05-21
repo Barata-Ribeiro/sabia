@@ -71,7 +71,7 @@ public class MainSeeder {
 
             userRepository.saveAndFlush(admin);
 
-            System.out.println("Admin: " + admin.toString());
+            System.out.println("Admin: " + admin);
 
             // Populate the database with some posts for main admin
             for (int i = 1; i <= 5; i++) {
