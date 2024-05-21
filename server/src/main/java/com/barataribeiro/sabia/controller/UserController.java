@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +18,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/public/{userId}")
-    public ResponseEntity getPublicUser(@PathVariable String userId,
-                                        @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<PublicProfileResponseDTO>> getPublicUser(@PathVariable String userId,
+                                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         PublicProfileResponseDTO user = userService.getPublicProfile(userId, language);
 
         String message = language == null || language.equals("en")
@@ -37,12 +37,12 @@ public class UserController {
                                                               user));
     }
 
-    @GetMapping("/public/{userId}/followers")
-    public ResponseEntity getFollowers(@PathVariable String userId,
-                                       @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int perPage,
-                                       @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = userService.getFollowers(userId, page, perPage, language);
+    @GetMapping(value = "/public/{userId}/followers", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getFollowers(@PathVariable String userId,
+                                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                                    @RequestParam(defaultValue = "10") int perPage,
+                                                                                    @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+        Map<String, Object> data = userService.getFollowers(userId, page, perPage);
 
         String message = language == null || language.equals("en")
                          ? "Followers retrieved successfully."
@@ -55,10 +55,10 @@ public class UserController {
     }
 
     @GetMapping("/public/search")
-    public ResponseEntity searchUser(@RequestParam String q,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int perPage,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> searchUser(@RequestParam String q,
+                                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                                  @RequestParam(defaultValue = "10") int perPage,
+                                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         Map<String, Object> data = userService.searchUser(q, page, perPage, language);
 
         String message = language == null || language.equals("en")
@@ -72,8 +72,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity getUser(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                  Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<ContextResponseDTO>> getUser(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                              Principal principal) {
         ContextResponseDTO user = userService.getUserContext(principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -87,11 +87,11 @@ public class UserController {
     }
 
     @GetMapping("/me/{userId}/feed")
-    public ResponseEntity getUserFeed(@PathVariable String userId,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "10") int perPage,
-                                      @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                      Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getUserFeed(@PathVariable String userId,
+                                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                                   @RequestParam(defaultValue = "10") int perPage,
+                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                   Principal principal) {
         Map<String, Object> data = userService.getUserFeed(userId,
                                                            page,
                                                            perPage,
@@ -109,10 +109,10 @@ public class UserController {
     }
 
     @PutMapping("/me/{userId}")
-    public ResponseEntity updateUser(@PathVariable String userId,
-                                     @RequestBody ProfileRequestDTO body,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<ContextResponseDTO>> updateUser(@PathVariable String userId,
+                                                                                 @RequestBody ProfileRequestDTO body,
+                                                                                 @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                 Principal principal) {
         ContextResponseDTO user = userService.updateOwnAccount(userId, principal.getName(), body, language);
 
         String message = language == null || language.equals("en")
@@ -126,9 +126,9 @@ public class UserController {
     }
 
     @DeleteMapping("/me/{userId}")
-    public ResponseEntity deleteUser(@PathVariable String userId,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> deleteUser(@PathVariable String userId,
+                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                Principal principal) {
         userService.deleteOwnAccount(userId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -142,10 +142,10 @@ public class UserController {
     }
 
     @PostMapping("/me/{userId}/follow/{followedId}")
-    public ResponseEntity followUser(@PathVariable String userId,
-                                     @PathVariable String followedId,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> followUser(@PathVariable String userId,
+                                                                @PathVariable String followedId,
+                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                Principal principal) {
         userService.followUser(userId, followedId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -159,10 +159,10 @@ public class UserController {
     }
 
     @DeleteMapping("/me/{userId}/follow/{followedId}")
-    public ResponseEntity unfollowUser(@PathVariable String userId,
-                                       @PathVariable String followedId,
-                                       @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                       Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> unfollowUser(@PathVariable String userId,
+                                                                  @PathVariable String followedId,
+                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                  Principal principal) {
         userService.unfollowUser(userId, followedId, principal.getName(), language);
 
         String message = language == null || language.equals("en")

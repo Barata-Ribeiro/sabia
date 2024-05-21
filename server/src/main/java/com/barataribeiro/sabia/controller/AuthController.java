@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDTO body,
-                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<LoginResponseDTO>> login(@RequestBody LoginRequestDTO body,
+                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         LoginResponseDTO data = authService.login(body.username(),
                                                   body.password(),
                                                   body.rememberMe(),
@@ -39,8 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequestDTO body,
-                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<RegisterResponseDTO>> register(@RequestBody RegisterRequestDTO body,
+                                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         RegisterResponseDTO data = authService.register(body, language);
 
         String message = language == null || language.equals("en")

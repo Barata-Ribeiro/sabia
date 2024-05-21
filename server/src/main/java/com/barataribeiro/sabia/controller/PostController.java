@@ -17,16 +17,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PostController {
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
     @GetMapping("/public")
-    public ResponseEntity getAllPostsFromUser(@RequestParam String userId,
-                                              @RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "6") int perPage,
-                                              @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getAllPostsFromUser(@RequestParam String userId,
+                                                                                           @RequestParam(defaultValue = "0") int page,
+                                                                                           @RequestParam(defaultValue = "6") int perPage,
+                                                                                           @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         Map<String, Object> data = postService.getAllPosts(userId, page, perPage, language);
 
         String message = language == null || language.equals("en")
@@ -40,8 +39,8 @@ public class PostController {
     }
 
     @GetMapping("/public/{postId}")
-    public ResponseEntity getPostById(@PathVariable String postId,
-                                      @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> getPostById(@PathVariable String postId,
+                                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         PostResponseDTO data = postService.getPostById(postId, language);
 
         String message = language == null || language.equals("en")
@@ -55,10 +54,10 @@ public class PostController {
     }
 
     @GetMapping("/public/{postId}/replies")
-    public ResponseEntity getReplies(@PathVariable String postId,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int perPage,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getReplies(@PathVariable String postId,
+                                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                                  @RequestParam(defaultValue = "10") int perPage,
+                                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         Map<String, Object> data = postService.getPostReplies(postId, page, perPage, language);
 
         String message = language == null || language.equals("en")
@@ -72,10 +71,10 @@ public class PostController {
     }
 
     @GetMapping("/public/search")
-    public ResponseEntity searchPosts(@RequestParam String q,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "10") int perPage,
-                                      @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> searchPosts(@RequestParam String q,
+                                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                                   @RequestParam(defaultValue = "10") int perPage,
+                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         Map<String, Object> data = postService.searchPosts(q, page, perPage, language);
 
         String message = language == null || language.equals("en")
@@ -89,9 +88,9 @@ public class PostController {
     }
 
     @PostMapping("/me/new-post")
-    public ResponseEntity createPost(@RequestBody PostRequestDTO body,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> createPost(@RequestBody PostRequestDTO body,
+                                                                              @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                              Principal principal) {
         PostResponseDTO data = postService.createPost(body, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -105,9 +104,9 @@ public class PostController {
     }
 
     @PostMapping("/me/{postId}/repost")
-    public ResponseEntity repost(@PathVariable String postId,
-                                 @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                 Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<Post>> repost(@PathVariable String postId,
+                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                               Principal principal) {
         Post data = postService.repost(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -121,10 +120,10 @@ public class PostController {
     }
 
     @PostMapping("/me/{postId}/reply")
-    public ResponseEntity reply(@PathVariable String postId,
-                                @RequestBody PostRequestDTO body,
-                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> reply(@PathVariable String postId,
+                                                                         @RequestBody PostRequestDTO body,
+                                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                         Principal principal) {
         PostResponseDTO data = postService.replyToPost(postId, body, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -138,9 +137,9 @@ public class PostController {
     }
 
     @DeleteMapping("/me/{postId}")
-    public ResponseEntity deletePost(@PathVariable String postId,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> deletePost(@PathVariable String postId,
+                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                Principal principal) {
         postService.deletePost(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -154,9 +153,9 @@ public class PostController {
     }
 
     @PostMapping("/me/{postId}/toggle-like")
-    public ResponseEntity toggleLike(@PathVariable String postId,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> toggleLike(@PathVariable String postId,
+                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                Principal principal) {
         Boolean response = postService.toggleLike(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")

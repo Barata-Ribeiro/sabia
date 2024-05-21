@@ -13,15 +13,14 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/admin")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AdminController {
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
 
     @PutMapping("/users/{userId}/toggle-verify")
-    public ResponseEntity toggleVerifyUser(@PathVariable String userId,
-                                           @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                           Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> toggleVerifyUser(@PathVariable String userId,
+                                                                      @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                      Principal principal) {
         Boolean response = adminService.toggleVerifyUser(userId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -35,9 +34,9 @@ public class AdminController {
     }
 
     @PutMapping("/users/{userId}/toggle-ban")
-    public ResponseEntity banUser(@PathVariable String userId,
-                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                  Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> banUser(@PathVariable String userId,
+                                                             @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                             Principal principal) {
         Boolean response = adminService.toggleUserBan(userId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -51,9 +50,9 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity deleteUser(@PathVariable String userId,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> deleteUser(@PathVariable String userId,
+                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                Principal principal) {
         adminService.deleteUser(userId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
@@ -68,9 +67,9 @@ public class AdminController {
 
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity deletePost(@PathVariable String postId,
-                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                     Principal principal) {
+    public ResponseEntity<RestSuccessResponseDTO<?>> deletePost(@PathVariable String postId,
+                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                Principal principal) {
         adminService.deletePost(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
