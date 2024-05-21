@@ -1,5 +1,6 @@
 import getUserContext from "@/actions/user/get-user-context"
 import getUserFeed from "@/actions/user/get-user-feed"
+import NewPostFeed from "@/components/feed/new-post-feed"
 import PrivateFeed from "@/components/feed/private-feed"
 import AsideMenu from "@/components/menu/aside-menu"
 import { FeedResponse, UserContextResponse } from "@/interfaces/user"
@@ -30,18 +31,23 @@ export default async function HomePage({ params }: { params: { locale: string } 
     const feed = feedState.response?.data as FeedResponse
 
     return (
-        <main role="main" className="flex h-full" aria-label={t("AriaLabelMain")}>
+        <main role="main" className="flex h-full " aria-label={t("AriaLabelMain")}>
             <AsideMenu />
-            <section
+            <div
                 id="content"
-                className="flex w-full flex-col gap-4 divide-y border-l"
+                className=" to_limit flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
             >
-                <div id="new-post" className="p-4" aria-label={t("AriaLabelNewPost")}>
+                <section
+                    id="new-post"
+                    className="p-4"
+                    aria-label={t("AriaLabelNewPost")}
+                >
                     <h2 className="font-heading text-xl">{t("PageTitle")}</h2>
-                </div>
-                <div
+                    <NewPostFeed />
+                </section>
+                <section
                     id="feed"
-                    className="max-w-[37.5rem] flex-1 overflow-y-scroll"
+                    className="max-w-[37.5rem] flex-1"
                     aria-label={t("AriaLabelFeed")}
                 >
                     {feed && feed.feed.length > 0 ? (
@@ -49,8 +55,8 @@ export default async function HomePage({ params }: { params: { locale: string } 
                     ) : (
                         <p className="text-center">{t("PageEmptyPosts")}</p>
                     )}
-                </div>
-            </section>
+                </section>
+            </div>
         </main>
     )
 }
