@@ -9,6 +9,27 @@ export function dateFormat(dateString: string, locale: string) {
     })
 }
 
+export function dateTimeFormat(dateString: string, locale: string) {
+    const date = new Date(dateString)
+    const isEnglish = locale === "en"
+
+    const selectYearMonthAndDay = date.toLocaleDateString(
+        isEnglish ? "en-US" : "pt-BR",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    )
+
+    const selectTime = date.toLocaleTimeString(isEnglish ? "en-US" : "pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
+    })
+
+    return selectTime + " · " + selectYearMonthAndDay
+}
+
 export function dateToHowLongAgo(dateString: string, locale: string) {
     const date = new Date(dateString)
     const now = new Date()
