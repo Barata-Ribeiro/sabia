@@ -10,8 +10,10 @@ public record PostResponseDTO(String id,
                               List<String> hashtags,
                               Long views_count,
                               Long like_count,
+                              PostResponseDTO repost_off,
                               Long repost_count,
                               Long reply_count,
+                              PostResponseDTO in_reply_to,
                               String created_at,
                               String updated_at) {
 }

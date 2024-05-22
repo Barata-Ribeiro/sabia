@@ -2,13 +2,13 @@ package com.barataribeiro.sabia.service;
 
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
-import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
 import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.post.PostNotFound;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
 import com.barataribeiro.sabia.model.*;
 import com.barataribeiro.sabia.repository.*;
+import com.barataribeiro.sabia.util.EntityMapper;
 import com.barataribeiro.sabia.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
@@ -40,6 +40,7 @@ public class PostService {
     private final HashtagRepository hashtagRepository;
     private final HashtagPostsRepository hashtagPostsRepository;
     private final Validation validation;
+    private final EntityMapper entityMapper;
 
     @Cacheable(value = "posts", key = "{#userId, #page, #perPage, #language}")
     public Map<String, Object> getAllPosts(String userId, int page, int perPage, String language) {
@@ -68,7 +69,7 @@ public class PostService {
         post.incrementViewCount();
         post = postRepository.saveAndFlush(post);
 
-        return getPostResponseDTO(post);
+        return entityMapper.getPostResponseDTO(post);
     }
 
     @Cacheable(value = "posts", key = "{#postId, #page, #perPage, #language}")
@@ -90,7 +91,7 @@ public class PostService {
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = posts.stream()
-                .map(PostService::getPostResponseDTO)
+                .map(entityMapper::getPostResponseDTO)
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -178,7 +179,7 @@ public class PostService {
 
         savedPost = postRepository.saveAndFlush(post);
 
-        return getPostResponseDTO(savedPost);
+        return entityMapper.getPostResponseDTO(savedPost);
     }
 
     @Transactional
@@ -188,7 +189,7 @@ public class PostService {
             @CacheEvict(value = "user", allEntries = true),
             @CacheEvict(value = "userFeed", allEntries = true)
     })
-    public Post repost(String postId, String requesting_user, String language) {
+    public PostResponseDTO repost(String postId, String requesting_user, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
@@ -208,7 +209,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        return repost;
+        return entityMapper.getPostResponseDTO(repost);
     }
 
     @Transactional
@@ -242,7 +243,7 @@ public class PostService {
         post.incrementReplyCount();
         postRepository.save(post);
 
-        return getPostResponseDTO(reply);
+        return entityMapper.getPostResponseDTO(reply);
     }
 
     @Transactional
@@ -318,7 +319,7 @@ public class PostService {
         List<Post> postsResult = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = postsResult.stream()
-                .map(PostService::getPostResponseDTO)
+                .map(entityMapper::getPostResponseDTO)
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -335,40 +336,5 @@ public class PostService {
 
         validation.validateBodyText(isEnglishLang, text);
         return text;
-    }
-
-    private static PostResponseDTO getPostResponseDTO(Post post) {
-        User author = post.getAuthor();
-        AuthorResponseDTO authorDTO = new AuthorResponseDTO(
-                author.getId(),
-                author.getUsername(),
-                author.getDisplay_name(),
-                author.getAvatar_image_url(),
-                author.getIs_verified(),
-                author.getRole()
-        );
-
-        List<HashtagPosts> postHashtags = post.getPostHashtags();
-
-        if (postHashtags == null) {
-            postHashtags = new ArrayList<>();
-        }
-
-        List<String> hashtags = postHashtags.stream()
-                .map(hashtagPost -> hashtagPost.getHashtags().getTag())
-                .collect(Collectors.toList());
-
-        return new PostResponseDTO(
-                post.getId(),
-                authorDTO,
-                post.getText(),
-                hashtags,
-                post.getViews_count(),
-                post.getLike_count(),
-                post.getRepost_count(),
-                post.getReply_count(),
-                post.getCreatedAt().toString(),
-                post.getUpdatedAt().toString()
-        );
     }
 }
