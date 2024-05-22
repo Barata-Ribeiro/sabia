@@ -3,7 +3,6 @@ package com.barataribeiro.sabia.controller;
 import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
-import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,10 +103,10 @@ public class PostController {
     }
 
     @PostMapping("/me/{postId}/repost")
-    public ResponseEntity<RestSuccessResponseDTO<Post>> repost(@PathVariable String postId,
-                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                                               Principal principal) {
-        Post data = postService.repost(postId, principal.getName(), language);
+    public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> repost(@PathVariable String postId,
+                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                          Principal principal) {
+        PostResponseDTO data = postService.repost(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Post reposted successfully."

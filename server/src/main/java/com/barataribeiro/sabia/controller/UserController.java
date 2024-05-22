@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +36,27 @@ public class UserController {
                                                               user));
     }
 
-    @GetMapping(value = "/public/{userId}/followers", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/public/{userId}/feed")
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getPublicFeed(@PathVariable String userId,
+                                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                                     @RequestParam(defaultValue = "20") int perPage,
+                                                                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+        Map<String, Object> data = userService.getUserPublicFeed(userId, page, perPage, language);
+
+        String message = language == null || language.equals("en")
+                         ? "User feed retrieved successfully."
+                         : "Feed do usuário recuperado com sucesso.";
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              message,
+                                                              data));
+    }
+
+    @GetMapping(value = "/public/{userId}/followers")
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getFollowers(@PathVariable String userId,
                                                                                     @RequestParam(defaultValue = "0") int page,
-                                                                                    @RequestParam(defaultValue = "10") int perPage,
+                                                                                    @RequestParam(defaultValue = "5") int perPage,
                                                                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         Map<String, Object> data = userService.getFollowers(userId, page, perPage);
 
@@ -57,7 +73,7 @@ public class UserController {
     @GetMapping("/public/search")
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> searchUser(@RequestParam String q,
                                                                                   @RequestParam(defaultValue = "0") int page,
-                                                                                  @RequestParam(defaultValue = "10") int perPage,
+                                                                                  @RequestParam(defaultValue = "15") int perPage,
                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         Map<String, Object> data = userService.searchUser(q, page, perPage, language);
 
@@ -89,7 +105,7 @@ public class UserController {
     @GetMapping("/me/{userId}/feed")
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getUserFeed(@PathVariable String userId,
                                                                                    @RequestParam(defaultValue = "0") int page,
-                                                                                   @RequestParam(defaultValue = "10") int perPage,
+                                                                                   @RequestParam(defaultValue = "20") int perPage,
                                                                                    @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
                                                                                    Principal principal) {
         Map<String, Object> data = userService.getUserFeed(userId,
