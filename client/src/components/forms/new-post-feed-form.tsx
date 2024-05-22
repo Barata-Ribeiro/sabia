@@ -4,10 +4,12 @@ import postNewPost from "@/actions/post/post-new-post"
 import Button from "@/components/shared/button"
 import { useRouter } from "@/navigation"
 import { type EmojiClickData, EmojiStyle, Theme } from "emoji-picker-react"
+import { useTranslations } from "next-intl"
 import dynamic from "next/dynamic"
 import { type MouseEvent, useEffect, useRef, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 import { HiMiniFaceSmile } from "react-icons/hi2"
+import { twMerge } from "tailwind-merge"
 
 const EmojiPicker = dynamic(
     () => {
@@ -17,6 +19,7 @@ const EmojiPicker = dynamic(
 )
 
 export default function NewPostFeedForm() {
+    const t = useTranslations("NewPostFeedForm")
     const [text, setText] = useState("")
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
     const emojiPickerRef = useRef<HTMLSpanElement>(null)
@@ -92,7 +95,7 @@ export default function NewPostFeedForm() {
                     peer-focus:after:border-t-2 peer-focus:after:!border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent
                     peer-disabled:peer-placeholder-shown:text-body-500"
                     >
-                        New Post
+                        {t("TextAreaLabel")}
                     </label>
                 </div>
                 <div className="mt-2 flex justify-between">
@@ -101,13 +104,22 @@ export default function NewPostFeedForm() {
                             type="button"
                             ref={emojiButtonRef}
                             onClick={handleEmojiPickerToggle}
-                            aria-label="Emoji Picker"
-                            title="Emoji Picker"
+                            aria-label={t("EmojiPickerLabel")}
+                            title={t("EmojiPickerLabel")}
                             className="cursor-pointer rounded-full p-2 text-body-600 hover:bg-background-100"
                         >
                             <HiMiniFaceSmile size={24} />
                         </button>
-                        <span className="absolute inset-1/2" ref={emojiPickerRef}>
+                        <span
+                            className={twMerge(
+                                "absolute inset-1/2",
+                                !emojiPickerOpen && "hidden"
+                            )}
+                            ref={emojiPickerRef}
+                            aria-hidden={!emojiPickerOpen}
+                            aria-live="polite"
+                            aria-label={t("EmojiPickerLabel")}
+                        >
                             <EmojiPicker
                                 onEmojiClick={(emojiData, event) =>
                                     handleEmojiClick(emojiData, event)
@@ -126,7 +138,7 @@ export default function NewPostFeedForm() {
                         disabled={pending}
                         aria-disabled={pending}
                     >
-                        {pending ? "Loading..." : "Post"}
+                        {pending ? t("NewPostButtonLoading") : t("NewPostButtonSubmit")}
                     </Button>
                 </div>
             </form>

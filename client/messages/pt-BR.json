@@ -64,6 +64,12 @@
         "NewPostButtonLoading": "Publicando...",
         "NewPostButtonSubmit": "Publicar"
     },
+    "NewPostFeedForm": {
+        "TextAreaLabel": "Nova Postagem",
+        "EmojiPickerLabel": "Escolha um emoji",
+        "NewPostButtonLoading": "Postando...",
+        "NewPostButtonSubmit": "Postar"
+    },
     "AsideMenu": {
         "InputSearch": "Pesquisar",
         "ButtonProfile": "Perfil",
