@@ -101,7 +101,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
                         }
                         className="flex w-full cursor-pointer flex-col gap-2 overflow-hidden p-4 hover:bg-background-100"
                     >
-                        <div className="flex w-full items-start gap-5">
+                        <div className="flex w-full flex-col items-start gap-2 md:flex-row md:gap-5">
                             <Image
                                 src={post.author.avatar_image_url ?? null_image}
                                 alt={post.author.username}

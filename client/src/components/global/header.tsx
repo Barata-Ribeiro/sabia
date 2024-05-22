@@ -1,10 +1,11 @@
 "use client"
 
 import logout from "@/actions/auth/logout"
+import LinkButton from "@/components/shared/link-button"
 import { useUser } from "@/context/user-context-provider"
 import { UserContextResponse } from "@/interfaces/user"
-import { Link, usePathname, useRouter } from "@/navigation"
-import { useLocale, useTranslations } from "next-intl"
+import { usePathname, useRouter } from "@/navigation"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useState } from "react"
 import { HiBars3BottomLeft, HiXMark } from "react-icons/hi2"
@@ -12,12 +13,14 @@ import { TbPencilPlus } from "react-icons/tb"
 import { twMerge } from "tailwind-merge"
 
 export default function Header({ user }: { user: UserContextResponse | null }) {
-    const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const t = useTranslations("Header")
-    const localActive = useLocale()
     const pathname = usePathname()
     const router = useRouter()
+    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
+    const { setUser } = useUser()
+
+    const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     const menuLinksStyle = twMerge(
         `rounded-md px-3 py-2 text-sm font-medium`,
@@ -28,10 +31,6 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
         `block rounded-md px-3 py-2 text-base font-medium hover:text-body-50`,
         `${pathname === "/home" ? "bg-background-900 text-body-50" : "text-body-300 hover:bg-background-700"}`
     )
-
-    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
-
-    const { setUser } = useUser()
 
     async function handleLogout() {
         await logout()
@@ -77,27 +76,27 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                             </div>
                             <div className="hidden sm:ml-6 sm:block">
                                 <div className="flex space-x-4">
-                                    <Link
-                                        locale={localActive}
+                                    <LinkButton
                                         href="/home"
                                         className={menuLinksStyle}
                                         aria-current="page"
                                     >
                                         {t("NavMenuHome")}
-                                    </Link>
+                                    </LinkButton>
                                 </div>
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <Link
-                                locale={localActive}
-                                href={"/p/" + user?.username + "/new-post"}
-                                className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
-                            >
-                                <span className="absolute -inset-1.5"></span>
-                                <span className="sr-only">{t("NavSRNewPost")}</span>
-                                <TbPencilPlus size={24} />
-                            </Link>
+                            {pathname !== "/home" && (
+                                <LinkButton
+                                    href={"/p/" + user?.username + "/new-post"}
+                                    className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
+                                >
+                                    <span className="absolute -inset-1.5"></span>
+                                    <span className="sr-only">{t("NavSRNewPost")}</span>
+                                    <TbPencilPlus size={24} />
+                                </LinkButton>
+                            )}
 
                             <div className="relative ml-3">
                                 <div>
@@ -139,37 +138,34 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
 
                                         <hr className="bg-background-100" />
                                     </div>
-                                    <Link
-                                        locale={localActive}
-                                        href="#"
-                                        className="block px-4 py-2 text-sm text-body-700"
+                                    <LinkButton
+                                        href={"/" + user?.username}
+                                        className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
                                         role="menuitem"
                                         tabIndex={-1}
                                         id="user-menu-item-0"
                                     >
                                         {t("NavUserMenuProfile")}
-                                    </Link>
-                                    <Link
-                                        locale={localActive}
-                                        href="#"
-                                        className="block px-4 py-2 text-sm text-body-700"
+                                    </LinkButton>
+                                    <LinkButton
+                                        href="/settings"
+                                        className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
                                         role="menuitem"
                                         tabIndex={-1}
                                         id="user-menu-item-1"
                                     >
                                         {t("NavUserMenuSettings")}
-                                    </Link>
-                                    <Link
-                                        locale={localActive}
+                                    </LinkButton>
+                                    <LinkButton
                                         href="/"
                                         onClick={handleLogout}
-                                        className="block px-4 py-2 text-sm text-body-700"
+                                        className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
                                         role="menuitem"
                                         tabIndex={-1}
                                         id="user-menu-item-2"
                                     >
                                         {t("NavUserMenuLogout")}
-                                    </Link>
+                                    </LinkButton>
                                 </div>
                             </div>
                         </div>
@@ -181,14 +177,13 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                     id="mobile-menu"
                 >
                     <div className="space-y-1 px-2 pb-3 pt-2">
-                        <Link
-                            locale={localActive}
+                        <LinkButton
                             href="/home"
                             className={mobileMenuLinksStyle}
                             aria-current="page"
                         >
                             {t("NavMenuHome")}
-                        </Link>
+                        </LinkButton>
                     </div>
                 </div>
             </nav>
