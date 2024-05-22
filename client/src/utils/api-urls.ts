@@ -1,3 +1,4 @@
+import { PostSearchParams } from "@/interfaces/post"
 import { FeedRequestParams } from "@/interfaces/user"
 
 const BACKEND_URL = process.env.BACKEND_ORIGIN || "http://localhost:8080"
@@ -15,8 +16,22 @@ export const USER_GET_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/me/${userId}/feed?perPage=${perPage}&page=${page}`
 }
+export const USER_GET_PUBLIC_PROFILE = (userId: string) =>
+    `${BACKEND_URL}/api/v1/users/public/${userId}`
+export const USER_GET_PUBLIC_FEED = (params: FeedRequestParams) => {
+    const { perPage, page, userId } = params
+    return `${BACKEND_URL}/api/v1/users/public/${userId}/feed?perPage=${perPage}&page=${page}`
+}
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
 export const POST_GET_BY_ID = (postId: string) =>
     `${BACKEND_URL}/api/v1/posts/public/${postId}`
+export const POST_SEARCH = (params: PostSearchParams) => {
+    const { perPage, page, query } = params
+    return `${BACKEND_URL}/api/v1/posts/search?q=${query}&page=${page}&perPage=${perPage}`
+}
+export const POST_REPOST = (postId: string) =>
+    `${BACKEND_URL}/api/v1/posts/me/${postId}/repost`
+export const POST_TOGGLE_LIKE = (postId: string) =>
+    `${BACKEND_URL}/api/v1/posts/me/${postId}/toggle-like`
