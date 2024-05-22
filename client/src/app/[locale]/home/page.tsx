@@ -1,7 +1,7 @@
 import getUserContext from "@/actions/user/get-user-context"
 import getUserFeed from "@/actions/user/get-user-feed"
-import NewPostFeed from "@/components/feed/new-post-feed"
 import PrivateFeed from "@/components/feed/private-feed"
+import NewPostFeedForm from "@/components/forms/new-post-feed-form"
 import AsideMenu from "@/components/menu/aside-menu"
 import { FeedResponse, UserContextResponse } from "@/interfaces/user"
 import { Metadata } from "next"
@@ -39,11 +39,11 @@ export default async function HomePage({ params }: { params: { locale: string } 
             >
                 <section
                     id="new-post"
-                    className="p-4"
+                    className="px-4 pt-4"
                     aria-label={t("AriaLabelNewPost")}
                 >
                     <h2 className="font-heading text-xl">{t("PageTitle")}</h2>
-                    <NewPostFeed />
+                    <NewPostFeedForm />
                 </section>
                 <section
                     id="feed"
