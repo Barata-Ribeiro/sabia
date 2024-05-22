@@ -65,7 +65,9 @@
         "NewPostButtonSubmit": "Publicar"
     },
     "AsideMenu": {
+        "InputSearch": "Pesquisar",
         "ButtonProfile": "Perfil",
+        "ButtonVerify": "Verificar Conta",
         "ButtonSettings": "Configurações",
         "ButtonLogout": "Sair"
     },

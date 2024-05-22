@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
             {/* Right side - illustration */}
             <Image
-                src="/undraw_quick_chat_re_bit5.svg"
+                src="/assets/undraw_quick_chat_re_bit5.svg"
                 alt={t("IllutrationDescription")}
                 title={t("IllutrationDescription")}
                 className="max-h-72 w-fit object-center italic"
