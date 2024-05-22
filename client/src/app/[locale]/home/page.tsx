@@ -31,11 +31,11 @@ export default async function HomePage({ params }: { params: { locale: string } 
     const feed = feedState.response?.data as FeedResponse
 
     return (
-        <main role="main" className="flex h-full " aria-label={t("AriaLabelMain")}>
+        <main role="main" className="flex h-full" aria-label={t("AriaLabelMain")}>
             <AsideMenu />
             <div
                 id="content"
-                className=" to_limit flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
+                className="to_limit flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
             >
                 <section
                     id="new-post"

@@ -3,10 +3,14 @@
 import getUserFeed from "@/actions/user/get-user-feed"
 import LinkButton from "@/components/shared/link-button"
 import { FeedResponse } from "@/interfaces/user"
+import { useRouter } from "@/navigation"
 import { dateToHowLongAgo } from "@/utils/date-format"
+import formatTextWithHashtags from "@/utils/format-text-with-hashtags"
 import { useLocale, useTranslations } from "next-intl"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { type MouseEvent, useEffect, useRef, useState } from "react"
+import { HiCheckBadge } from "react-icons/hi2"
+import { twMerge } from "tailwind-merge"
 
 interface PrivateFeedProps {
     feedResponse: FeedResponse
@@ -23,6 +27,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
     const fetching = useRef(false)
     const t = useTranslations("PrivateFeed")
     const localeActive = useLocale()
+    const router = useRouter()
 
     const null_image = "/assets/default/profile-default-svgrepo-com.svg"
 
@@ -40,11 +45,20 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
         }, 1000)
     }
 
+    function handlePostClick(
+        username: string,
+        postId: string,
+        event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
+    ) {
+        if (event.target instanceof HTMLAnchorElement) return
+        router.push(username + "/status/" + postId)
+    }
+
     useEffect(() => {
         if (page === 0) return
 
         async function fetchPrivateFeed(page: number) {
-            const feedState = await getUserFeed({ perPage: 6, page, userId })
+            const feedState = await getUserFeed({ perPage: 5, page, userId })
             const feed = feedState.response?.data as FeedResponse
             const posts = feed?.feed ?? []
 
@@ -55,8 +69,8 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
             }
         }
 
-        fetchPrivateFeed(page)
-    }, [page, userId])
+        fetchPrivateFeed(page).then((r) => console.log(r))
+    }, [posts, page, userId])
 
     useEffect(() => {
         if (infinite) {
@@ -81,11 +95,9 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
             >
                 {posts.map((post) => (
                     <li
-                        key={post.id}
-                        onClick={() =>
-                            window.location.assign(
-                                post.author.username + "/status/" + post.id
-                            )
+                        key={post.author.username + "-" + post.id}
+                        onClick={(e) =>
+                            handlePostClick(post.author.username, post.id, e)
                         }
                         className="flex w-full cursor-pointer flex-col gap-2 overflow-hidden p-4 hover:bg-background-100"
                     >
@@ -100,8 +112,23 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
                             />
                             <article className="flex flex-col gap-1">
                                 <div className="flex w-max gap-1">
-                                    <p className="font-heading font-bold text-body-900">
-                                        {post.author.display_name}
+                                    <p
+                                        className={twMerge(
+                                            "font-heading font-bold text-body-900",
+                                            post.author.is_verified &&
+                                                "flex items-center gap-1"
+                                        )}
+                                    >
+                                        {post.author.display_name}{" "}
+                                        {post.author.is_verified && (
+                                            <span
+                                                className="text-accent-600"
+                                                title="Verified"
+                                                aria-label="Verified"
+                                            >
+                                                <HiCheckBadge size={22} />
+                                            </span>
+                                        )}
                                     </p>
                                     <p className="font-body text-body-500">
                                         @{post.author.username}
@@ -121,7 +148,15 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
                                         </time>
                                     </LinkButton>
                                 </div>
-                                <p className="text-pretty text-body-900">{post.text}</p>
+
+                                <p className="text-pretty text-body-900">
+                                    {post.hashtags.length > 0
+                                        ? formatTextWithHashtags(
+                                              post.text,
+                                              post.hashtags
+                                          )
+                                        : post.text}
+                                </p>
                             </article>
                         </div>
                     </li>
