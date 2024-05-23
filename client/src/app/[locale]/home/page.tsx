@@ -28,7 +28,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
         (context.response?.data as UserContextResponse) ?? ""
 
     const feedState = await getUserFeed({ userId: user.id })
-    const feed = feedState.response?.data as FeedResponse
+    const feedResponse = feedState.response?.data as FeedResponse
 
     return (
         <main role="main" className="flex h-full" aria-label={t("AriaLabelMain")}>
@@ -38,7 +38,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                 className="to_limit flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
             >
                 <section
-                    id="new-post"
+                    id="private-new-post"
                     className="px-4 pt-4"
                     aria-label={t("AriaLabelNewPost")}
                 >
@@ -46,12 +46,12 @@ export default async function HomePage({ params }: { params: { locale: string } 
                     <NewPostFeedForm />
                 </section>
                 <section
-                    id="feed"
+                    id="private-feed"
                     className="max-w-[37.5rem] flex-1"
                     aria-label={t("AriaLabelFeed")}
                 >
-                    {feed && feed.feed.length > 0 ? (
-                        <PrivateFeed feedResponse={feed} userId={user.id} />
+                    {feedResponse ? (
+                        <PrivateFeed feedResponse={feedResponse} userId={user.id} />
                     ) : (
                         <p className="text-center">{t("PageEmptyPosts")}</p>
                     )}

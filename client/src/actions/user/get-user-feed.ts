@@ -7,17 +7,20 @@ import ResponseError from "@/utils/response-error"
 import { getLocale } from "next-intl/server"
 import { cookies } from "next/headers"
 
-export default async function getUserFeed({
-    perPage = 20,
-    page = 0,
-    userId
-}: FeedRequestParams) {
+export default async function getUserFeed(
+    { page = 0, perPage = 20, userId }: FeedRequestParams = { userId: "" },
+    optionsFront?: RequestInit
+) {
     const locale = await getLocale()
     const URL = USER_GET_FEED({ perPage, page, userId })
 
     try {
         const auth_token = cookies().get("auth_token")?.value
         if (!auth_token) return { ok: false, client_error: null, response: null }
+
+        const options = optionsFront || {
+            next: { revalidate: 10, tags: ["feed"] }
+        }
 
         const response = await fetch(URL, {
             method: "GET",
@@ -26,7 +29,7 @@ export default async function getUserFeed({
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },
-            next: { revalidate: 10, tags: ["feed"] }
+            ...options
         })
 
         const responseData = (await response.json()) as ApiResponse

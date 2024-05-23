@@ -2,14 +2,16 @@
 
 import getUserFeed from "@/actions/user/get-user-feed"
 import LinkButton from "@/components/shared/link-button"
+import { PostResponse } from "@/interfaces/post"
 import { FeedResponse } from "@/interfaces/user"
 import { useRouter } from "@/navigation"
 import { dateToHowLongAgo } from "@/utils/date-format"
 import formatTextWithHashtags from "@/utils/format-text-with-hashtags"
 import { useLocale, useTranslations } from "next-intl"
 import Image from "next/image"
-import { type MouseEvent, useEffect, useRef, useState } from "react"
+import { type MouseEvent, useCallback, useEffect, useRef, useState } from "react"
 import { HiCheckBadge } from "react-icons/hi2"
+import { useInView } from "react-intersection-observer"
 import { twMerge } from "tailwind-merge"
 
 interface PrivateFeedProps {
@@ -18,32 +20,53 @@ interface PrivateFeedProps {
 }
 
 export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) {
-    const [feed, setFeed] = useState<FeedResponse>(feedResponse)
-    const [posts, setPosts] = useState(feed.feed ?? [])
-    const [page, setPage] = useState(feedResponse.current_page)
+    const [feed, setFeed] = useState(feedResponse)
+    const [feedPosts, setFeedPosts] = useState<PostResponse[]>(feed.feed)
+    const [page, setPage] = useState(feed.current_page)
     const [loading, setLoading] = useState(false)
-    const [infinite, setInfinite] = useState(posts.length >= 20)
+    const [infinite, setInfinite] = useState(feedPosts.length >= 20)
+    const { ref, inView } = useInView({ threshold: 1 })
 
+    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
     const fetching = useRef(false)
     const t = useTranslations("PrivateFeed")
     const localeActive = useLocale()
     const router = useRouter()
 
-    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
-
-    function infiniteScroll() {
-        if (fetching.current) return
-
+    const infiniteScroll = useCallback(async () => {
+        if (fetching.current || !infinite || loading) return
         fetching.current = true
-
         setLoading(true)
 
-        setTimeout(() => {
-            setPage((currentPage) => currentPage + 1)
-            fetching.current = false
+        try {
+            const newPage = page + 1
+            setPage(newPage)
+            const feedState = await getUserFeed(
+                { perPage: 5, page: newPage, userId },
+                { cache: "no-store" }
+            )
+            const feedResponse = feedState.response?.data as FeedResponse
+            setFeed(feedResponse)
+
+            if (feedResponse && feedResponse.feed != null) {
+                const newPosts = feedResponse.feed as PostResponse[]
+                setFeedPosts((prevPosts) => {
+                    const postsMap = new Map(prevPosts.map((post) => [post.id, post]))
+                    newPosts.forEach((post) => {
+                        if (!postsMap.has(post.id)) postsMap.set(post.id, post)
+                    })
+                    return Array.from(postsMap.values())
+                })
+                if (newPosts.length < 5) setInfinite(false)
+            }
+        } catch (error) {
+            console.error(error)
+            setInfinite(false)
+        } finally {
             setLoading(false)
-        }, 1000)
-    }
+            fetching.current = false
+        }
+    }, [infinite, loading, page, userId])
 
     function handlePostClick(
         username: string,
@@ -55,36 +78,10 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
     }
 
     useEffect(() => {
-        if (page === 0) return
-
-        async function fetchPrivateFeed(page: number) {
-            const feedState = await getUserFeed({ perPage: 5, page, userId })
-            const feed = feedState.response?.data as FeedResponse
-            const posts = feed?.feed ?? []
-
-            if (feedState && feed && posts) {
-                setFeed(feed)
-                setPosts((prevPhotos) => [...prevPhotos, ...posts])
-                if (posts.length < 20) setInfinite(false)
-            }
+        if (inView && !loading && infinite) {
+            ;(async () => await infiniteScroll())()
         }
-
-        fetchPrivateFeed(page).then((r) => console.log(r))
-    }, [posts, page, userId])
-
-    useEffect(() => {
-        if (infinite) {
-            window.addEventListener("scroll", infiniteScroll)
-            window.addEventListener("wheel", infiniteScroll)
-        } else {
-            window.removeEventListener("scroll", infiniteScroll)
-            window.removeEventListener("wheel", infiniteScroll)
-        }
-        return () => {
-            window.removeEventListener("scroll", infiniteScroll)
-            window.removeEventListener("wheel", infiniteScroll)
-        }
-    }, [infinite])
+    }, [inView, infinite, infiniteScroll, loading])
 
     return (
         <>
@@ -93,9 +90,10 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
                 role="list"
                 aria-label={t("AriaLabelList")}
             >
-                {posts.map((post) => (
+                {feedPosts.map((post) => (
                     <li
                         key={post.author.username + "-" + post.id}
+                        id={post.author.username + "-" + post.id}
                         onClick={(e) =>
                             handlePostClick(post.author.username, post.id, e)
                         }
@@ -162,7 +160,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
                     </li>
                 ))}
             </ul>
-            <div className="mx-auto mt-auto flex h-max w-max pt-4">
+            <div ref={ref} className="mx-auto mt-auto flex h-max w-max pt-4">
                 {infinite ? (
                     loading && <p>Loading...</p>
                 ) : (
