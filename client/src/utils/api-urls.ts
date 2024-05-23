@@ -16,8 +16,8 @@ export const USER_GET_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/me/${userId}/feed?perPage=${perPage}&page=${page}`
 }
-export const USER_GET_PUBLIC_PROFILE = (userId: string) =>
-    `${BACKEND_URL}/api/v1/users/public/${userId}`
+export const USER_GET_PUBLIC_PROFILE = (username: string) =>
+    `${BACKEND_URL}/api/v1/users/public/${username}`
 export const USER_GET_PUBLIC_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/public/${userId}/feed?perPage=${perPage}&page=${page}`
