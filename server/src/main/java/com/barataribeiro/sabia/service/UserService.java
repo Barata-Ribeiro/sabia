@@ -48,7 +48,7 @@ public class UserService {
     private final Validation validation;
     private final EntityMapper entityMapper;
 
-    @Cacheable(value = "user", key = "{#userId, #page, #perPage}")
+    @Cacheable(value = "userPublicFollowers", key = "{#userId, #page, #perPage}")
     public Map<String, Object> getFollowers(String userId, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
@@ -69,11 +69,11 @@ public class UserService {
         return response;
     }
 
-    @Cacheable(value = "user", key = "{#userId, #language}")
-    public PublicProfileResponseDTO getPublicProfile(String userId, String language) {
+    @Cacheable(value = "userPublicProfile", key = "{#username, #language}")
+    public PublicProfileResponseDTO getPublicProfile(String username, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFound(language));
 
         String privateProfileMessage = isEnglishLang ? "This user's profile is private." : "O perfil deste usuário é privado.";
@@ -120,7 +120,7 @@ public class UserService {
         return response;
     }
 
-    @Cacheable(value = "user", key = "{#requesting_user, #language}")
+    @Cacheable(value = "userContext", key = "{#requesting_user, #language}")
     public ContextResponseDTO getUserContext(String requesting_user, String language) {
         User user = userRepository.findByUsername(requesting_user)
                 .orElseThrow(() -> new UserNotFound(language));

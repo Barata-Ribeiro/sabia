@@ -133,7 +133,8 @@ public class PostService {
     @Caching(evict = {
             @CacheEvict(value = "posts", allEntries = true),
             @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
             @CacheEvict(value = "userFeed", allEntries = true)
     })
     public PostResponseDTO createPost(PostRequestDTO body, String requesting_user, String language) {
@@ -186,7 +187,8 @@ public class PostService {
     @Caching(evict = {
             @CacheEvict(value = "posts", allEntries = true),
             @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
             @CacheEvict(value = "userFeed", allEntries = true)
     })
     public PostResponseDTO repost(String postId, String requesting_user, String language) {
@@ -216,7 +218,8 @@ public class PostService {
     @Caching(evict = {
             @CacheEvict(value = "posts", allEntries = true),
             @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
             @CacheEvict(value = "userFeed", allEntries = true)
     })
     public PostResponseDTO replyToPost(String postId, PostRequestDTO body, String requesting_user, String language) {
@@ -273,7 +276,8 @@ public class PostService {
     @Caching(evict = {
             @CacheEvict(value = "posts", allEntries = true),
             @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "user", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
             @CacheEvict(value = "userFeed", allEntries = true)
     })
     public Boolean toggleLike(String postId, String requesting_user, String language) {

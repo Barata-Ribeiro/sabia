@@ -21,10 +21,10 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/public/{userId}")
-    public ResponseEntity<RestSuccessResponseDTO<PublicProfileResponseDTO>> getPublicUser(@PathVariable String userId,
+    @GetMapping("/public/{username}")
+    public ResponseEntity<RestSuccessResponseDTO<PublicProfileResponseDTO>> getPublicUser(@PathVariable String username,
                                                                                           @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        PublicProfileResponseDTO user = userService.getPublicProfile(userId, language);
+        PublicProfileResponseDTO user = userService.getPublicProfile(username, language);
 
         String message = language == null || language.equals("en")
                          ? "User retrieved successfully."
