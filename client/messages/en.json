@@ -96,6 +96,9 @@
         "Avatar": {
             "AltAvatar": "Profile Image",
             "AriaLabelLink": "Open Avatar Image in New Tab"
+        },
+        "Cover": {
+            "AltCover": "Profile Cover Image"
         }
     },
     "Header": {
