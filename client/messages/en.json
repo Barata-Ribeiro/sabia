@@ -24,6 +24,13 @@
         "AriaLabelFeed": "Feed Section",
         "PageEmptyPosts": "No posts to display. How about creating one?"
     },
+    "ProfilePage": {
+        "VerifiedBadge": "Verified Account",
+        "WebLink": "Visit Website",
+        "JoinedDate": "Joined ",
+        "Followings": " Following",
+        "Followers": " Followers"
+    },
     "_comment-2": "Components related translations.",
     "LocaleSwitcher": {
         "SelectLanguage": "Select Language",

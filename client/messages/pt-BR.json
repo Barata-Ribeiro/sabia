@@ -24,6 +24,13 @@
         "AriaLabelFeed": "Seção de Feed",
         "PageEmptyPosts": "Você ainda não possui postagens. Que tal criar uma agora?"
     },
+    "ProfilePage": {
+        "VerifiedBadge": "Conta Verificada",
+        "WebLink": "Visite o site",
+        "JoinedDate": "Membro desde ",
+        "Followings": " Seguindo",
+        "Followers": " Seguidores"
+    },
     "_comment-2": "Traduções relacionadas aos componentes",
     "LocaleSwitcher": {
         "SelectLanguage": "Selecione o Idioma",
