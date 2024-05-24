@@ -3,6 +3,7 @@
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { useRouter } from "@/navigation"
+import { NULL_AVATAR } from "@/utils/constants"
 import { dateToHowLongAgo } from "@/utils/date-format"
 import formatTextWithHashtags from "@/utils/format-text-with-hashtags"
 import { useLocale } from "next-intl"
@@ -14,7 +15,6 @@ import { twMerge } from "tailwind-merge"
 export default function FeedPost({ post }: { post: PostResponse }) {
     const localeActive = useLocale()
     const router = useRouter()
-    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
 
     function handlePostClick(
         username: string,
@@ -33,7 +33,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
         >
             <div className="flex w-full flex-col items-start gap-2 md:flex-row md:gap-5">
                 <Image
-                    src={post.author.avatar_image_url ?? null_image}
+                    src={post.author.avatar_image_url ?? NULL_AVATAR}
                     alt={post.author.username}
                     className="aspect-square h-10 w-10 rounded-full object-cover"
                     width={128}

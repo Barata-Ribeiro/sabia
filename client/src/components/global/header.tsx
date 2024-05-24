@@ -5,6 +5,7 @@ import LinkButton from "@/components/shared/link-button"
 import { useUser } from "@/context/user-context-provider"
 import { UserContextResponse } from "@/interfaces/user"
 import { usePathname, useRouter } from "@/navigation"
+import { NULL_AVATAR } from "@/utils/constants"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useState } from "react"
@@ -16,7 +17,6 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
     const t = useTranslations("Header")
     const pathname = usePathname()
     const router = useRouter()
-    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
     const { setUser } = useUser()
 
     const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
@@ -116,7 +116,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         </span>
                                         <Image
                                             className="h-8 w-8 rounded-full object-cover"
-                                            src={user?.avatar_image_url ?? null_image}
+                                            src={user?.avatar_image_url ?? NULL_AVATAR}
                                             alt={`${t("NavUserImageAlt")} ${user?.username}`}
                                             title={`${t("NavUserImageAlt")} ${user?.username}`}
                                             width={256}

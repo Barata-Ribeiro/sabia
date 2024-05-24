@@ -1,6 +1,7 @@
 import getPost from "@/actions/post/get-post"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
+import { NULL_AVATAR } from "@/utils/constants"
 import { dateTimeFormat } from "@/utils/date-format"
 import { Metadata } from "next"
 import { getLocale } from "next-intl/server"
@@ -37,8 +38,6 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 export default async function PostPage({ params }: PostPageProps) {
     const localeActive = await getLocale()
 
-    const null_image = "/assets/default/profile-default-svgrepo-com.svg"
-
     const postState = await getPost({ id: params.id, locale: localeActive })
     const post = postState.response?.data as PostResponse
 
@@ -69,7 +68,7 @@ export default async function PostPage({ params }: PostPageProps) {
                     >
                         <header className="mb-4 flex w-max items-center gap-2">
                             <Image
-                                src={post.author.avatar_image_url ?? null_image}
+                                src={post.author.avatar_image_url ?? NULL_AVATAR}
                                 alt={post.author.username}
                                 className="aspect-square h-10 w-10 rounded-full object-cover"
                                 width={128}
