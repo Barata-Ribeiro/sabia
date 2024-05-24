@@ -7,6 +7,7 @@ import LinkButton from "@/components/shared/link-button"
 import { UserPublicProfileResponse } from "@/interfaces/user"
 import { dateFormat } from "@/utils/date-format"
 import { getLocale, getTranslations } from "next-intl/server"
+import { notFound } from "next/navigation"
 import { HiCalendarDays, HiCheckBadge, HiLink } from "react-icons/hi2"
 
 interface ProfilePageProps {
@@ -24,6 +25,8 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
+    if (!params.username) return notFound()
+
     const t = await getTranslations("ProfilePage")
     const localeActive = await getLocale()
     const isEnglishLang = localeActive === "en"
