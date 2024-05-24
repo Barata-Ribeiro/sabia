@@ -81,6 +81,16 @@
         "AriaLabelList": "Seu feed de postagens",
         "EndOfFeed": "Você chegou ao final do seu feed."
     },
+    "Profile": {
+        "Top": {
+            "AriaLabelLink": "Ir para a home",
+            "Title": "Postagens"
+        },
+        "Avatar": {
+            "AltAvatar": "Imagem de perfil",
+            "AriaLabelLink": "Abrir imagem do perfil em nova aba"
+        }
+    },
     "Header": {
         "NavMenuHome": "Início",
         "NavUserGreet": "Bem vindo,",

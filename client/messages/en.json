@@ -81,6 +81,16 @@
         "AriaLabelList": "Your posts feed",
         "EndOfFeed": "You have reached the end of the feed."
     },
+    "Profile": {
+        "Top": {
+            "AriaLabelLink": "Go to home page",
+            "Title": "Posts"
+        },
+        "Avatar": {
+            "AltAvatar": "Profile Image",
+            "AriaLabelLink": "Open Avatar Image in New Tab"
+        }
+    },
     "Header": {
         "NavMenuHome": "Home",
         "NavUserGreet": "Welcome,",
