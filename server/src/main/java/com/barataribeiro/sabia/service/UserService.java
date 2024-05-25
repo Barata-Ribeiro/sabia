@@ -377,15 +377,12 @@ public class UserService {
                 throw new ForbiddenRequest(notAllowedMessage);
             }
 
-            var follow = user.getFollowings().stream()
-                    .filter(f -> f.getFollowed().getId().equals(followedId))
-                    .findFirst()
+            Follow follow = followRepository.findByFollowerIdAndFollowedId(userId, followedId)
                     .orElseThrow(() -> new BadRequest(notFollowingMessage));
 
-            user.getFollowings().remove(follow);
-            user.decrementFollowingCount();
+            followRepository.delete(follow);
 
-            followedUser.getFollowers().remove(follow);
+            user.decrementFollowingCount();
             followedUser.decrementFollowerCount();
 
             userRepository.save(user);
