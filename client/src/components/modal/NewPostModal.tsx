@@ -4,6 +4,7 @@ import NewPostForm from "@/components/forms/new-post-form"
 import Button from "@/components/shared/button"
 import { useUser } from "@/context/user-context-provider"
 import { useRouter } from "@/navigation"
+import { NULL_AVATAR } from "@/utils/constants"
 import { useLocale, useTranslations } from "next-intl"
 import Image from "next/image"
 import {
@@ -53,8 +54,8 @@ export default function NewPostModal() {
                 </header>
                 <article className="flex gap-4">
                     <Image
-                        src={user?.avatar_image_url}
-                        alt={`${user?.username}'s avatar`}
+                        src={user?.avatar_image_url ?? NULL_AVATAR}
+                        alt={`${t("NewPostAvatarAlt")}${user?.username}`}
                         width={50}
                         height={50}
                         priority

@@ -64,6 +64,7 @@
     "NewPostModal": {
         "NewPostTitle": "Nova Postagem",
         "NewPostSubtitle": "Compartilhe seus pensamentos e ideias com o mundo!",
+        "NewPostAvatarAlt": "Avatar de ",
         "NewPostCloseButton": "Fechar"
     },
     "NewPostForm": {
