@@ -29,7 +29,8 @@
         "WebLink": "Visite o site",
         "JoinedDate": "Membro desde ",
         "Followings": " Seguindo",
-        "Followers": " Seguidores"
+        "Followers": " Seguidores",
+        "PageEmptyPosts": "Você ainda não possui postagens. Que tal criar uma agora?"
     },
     "_comment-2": "Traduções relacionadas aos componentes",
     "LocaleSwitcher": {
@@ -85,9 +86,15 @@
         "ButtonSettings": "Configurações",
         "ButtonLogout": "Sair"
     },
-    "PrivateFeed": {
-        "AriaLabelList": "Seu feed de postagens",
-        "EndOfFeed": "Você chegou ao final do seu feed."
+    "Feed": {
+        "Private": {
+            "AriaLabelList": "Seu feed de postagens",
+            "EndOfFeed": "Você chegou ao final do seu feed."
+        },
+        "Public": {
+            "AriaLabelList": "Feed de postagens do usuário",
+            "EndOfFeed": "Este usuário não possui mais postagens."
+        }
     },
     "Profile": {
         "Top": {

@@ -1,6 +1,6 @@
 import getUserContext from "@/actions/user/get-user-context"
 import getUserFeed from "@/actions/user/get-user-feed"
-import PrivateFeed from "@/components/feed/private-feed"
+import Feed from "@/components/feed/feed"
 import NewPostFeedForm from "@/components/forms/new-post-feed-form"
 import AsideMenu from "@/components/menu/aside-menu"
 import { FeedResponse, UserContextResponse } from "@/interfaces/user"
@@ -51,7 +51,11 @@ export default async function HomePage({ params }: { params: { locale: string } 
                     aria-label={t("AriaLabelFeed")}
                 >
                     {feedResponse ? (
-                        <PrivateFeed feedResponse={feedResponse} userId={user.id} />
+                        <Feed
+                            feedResponse={feedResponse}
+                            userId={user.id}
+                            isPublic={false}
+                        />
                     ) : (
                         <p className="text-center">{t("PageEmptyPosts")}</p>
                     )}

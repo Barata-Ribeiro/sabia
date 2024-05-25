@@ -29,7 +29,8 @@
         "WebLink": "Visit Website",
         "JoinedDate": "Joined ",
         "Followings": " Following",
-        "Followers": " Followers"
+        "Followers": " Followers",
+        "PageEmptyPosts": "No posts to display. How about creating one?"
     },
     "_comment-2": "Components related translations.",
     "LocaleSwitcher": {
@@ -85,9 +86,15 @@
         "ButtonSettings": "Settings",
         "ButtonLogout": "Log out"
     },
-    "PrivateFeed": {
-        "AriaLabelList": "Your posts feed",
-        "EndOfFeed": "You have reached the end of the feed."
+    "Feed": {
+        "Private": {
+            "AriaLabelList": "Your posts feed",
+            "EndOfFeed": "You have reached the end of the feed."
+        },
+        "Public": {
+            "AriaLabelList": "User's posts feed",
+            "EndOfFeed": "You have reached the end of the feed."
+        }
     },
     "Profile": {
         "Top": {

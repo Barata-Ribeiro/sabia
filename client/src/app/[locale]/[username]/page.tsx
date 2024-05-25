@@ -1,10 +1,12 @@
+import getUserPublicFeed from "@/actions/user/get-user-public-feed"
 import getUserPublicProfile from "@/actions/user/get-user-public-profile"
+import Feed from "@/components/feed/feed"
 import ProfileAvatar from "@/components/profile/profile-avatar"
 import ProfileCoverImage from "@/components/profile/profile-cover-image"
 import ProfileFollowButton from "@/components/profile/profile-follow-button"
 import ProfileTop from "@/components/profile/profile-top"
 import LinkButton from "@/components/shared/link-button"
-import { UserPublicProfileResponse } from "@/interfaces/user"
+import { FeedResponse, UserPublicProfileResponse } from "@/interfaces/user"
 import { dateFormat } from "@/utils/date-format"
 import { getLocale, getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
@@ -34,14 +36,17 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     const profileState = await getUserPublicProfile(params.username)
     const profile = profileState.response?.data as UserPublicProfileResponse
 
+    const feedState = await getUserPublicFeed({ userId: profile.id })
+    const feedResponse = feedState.response?.data as FeedResponse
+
     return (
-        <section className="max-w-[37.5rem] flex-1 border-x">
+        <div className="w-max max-w-[37.5rem] flex-1 overflow-y-scroll border-x">
             <header className="w-full p-4">
                 <ProfileTop profile={profile} englishLang={isEnglishLang} />
             </header>
 
             {/* PROFILE */}
-            <div>
+            <section id="profile-section">
                 <ProfileCoverImage profile={profile} />
 
                 <div className="p-4">
@@ -122,7 +127,18 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                     </div>
                 </div>
                 <hr className="border-gray-200" />
-            </div>
-        </section>
+            </section>
+            <section id="public-feed-section">
+                {feedResponse ? (
+                    <Feed
+                        feedResponse={feedResponse}
+                        userId={profile.id}
+                        isPublic={true}
+                    />
+                ) : (
+                    <p className="text-center">{t("PageEmptyPosts")}</p>
+                )}
+            </section>
+        </div>
     )
 }

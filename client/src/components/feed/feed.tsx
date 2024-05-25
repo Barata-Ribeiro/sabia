@@ -1,6 +1,7 @@
 "use client"
 
 import getUserFeed from "@/actions/user/get-user-feed"
+import getUserPublicFeed from "@/actions/user/get-user-public-feed"
 import FeedPost from "@/components/feed/feed-post"
 import Loading from "@/components/shared/loading"
 import { PostResponse } from "@/interfaces/post"
@@ -9,13 +10,14 @@ import { useTranslations } from "next-intl"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
 
-interface PrivateFeedProps {
+interface FeedProps {
     feedResponse: FeedResponse
     userId: string
+    isPublic: boolean
 }
 
-export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) {
-    const t = useTranslations("PrivateFeed")
+export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
+    const t = useTranslations("Feed.Public")
 
     const [feed, setFeed] = useState(feedResponse)
     const [feedPosts, setFeedPosts] = useState<PostResponse[]>(feed.feed)
@@ -25,6 +27,8 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
     const { ref, inView } = useInView({ threshold: 1 })
     const fetching = useRef(false)
 
+    const fetchFeed = isPublic ? getUserPublicFeed : getUserFeed
+
     const infiniteScroll = useCallback(async () => {
         if (fetching.current || !infinite || loading) return
         fetching.current = true
@@ -33,7 +37,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
         try {
             const newPage = page + 1
             setPage(newPage)
-            const feedState = await getUserFeed(
+            const feedState = await fetchFeed(
                 { perPage: 5, page: newPage, userId },
                 { cache: "no-store" }
             )
@@ -58,7 +62,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
             setLoading(false)
             fetching.current = false
         }
-    }, [infinite, loading, page, userId])
+    }, [infinite, loading, page, userId, fetchFeed])
 
     useEffect(() => {
         if (inView && !loading && infinite) {
@@ -69,7 +73,7 @@ export default function PrivateFeed({ feedResponse, userId }: PrivateFeedProps) 
     return (
         <>
             <ul
-                className="flex flex-col divide-y"
+                className="flex snap-y flex-col divide-y"
                 role="list"
                 aria-label={t("AriaLabelList")}
             >
