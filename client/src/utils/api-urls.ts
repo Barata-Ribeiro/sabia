@@ -22,6 +22,8 @@ export const USER_GET_PUBLIC_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/public/${userId}/feed?perPage=${perPage}&page=${page}`
 }
+export const IS_USER_FOLLOWING = (userId: string, followId: string) =>
+    `${BACKEND_URL}/api/v1/users/me/${userId}/follows/${followId}`
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
