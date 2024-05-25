@@ -13,7 +13,7 @@ import { cookies } from "next/headers"
 export default async function postNewPost(state: State, formData: FormData) {
     const URL = POST_NEW_POST()
     const locale = await getLocale()
-    const isEnglish = locale === "en"
+    const isEnglishLang = locale === "en"
 
     const text = formData.get("newPost") as string | null
 
@@ -21,26 +21,28 @@ export default async function postNewPost(state: State, formData: FormData) {
         const auth_token = cookies().get("auth_token")?.value
         if (!auth_token) {
             await logout()
-            throw new Error(isEnglish ? "Unauthorized." : "Não autorizado.")
+            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
         }
 
         const isTokenValid = verifyToken(auth_token)
         if (!isTokenValid) {
             await logout()
-            throw new Error(isEnglish ? "Unauthorized." : "Não autorizado.")
+            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
         }
 
         if (!text)
-            throw new Error(isEnglish ? "Text is required." : "Texto é obrigatório.")
+            throw new Error(
+                isEnglishLang ? "Text is required." : "Texto é obrigatório."
+            )
 
         if (text.trim().length === 0)
             throw new Error(
-                isEnglish ? "Text cannot be empty." : "Texto não pode estar vazio."
+                isEnglishLang ? "Text cannot be empty." : "Texto não pode estar vazio."
             )
 
         if (text.trim().length > 280)
             throw new Error(
-                isEnglish
+                isEnglishLang
                     ? "Text must have at most 280 characters."
                     : "Texto deve ter no máximo 280 caracteres."
             )

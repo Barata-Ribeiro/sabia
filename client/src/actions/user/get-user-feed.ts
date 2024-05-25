@@ -12,11 +12,13 @@ export default async function getUserFeed(
     optionsFront?: RequestInit
 ) {
     const locale = await getLocale()
+    const isEnglishLang = locale === "en"
     const URL = USER_GET_FEED({ perPage, page, userId })
 
     try {
         const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) return { ok: false, client_error: null, response: null }
+        if (!auth_token)
+            throw new Error(isEnglishLang ? "Unauthorized." : "Não Autorizado.")
 
         const options = optionsFront || {
             next: { revalidate: 10, tags: ["feed"] }

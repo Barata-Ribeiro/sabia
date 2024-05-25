@@ -14,7 +14,8 @@ export default async function getUserContext() {
 
     try {
         const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) return { ok: false, client_error: null, response: null }
+        if (!auth_token)
+            throw new Error(isEnglishLang ? "Unauthorized." : "Não Autorizado.")
 
         const response = await fetch(URL, {
             method: "GET",
