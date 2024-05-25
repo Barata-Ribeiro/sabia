@@ -24,6 +24,10 @@ export const USER_GET_PUBLIC_FEED = (params: FeedRequestParams) => {
 }
 export const IS_USER_FOLLOWING = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follows/${followId}`
+export const FOLLOW_USER = (userId: string, followId: string) =>
+    `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
+export const UNFOLLOW_USER = (userId: string, followId: string) =>
+    `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
