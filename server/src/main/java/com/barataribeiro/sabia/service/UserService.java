@@ -186,6 +186,13 @@ public class UserService {
         return createResponseFromPostPage(postPage);
     }
 
+    public Map<String, String> checkIfUserFollows(String userId, String followedId) {
+
+        Boolean exists = followRepository.existsByFollowerIdAndFollowedId(userId, followedId);
+
+        return Map.of("follows", exists.toString());
+    }
+
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "user", key = "#userId"),

@@ -124,6 +124,22 @@ public class UserController {
                                                               data));
     }
 
+    @GetMapping("/me/{userId}/follows/{followedId}")
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, String>>> checkIfUserFollows(@PathVariable String userId,
+                                                                                          @PathVariable String followedId,
+                                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+        Map<String, String> follows = userService.checkIfUserFollows(userId, followedId);
+
+        String message = language == null || language.equals("en")
+                         ? "User follow retrieved successfully."
+                         : "Seguimento do usuário recuperado com sucesso.";
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              message,
+                                                              follows));
+    }
+
     @PutMapping("/me/{userId}")
     public ResponseEntity<RestSuccessResponseDTO<ContextResponseDTO>> updateUser(@PathVariable String userId,
                                                                                  @RequestBody ProfileRequestDTO body,
