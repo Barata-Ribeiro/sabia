@@ -5,6 +5,7 @@ import { ApiResponse } from "@/interfaces/actions"
 import { UNFOLLOW_USER } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import { getLocale } from "next-intl/server"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 export default async function deleteUserFollow(userId: string, followId: string) {
@@ -31,6 +32,10 @@ export default async function deleteUserFollow(userId: string, followId: string)
         const responseData = (await response.json()) as ApiResponse
 
         if (!response.ok) throw new Error(responseData.message)
+
+        revalidateTag("feed")
+        revalidateTag("context")
+        revalidateTag("profile")
 
         return {
             ok: true,

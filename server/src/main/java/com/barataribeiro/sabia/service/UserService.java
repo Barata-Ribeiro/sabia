@@ -32,10 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,6 +125,7 @@ public class UserService {
         return entityMapper.getContextResponseDTO(user);
     }
 
+    @Transactional
     @Cacheable(value = "userFeed", key = "{#userId, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getUserFeed(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
@@ -153,13 +151,15 @@ public class UserService {
             throw new BadRequest(invalidParamsMessage);
         }
 
-        List<User> followings = user.getFollowings().stream()
+        Set<Follow> followings = user.getFollowings();
+
+        List<User> authors = followings.stream()
                 .map(Follow::getFollowed)
                 .collect(Collectors.toList());
 
-        followings.add(user);
+        authors.add(user);
 
-        Page<Post> postPage = postRepository.findByAuthorInOrderByCreatedAtDesc(followings, paging);
+        Page<Post> postPage = postRepository.findByAuthorInOrderByCreatedAtDesc(authors, paging);
 
         return createResponseFromPostPage(postPage);
     }
@@ -195,8 +195,11 @@ public class UserService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "user", key = "#userId"),
-            @CacheEvict(value = "users", key = "#userId")
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true),
+            @CacheEvict(value = "userPublicFeed", allEntries = true)
     })
     public ContextResponseDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
@@ -245,8 +248,12 @@ public class UserService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "user", key = "#userId"),
-            @CacheEvict(value = "users", key = "#userId")
+            @CacheEvict(value = "userPublicFollowers", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true),
+            @CacheEvict(value = "userPublicFeed", allEntries = true)
     })
     public void deleteOwnAccount(String userId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
@@ -277,8 +284,11 @@ public class UserService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "user", key = "#userId"),
-            @CacheEvict(value = "users", key = "#userId")
+            @CacheEvict(value = "userPublicFollowers", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true),
     })
     public void followUser(String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
@@ -332,11 +342,11 @@ public class UserService {
 
             followRepository.save(newFollow);
 
-            user.getFollowers().add(newFollow);
-            user.incrementFollowerCount();
+            user.getFollowings().add(newFollow);
+            user.incrementFollowingCount();
 
-            followedUser.getFollowings().add(newFollow);
-            followedUser.incrementFollowingCount();
+            followedUser.getFollowers().add(newFollow);
+            followedUser.incrementFollowerCount();
 
             userRepository.save(user);
             userRepository.save(followedUser);
@@ -348,8 +358,11 @@ public class UserService {
 
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "user", key = "#userId"),
-            @CacheEvict(value = "users", key = "#userId")
+            @CacheEvict(value = "userPublicFollowers", allEntries = true),
+            @CacheEvict(value = "userPublicProfile", allEntries = true),
+            @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "userContext", allEntries = true),
+            @CacheEvict(value = "userFeed", allEntries = true),
     })
     public void unfollowUser(String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");

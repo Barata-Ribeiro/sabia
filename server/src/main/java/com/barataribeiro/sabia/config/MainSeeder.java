@@ -74,7 +74,7 @@ public class MainSeeder {
             System.out.println("Admin: " + admin);
 
             // Populate the database with some posts for main admin
-            for (int i = 1; i <= 5; i++) {
+            for (int i = 1; i <= 50; i++) {
                 Post post = Post.builder()
                         .author(admin)
                         .text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +

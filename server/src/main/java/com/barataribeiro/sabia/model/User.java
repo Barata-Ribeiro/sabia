@@ -69,7 +69,7 @@ public class User {
     private Boolean is_private = false;
 
     @Builder.Default
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private Set<Follow> followers = new HashSet<>();
@@ -79,7 +79,7 @@ public class User {
     private Long follower_count = 0L;
 
     @Builder.Default
-    @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private Set<Follow> followings = new HashSet<>();
