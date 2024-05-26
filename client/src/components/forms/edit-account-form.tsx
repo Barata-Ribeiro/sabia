@@ -4,11 +4,23 @@ import Input from "@/components/shared/input"
 import { UserContextResponse } from "@/interfaces/user"
 import { NULL_AVATAR } from "@/utils/constants"
 import tw from "@/utils/tw"
+import { useLocale } from "next-intl"
 import Image from "next/image"
 import { FaCircleExclamation } from "react-icons/fa6"
 import { HiAtSymbol, HiEnvelope, HiLink, HiPhoto } from "react-icons/hi2"
 
-export default function EditAccountForm({ user }: { user: UserContextResponse }) {
+interface EditAccountFormProps {
+    user: UserContextResponse
+    coverBlur: string | undefined
+    avatarBlur: string | undefined
+}
+
+export default function EditAccountForm({
+    user,
+    coverBlur,
+    avatarBlur
+}: EditAccountFormProps) {
+    const localeActive = useLocale()
     const textAreaStyle = tw`peer h-full min-h-[6.25rem] w-full !resize-none rounded-[0.438rem]
                         border border-background-200 border-t-transparent bg-white px-3 py-2.5
                         text-body-700 outline outline-0 transition-all placeholder-shown:border
@@ -127,6 +139,8 @@ export default function EditAccountForm({ user }: { user: UserContextResponse })
                         <Image
                             src={user.avatar_image_url ?? NULL_AVATAR}
                             className="rounded object-cover"
+                            placeholder="blur"
+                            blurDataURL={avatarBlur}
                             quality={50}
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             priority
@@ -162,7 +176,7 @@ export default function EditAccountForm({ user }: { user: UserContextResponse })
                                 className="rounded object-cover"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 placeholder="blur"
-                                blurDataURL={user.cover_image_url}
+                                blurDataURL={coverBlur}
                                 quality={80}
                                 priority
                                 fill

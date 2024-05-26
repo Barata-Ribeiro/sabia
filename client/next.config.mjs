@@ -1,9 +1,12 @@
+// @ts-check
+import withPlaiceholder from "@plaiceholder/next";
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
+    swcMinify: true,
     images: {
         remotePatterns: [
             {
@@ -20,4 +23,7 @@ const nextConfig = {
     }
 };
 
-export default withNextIntl(nextConfig);
+const withNextIntl = createNextIntlPlugin();
+const withPlugins = (config) => withNextIntl(withPlaiceholder(config));
+
+export default withPlugins(nextConfig);

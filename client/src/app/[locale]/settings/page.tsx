@@ -2,11 +2,25 @@ import getUserContext from "@/actions/user/get-user-context"
 import EditAccountForm from "@/components/forms/edit-account-form"
 import LinkButton from "@/components/shared/link-button"
 import { UserContextResponse } from "@/interfaces/user"
+import { NULL_AVATAR } from "@/utils/constants"
+import getBase64 from "@/utils/get-base64"
+import { getLocale } from "next-intl/server"
 import { HiExclamationCircle } from "react-icons/hi2"
 
 export default async function Settings() {
+    const localeActive = await getLocale()
     const context = await getUserContext()
     const user = context.response?.data as UserContextResponse
+
+    let coverBlur: string | undefined
+    if (user.cover_image_url) {
+        coverBlur = await getBase64(user.cover_image_url, localeActive)
+    }
+
+    const avatarBlur = await getBase64(
+        user.avatar_image_url ?? NULL_AVATAR,
+        localeActive
+    )
 
     return (
         <section
@@ -22,7 +36,11 @@ export default async function Settings() {
                 </p>
             </header>
 
-            <EditAccountForm user={user} />
+            <EditAccountForm
+                user={user}
+                avatarBlur={avatarBlur}
+                coverBlur={coverBlur}
+            />
 
             <footer>
                 <h2 className="py-2 font-heading text-xl font-semibold text-body-900 dark:text-body-100">
