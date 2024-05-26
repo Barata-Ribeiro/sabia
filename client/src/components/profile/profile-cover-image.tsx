@@ -1,5 +1,6 @@
 import { UserPublicProfileResponse } from "@/interfaces/user"
-import { getTranslations } from "next-intl/server"
+import getBase64 from "@/utils/get-base64"
+import { getLocale, getTranslations } from "next-intl/server"
 import Image from "next/image"
 
 export default async function ProfileCoverImage({
@@ -8,6 +9,12 @@ export default async function ProfileCoverImage({
     profile: UserPublicProfileResponse
 }) {
     const t = await getTranslations("Profile.Cover")
+    const localeActive = await getLocale()
+
+    let coverBlur: string | undefined
+    if (profile.cover_image_url) {
+        coverBlur = await getBase64(profile.cover_image_url, localeActive)
+    }
 
     return (
         <div
@@ -19,6 +26,8 @@ export default async function ProfileCoverImage({
                     className="pointer-events-none absolute object-cover object-center italic"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     src={profile.cover_image_url}
+                    placeholder="blur"
+                    blurDataURL={coverBlur}
                     alt={t("AltCover")}
                     priority
                     fill

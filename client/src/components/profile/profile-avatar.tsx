@@ -1,7 +1,8 @@
 import LinkButton from "@/components/shared/link-button"
 import { UserPublicProfileResponse } from "@/interfaces/user"
 import { NULL_AVATAR } from "@/utils/constants"
-import { getTranslations } from "next-intl/server"
+import getBase64 from "@/utils/get-base64"
+import { getLocale, getTranslations } from "next-intl/server"
 import Image from "next/image"
 
 export default async function ProfileAvatar({
@@ -10,6 +11,12 @@ export default async function ProfileAvatar({
     profile: UserPublicProfileResponse
 }) {
     const t = await getTranslations("Profile.Avatar")
+    const localeActive = await getLocale()
+
+    const avatarBlur = await getBase64(
+        profile.avatar_image_url ?? NULL_AVATAR,
+        localeActive
+    )
 
     return (
         <div style={{ marginTop: "-6rem" }}>
@@ -21,6 +28,8 @@ export default async function ProfileAvatar({
                     className="pointer-events-none absolute rounded-full border-4 border-background-600 bg-background-600 object-cover object-center italic"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     src={profile.avatar_image_url ?? NULL_AVATAR}
+                    placeholder="blur"
+                    blurDataURL={avatarBlur}
                     alt={t("AltAvatar")}
                     priority
                     fill
