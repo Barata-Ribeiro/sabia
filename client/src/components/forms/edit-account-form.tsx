@@ -1,13 +1,21 @@
 "use client"
 
+import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
+import LinkButton from "@/components/shared/link-button"
 import { UserContextResponse } from "@/interfaces/user"
 import { NULL_AVATAR } from "@/utils/constants"
 import tw from "@/utils/tw"
-import { useLocale } from "next-intl"
 import Image from "next/image"
 import { FaCircleExclamation } from "react-icons/fa6"
-import { HiAtSymbol, HiEnvelope, HiLink, HiPhoto } from "react-icons/hi2"
+import {
+    HiAtSymbol,
+    HiEnvelope,
+    HiIdentification,
+    HiLink,
+    HiLockClosed,
+    HiPhoto
+} from "react-icons/hi2"
 
 interface EditAccountFormProps {
     user: UserContextResponse
@@ -20,7 +28,6 @@ export default function EditAccountForm({
     coverBlur,
     avatarBlur
 }: EditAccountFormProps) {
-    const localeActive = useLocale()
     const textAreaStyle = tw`peer h-full min-h-[6.25rem] w-full !resize-none rounded-[0.438rem]
                         border border-background-200 border-t-transparent bg-white px-3 py-2.5
                         text-body-700 outline outline-0 transition-all placeholder-shown:border
@@ -56,6 +63,7 @@ export default function EditAccountForm({
                         label="Username"
                         name="username"
                         icon={<HiAtSymbol size={22} />}
+                        autoComplete="off"
                         minLength={3}
                         maxLength={20}
                         className="px-3 py-2.5"
@@ -122,7 +130,12 @@ export default function EditAccountForm({
                     </p>
                 </div>
                 <div>
-                    <Input label="Gender" name="gender" className="px-3 py-2.5" />
+                    <Input
+                        label="Gender"
+                        name="gender"
+                        icon={<HiIdentification size={22} />}
+                        className="px-3 py-2.5"
+                    />
                     <p className="text-body-600">
                         {user.gender
                             ? `Your gender is <strong>${user.gender}</strong>.`
@@ -130,7 +143,7 @@ export default function EditAccountForm({
                     </p>
                 </div>
             </fieldset>
-            <fieldset className="grid gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100 md:grid-cols-2">
+            <fieldset className="mb-6 grid gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100 md:grid-cols-2">
                 <legend className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
                     Public Information
                 </legend>
@@ -259,6 +272,80 @@ export default function EditAccountForm({
                     </div>
                 </div>
             </fieldset>
+            <fieldset className="mb-6 grid gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100 md:grid-cols-2">
+                <legend className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
+                    Security Information
+                </legend>
+                <div>
+                    <Input
+                        label="New Password"
+                        name="newPassword"
+                        type="password"
+                        autoComplete="new-password"
+                        icon={<HiLockClosed size={22} />}
+                        className="px-3 py-2.5"
+                    />
+                    <p className="flex w-fit items-center gap-2 self-center text-sm text-primary-700 antialiased">
+                        <FaCircleExclamation size={14} />
+                        <span className="w-[55ch]">
+                            Use at least 8 characters, one uppercase, one lowercase, a
+                            special character, and one number.
+                        </span>
+                    </p>
+                </div>
+                <Input
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    type="password"
+                    autoComplete="off"
+                    icon={<HiLockClosed size={22} />}
+                    className="px-3 py-2.5"
+                />
+            </fieldset>
+            <div className="flex flex-col gap-6 self-center">
+                <div className="flex max-w-[20rem] flex-col gap-4 self-center">
+                    <p className="text-pretty text-center text-xl leading-6">
+                        To edit your account, you need to provide your current password.
+                    </p>
+                    <Input
+                        label="Current Password"
+                        name="currentPassword"
+                        type="password"
+                        autoComplete="current-password"
+                        className="px-3 py-2.5"
+                        required
+                        aria-required
+                    />
+                </div>
+                <div className="flex items-center gap-2 self-center">
+                    <input
+                        className="form-checkbox h-4 w-4 rounded border-body-300 bg-white text-accent-600 focus:ring-2 focus:ring-accent-500 dark:border-body-600 dark:bg-body-700 dark:ring-offset-body-800 dark:focus:ring-accent-600"
+                        type="checkbox"
+                        name="terms-of-use"
+                        id="terms-of-use"
+                        required
+                        aria-required
+                    />
+                    <label
+                        htmlFor="terms-of-use"
+                        className="inline-flex gap-1 text-body-600 dark:text-body-50 lg:text-body-950"
+                    >
+                        I still agree with the
+                        <LinkButton
+                            href={"/terms-of-use"}
+                            className="font-heading text-body-600 transition-colors duration-300 hover:text-accent-500 hover:underline dark:text-body-400 dark:hover:text-accent-200"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Terms of use
+                        </LinkButton>
+                        while editing my account.
+                    </label>
+                </div>
+                <Button type="submit" className="py-2">
+                    Edit Account
+                </Button>
+            </div>
         </form>
     )
 }
