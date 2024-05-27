@@ -28,6 +28,8 @@ export const FOLLOW_USER = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
 export const UNFOLLOW_USER = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
+export const USER_DELETE_ACCOUNT = (userId: string) =>
+    `${BACKEND_URL}/api/v1/users/me/${userId}`
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
