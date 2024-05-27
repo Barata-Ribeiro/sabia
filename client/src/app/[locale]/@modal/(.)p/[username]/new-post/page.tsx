@@ -1,4 +1,4 @@
-import NewPostModal from "@/components/modal/NewPostModal"
+import NewPostModal from "@/components/modal/new-post-modal"
 import { notFound } from "next/navigation"
 
 interface NewPostPageProps {
