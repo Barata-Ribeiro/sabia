@@ -1,25 +1,22 @@
+import getUnsplashRandomImage from "@/actions/get-unsplash-random-image"
 import LoginForm from "@/components/forms/login-form"
-import { useLocale, useTranslations } from "next-intl"
-import Image from "next/image"
+import LoginImage from "@/components/login-image"
+import { UnsplashResponse } from "@/interfaces/unplash"
+import { getLocale, getTranslations } from "next-intl/server"
 import Link from "next/link"
 
-export default function LoginPage() {
-    const t = useTranslations("LoginPage")
-    const localActive = useLocale()
+export default async function LoginPage() {
+    const t = await getTranslations("LoginPage")
+    const localActive = await getLocale()
+
+    const photoResponse = await getUnsplashRandomImage("Thrush")
+    const { photo } = photoResponse as { photo: UnsplashResponse }
 
     return (
         <main className="shadow-accent-900/5 font-body lg:rounded-b-2xl lg:shadow-xl">
             <section className=" flex h-screen flex-col items-center md:flex-row lg:rounded-b-2xl">
                 <div className="relative hidden h-screen w-full bg-background-950 md:w-1/2 lg:block lg:rounded-bl-2xl xl:w-2/3">
-                    <Image
-                        src="https://source.unsplash.com/random/?Thrush"
-                        alt={t("PageImageDescription")}
-                        title={t("PageImageDescription")}
-                        className="h-auto w-auto object-cover lg:rounded-bl-2xl"
-                        sizes="100%"
-                        fill
-                        priority
-                    />
+                    {photo && <LoginImage photo={photo} />}
                 </div>
 
                 <div
