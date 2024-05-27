@@ -10,6 +10,8 @@
     },
     "dependencies": {
         "@plaiceholder/next": "^3.0.0",
+        "blurhash": "^2.0.5",
+        "canvas": "^2.11.2",
         "emoji-picker-react": "^4.9.2",
         "jose": "^5.3.0",
         "next": "14.2.3",
