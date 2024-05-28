@@ -1,12 +1,16 @@
+import SecondaryHeader from "@/components/global/secondary-header"
+import ReadingIndicator from "@/components/shared/reading-indicator"
+import ScrollToTopButton from "@/components/shared/scroll-to-top-button"
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-    title: "Privacy Policy | Sabiá",
-    description:
-        "This is the privacy policy of our site. As a user of our site, " +
-        "you must ensure that you read the privacy policy and understand how we store, " +
-        "use, and/or maintain your information."
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("PrivacyPolicy")
+
+    return {
+        title: `${t("PolicyTitle")} | Sabiá`,
+        description: t("PolicyDescription")
+    }
 }
 
 export default async function PrivacyPolicyPage({
@@ -21,6 +25,8 @@ export default async function PrivacyPolicyPage({
 
     return (
         <main role="main">
+            <ReadingIndicator />
+            <SecondaryHeader />
             <section
                 className="mx-auto my-6 flex max-w-5xl flex-col gap-6 px-4
             sm:px-0"
@@ -487,6 +493,7 @@ export default async function PrivacyPolicyPage({
                     {t("GoBackScreenReader")}
                 </a>
             </section>
+            <ScrollToTopButton />
         </main>
     )
 }

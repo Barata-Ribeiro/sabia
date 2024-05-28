@@ -128,6 +128,7 @@
     "_comment-3": "Privacy Policy related translations.",
     "PrivacyPolicy": {
         "PolicyTitle": "Privacy Policy",
+        "PolicyDescription": "This is the privacy policy of our site. As a user of our site, you must ensure that you read the privacy policy and understand how we store, use, and/or maintain your information.",
         "PolicyLastUpdated": "Last updated: May 15, 2024",
         "PrivacyDescription-1": "This Privacy Policy describes Our policies and procedures on the\n                        collection, use and disclosure of Your information when You use\n                        the Service and tells You about Your privacy rights and how the\n                        law protects You.",
         "PrivacyDescription-2": "We use Your Personal data to provide and improve the Service. By\n                        using the Service, You agree to the collection and use of\n                        information in accordance with this Privacy Policy.",
