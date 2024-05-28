@@ -19,6 +19,12 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
     const router = useRouter()
     const { setUser } = useUser()
 
+    const shouldNotRender =
+        pathname === "/privacy-policy" ||
+        pathname === "/terms-of-use" ||
+        pathname === "/about" ||
+        pathname === "/auth/register"
+
     const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -40,153 +46,164 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
     }
 
     return (
-        <header className="font-body text-body-600">
-            <nav className="bg-background-800">
-                <div className="container mx-auto px-2 sm:px-6 lg:px-8">
-                    <div className="relative flex h-16 items-center justify-between">
-                        <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                            <button
-                                type="button"
-                                className="relative inline-flex items-center justify-center rounded-md p-2 text-body-400 hover:bg-background-700 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-background-50"
-                                aria-controls="mobile-menu"
-                                aria-expanded="false"
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            >
-                                <span className="absolute -inset-0.5"></span>
-                                <span className="sr-only">{t("NavSRMainMenu")}</span>
+        !shouldNotRender && (
+            <header className="font-body text-body-600">
+                <nav className="bg-background-800">
+                    <div className="container mx-auto px-2 sm:px-6 lg:px-8">
+                        <div className="relative flex h-16 items-center justify-between">
+                            <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                                <button
+                                    type="button"
+                                    className="relative inline-flex items-center justify-center rounded-md p-2 text-body-400 hover:bg-background-700 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-background-50"
+                                    aria-controls="mobile-menu"
+                                    aria-expanded="false"
+                                    onClick={() =>
+                                        setIsMobileMenuOpen(!isMobileMenuOpen)
+                                    }
+                                >
+                                    <span className="absolute -inset-0.5"></span>
+                                    <span className="sr-only">
+                                        {t("NavSRMainMenu")}
+                                    </span>
 
-                                {isMobileMenuOpen ? (
-                                    <HiXMark size={24} />
-                                ) : (
-                                    <HiBars3BottomLeft size={24} />
-                                )}
-                            </button>
-                        </div>
-                        <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                            <div className="flex flex-shrink-0 items-center">
-                                <Image
-                                    src="/assets/logo-bird.svg"
-                                    alt="Mini logo"
-                                    className="h-8 w-auto"
-                                    width={120}
-                                    height={85}
-                                    sizes="100vw"
-                                    priority
-                                />
+                                    {isMobileMenuOpen ? (
+                                        <HiXMark size={24} />
+                                    ) : (
+                                        <HiBars3BottomLeft size={24} />
+                                    )}
+                                </button>
                             </div>
-                            <div className="hidden sm:ml-6 sm:block">
-                                <div className="flex space-x-4">
-                                    <LinkButton
-                                        href="/home"
-                                        className={menuLinksStyle}
-                                        aria-current="page"
-                                    >
-                                        {t("NavMenuHome")}
-                                    </LinkButton>
+                            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                                <div className="flex flex-shrink-0 items-center">
+                                    <Image
+                                        src="/assets/logo-bird.svg"
+                                        alt="Mini logo"
+                                        className="h-8 w-auto"
+                                        width={120}
+                                        height={85}
+                                        sizes="100vw"
+                                        priority
+                                    />
+                                </div>
+                                <div className="hidden sm:ml-6 sm:block">
+                                    <div className="flex space-x-4">
+                                        <LinkButton
+                                            href="/home"
+                                            className={menuLinksStyle}
+                                            aria-current="page"
+                                        >
+                                            {t("NavMenuHome")}
+                                        </LinkButton>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            {pathname !== "/home" && (
-                                <LinkButton
-                                    href={"/p/" + user?.username + "/new-post"}
-                                    className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
-                                >
-                                    <span className="absolute -inset-1.5"></span>
-                                    <span className="sr-only">{t("NavSRNewPost")}</span>
-                                    <TbPencilPlus size={24} />
-                                </LinkButton>
-                            )}
-
-                            <div className="relative ml-3">
-                                <div>
-                                    <button
-                                        type="button"
-                                        className="relative flex rounded-full bg-background-800 text-sm focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-background-800"
-                                        id="user-menu-button"
-                                        aria-expanded="false"
-                                        aria-haspopup="true"
-                                        onClick={() =>
-                                            setIsAvatarMenuOpen(!isAvatarMenuOpen)
-                                        }
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                {pathname !== "/home" && (
+                                    <LinkButton
+                                        href={"/p/" + user?.username + "/new-post"}
+                                        className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
                                     >
                                         <span className="absolute -inset-1.5"></span>
                                         <span className="sr-only">
-                                            {t("NavSRUseMenu")}
+                                            {t("NavSRNewPost")}
                                         </span>
-                                        <Image
-                                            className="h-8 w-8 rounded-full object-cover"
-                                            src={user?.avatar_image_url ?? NULL_AVATAR}
-                                            alt={`${t("NavUserImageAlt")} ${user?.username}`}
-                                            title={`${t("NavUserImageAlt")} ${user?.username}`}
-                                            width={256}
-                                            height={256}
-                                            quality={50}
-                                        />
-                                    </button>
-                                </div>
-                                <div
-                                    className={`${isAvatarMenuOpen ? "absolute" : "hidden"} right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition-all focus:outline-none`}
-                                    role="menu"
-                                    aria-orientation="vertical"
-                                    aria-labelledby="user-menu-button"
-                                >
-                                    <div>
-                                        <p className="block select-none px-4 py-2 text-sm text-body-700">
-                                            {t("NavUserGreet")} @{user?.username}
-                                        </p>
+                                        <TbPencilPlus size={24} />
+                                    </LinkButton>
+                                )}
 
-                                        <hr className="bg-background-100" />
+                                <div className="relative ml-3">
+                                    <div>
+                                        <button
+                                            type="button"
+                                            className="relative flex rounded-full bg-background-800 text-sm focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-background-800"
+                                            id="user-menu-button"
+                                            aria-expanded="false"
+                                            aria-haspopup="true"
+                                            onClick={() =>
+                                                setIsAvatarMenuOpen(!isAvatarMenuOpen)
+                                            }
+                                        >
+                                            <span className="absolute -inset-1.5"></span>
+                                            <span className="sr-only">
+                                                {t("NavSRUseMenu")}
+                                            </span>
+                                            <Image
+                                                className="h-8 w-8 rounded-full object-cover"
+                                                src={
+                                                    user?.avatar_image_url ??
+                                                    NULL_AVATAR
+                                                }
+                                                alt={`${t("NavUserImageAlt")} ${user?.username}`}
+                                                title={`${t("NavUserImageAlt")} ${user?.username}`}
+                                                width={256}
+                                                height={256}
+                                                quality={50}
+                                            />
+                                        </button>
                                     </div>
-                                    <LinkButton
-                                        href={"/" + user?.username}
-                                        className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                        tabIndex={-1}
-                                        id="user-menu-item-0"
+                                    <div
+                                        className={`${isAvatarMenuOpen ? "absolute" : "hidden"} right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition-all focus:outline-none`}
+                                        role="menu"
+                                        aria-orientation="vertical"
+                                        aria-labelledby="user-menu-button"
                                     >
-                                        {t("NavUserMenuProfile")}
-                                    </LinkButton>
-                                    <LinkButton
-                                        href="/settings"
-                                        className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                        tabIndex={-1}
-                                        id="user-menu-item-1"
-                                    >
-                                        {t("NavUserMenuSettings")}
-                                    </LinkButton>
-                                    <LinkButton
-                                        href="/"
-                                        onClick={handleLogout}
-                                        className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
-                                        role="menuitem"
-                                        tabIndex={-1}
-                                        id="user-menu-item-2"
-                                    >
-                                        {t("NavUserMenuLogout")}
-                                    </LinkButton>
+                                        <div>
+                                            <p className="block select-none px-4 py-2 text-sm text-body-700">
+                                                {t("NavUserGreet")} @{user?.username}
+                                            </p>
+
+                                            <hr className="bg-background-100" />
+                                        </div>
+                                        <LinkButton
+                                            href={"/" + user?.username}
+                                            className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
+                                            role="menuitem"
+                                            tabIndex={-1}
+                                            id="user-menu-item-0"
+                                        >
+                                            {t("NavUserMenuProfile")}
+                                        </LinkButton>
+                                        <LinkButton
+                                            href="/settings"
+                                            className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
+                                            role="menuitem"
+                                            tabIndex={-1}
+                                            id="user-menu-item-1"
+                                        >
+                                            {t("NavUserMenuSettings")}
+                                        </LinkButton>
+                                        <LinkButton
+                                            href="/"
+                                            onClick={handleLogout}
+                                            className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
+                                            role="menuitem"
+                                            tabIndex={-1}
+                                            id="user-menu-item-2"
+                                        >
+                                            {t("NavUserMenuLogout")}
+                                        </LinkButton>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div
-                    className={`${isMobileMenuOpen ? "block" : "hidden"} sm:hidden`}
-                    id="mobile-menu"
-                >
-                    <div className="space-y-1 px-2 pb-3 pt-2">
-                        <LinkButton
-                            href="/home"
-                            className={mobileMenuLinksStyle}
-                            aria-current="page"
-                        >
-                            {t("NavMenuHome")}
-                        </LinkButton>
+                    <div
+                        className={`${isMobileMenuOpen ? "block" : "hidden"} sm:hidden`}
+                        id="mobile-menu"
+                    >
+                        <div className="space-y-1 px-2 pb-3 pt-2">
+                            <LinkButton
+                                href="/home"
+                                className={mobileMenuLinksStyle}
+                                aria-current="page"
+                            >
+                                {t("NavMenuHome")}
+                            </LinkButton>
+                        </div>
                     </div>
-                </div>
-            </nav>
-        </header>
+                </nav>
+            </header>
+        )
     )
 }

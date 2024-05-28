@@ -35,7 +35,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
             <AsideMenu />
             <div
                 id="content"
-                className="to_limit flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
+                className="flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
             >
                 <section
                     id="private-new-post"
