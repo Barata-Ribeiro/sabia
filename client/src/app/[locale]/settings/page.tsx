@@ -4,10 +4,18 @@ import LinkButton from "@/components/shared/link-button"
 import { UserContextResponse } from "@/interfaces/user"
 import { NULL_AVATAR } from "@/utils/constants"
 import getBase64 from "@/utils/get-base64"
+import { Metadata } from "next"
 import { getLocale } from "next-intl/server"
 import { HiExclamationCircle } from "react-icons/hi2"
 
-export default async function Settings() {
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: "Account Settings | Sabiá",
+        description: "Update your account settings."
+    }
+}
+
+export default async function SettingsPage() {
     const localeActive = await getLocale()
     const context = await getUserContext()
     const user = context.response?.data as UserContextResponse

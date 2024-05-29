@@ -28,7 +28,7 @@ const avarage_sans = Average_Sans({
 
 interface LocaleLayoutProps {
     children: ReactNode
-    modal: ReactNode
+    newPostModal: ReactNode
     params: { locale: string }
 }
 
@@ -45,7 +45,7 @@ export async function generateMetadata({
 
 export default async function RootLayout({
     children,
-    modal = null,
+    newPostModal = null,
     params: { locale }
 }: Readonly<LocaleLayoutProps>) {
     if (!locales.includes(locale)) notFound()
@@ -74,7 +74,7 @@ export default async function RootLayout({
                             {children}
                         </div>
                         <Footer />
-                        {modal}
+                        {newPostModal}
                     </UserContextProvider>
                 </body>
             </NextIntlClientProvider>

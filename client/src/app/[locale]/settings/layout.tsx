@@ -1,11 +1,20 @@
 import AsideMenu from "@/components/menu/aside-menu"
-import type { ReactNode } from "react"
+import { ReactNode } from "react"
 
-export default function Layout({ children }: { children: Readonly<ReactNode> }) {
+interface SettingsLayoutProps {
+    children: Readonly<ReactNode>
+    deleteModal?: ReactNode | null
+}
+
+export default function SettingsLayout({
+    children,
+    deleteModal = null
+}: SettingsLayoutProps) {
     return (
         <main role="main" className="flex h-full font-body">
             <AsideMenu />
             {children}
+            {deleteModal}
         </main>
     )
 }

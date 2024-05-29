@@ -1,3 +1,3 @@
-export default function Default() {
-    return null
-}
+import SettingsPage from "@/app/[locale]/settings/page"
+
+export default SettingsPage
