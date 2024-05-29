@@ -29,11 +29,13 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 export default async function ProfilePage({ params }: ProfilePageProps) {
     if (!params.username) return notFound()
 
-    const t = await getTranslations("ProfilePage")
-    const localeActive = await getLocale()
-    const isEnglishLang = localeActive === "en"
+    const [t, localeActive, profileState] = await Promise.all([
+        getTranslations("ProfilePage"),
+        getLocale(),
+        getUserPublicProfile(params.username)
+    ])
 
-    const profileState = await getUserPublicProfile(params.username)
+    const isEnglishLang = localeActive === "en"
     const profile = profileState.response?.data as UserPublicProfileResponse
 
     const feedState = await getUserPublicFeed({ userId: profile.id })
