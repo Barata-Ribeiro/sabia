@@ -17,6 +17,19 @@ export interface PostResponse {
 
 export interface PostSearchParams {
     perPage: number
-    page: number
-    query: string
+    page?: number
+    query?: string
+}
+
+export interface PostHashtagParams {
+    hashtag: string
+    page?: number
+    perPage?: number
+}
+
+export interface PostsHashtagResponse {
+    posts: PostResponse[]
+    total_pages: number
+    total_items: number
+    current_page: number
 }

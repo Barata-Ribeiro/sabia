@@ -1,4 +1,4 @@
-import { PostSearchParams } from "@/interfaces/post"
+import { PostHashtagParams, PostSearchParams } from "@/interfaces/post"
 import { FeedRequestParams } from "@/interfaces/user"
 
 const BACKEND_URL = process.env.BACKEND_ORIGIN || "http://localhost:8080"
@@ -35,6 +35,10 @@ export const USER_DELETE_ACCOUNT = (userId: string) =>
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
 export const POST_GET_BY_ID = (postId: string) =>
     `${BACKEND_URL}/api/v1/posts/public/${postId}`
+export const POST_GET_ALL_BY_HASHTAG = (params: PostHashtagParams) => {
+    const { hashtag, page, perPage } = params
+    return `${BACKEND_URL}/api/v1/posts/public/hashtag/${hashtag}?page=${page}&perPage=${perPage}`
+}
 export const POST_SEARCH = (params: PostSearchParams) => {
     const { perPage, page, query } = params
     return `${BACKEND_URL}/api/v1/posts/search?q=${query}&page=${page}&perPage=${perPage}`
