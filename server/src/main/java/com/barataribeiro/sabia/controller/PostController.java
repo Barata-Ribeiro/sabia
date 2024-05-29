@@ -86,6 +86,23 @@ public class PostController {
                                                               data));
     }
 
+    @GetMapping("/public/hashtag/{hashtag}")
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getPostsByHashtag(@PathVariable String hashtag,
+                                                                                         @RequestParam(defaultValue = "0") int page,
+                                                                                         @RequestParam(defaultValue = "10") int perPage,
+                                                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+        Map<String, Object> data = postService.getPostsByHashtag(hashtag, page, perPage, language);
+
+        String message = language == null || language.equals("en")
+                         ? "Posts retrieved successfully."
+                         : "Posts recuperados com sucesso.";
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              message,
+                                                              data));
+    }
+
     @PostMapping("/me/new-post")
     public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> createPost(@RequestBody PostRequestDTO body,
                                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,

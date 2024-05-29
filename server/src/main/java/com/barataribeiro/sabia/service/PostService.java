@@ -129,6 +129,24 @@ public class PostService {
         return createPostPageResponse(postPage);
     }
 
+    public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String language) {
+        boolean isEnglishLang = language == null || language.equals("en");
+
+        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
+
+        String invalidParamsMessage = isEnglishLang
+                                      ? "The number of items per page must be between 0 and 10."
+                                      : "O número de itens por página deve estar entre 0 e 10.";
+
+        if (perPage < 0 || perPage > 10) {
+            throw new BadRequest(invalidParamsMessage);
+        }
+
+        Page<Post> postPage = postRepository.findAllByHashtag(hashtag, paging);
+
+        return createPostPageResponse(postPage);
+    }
+
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "posts", allEntries = true),
