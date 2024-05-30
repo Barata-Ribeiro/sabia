@@ -1,4 +1,5 @@
 import getPost from "@/actions/post/get-post"
+import PostLikeButton from "@/components/post/post-like-button"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { NULL_AVATAR } from "@/utils/constants"
@@ -9,7 +10,6 @@ import Image from "next/image"
 import {
     HiArrowUturnLeft,
     HiCheckBadge,
-    HiHeart,
     HiMiniArrowPath,
     HiOutlineChatBubbleOvalLeft
 } from "react-icons/hi2"
@@ -138,15 +138,7 @@ export default async function PostPage({ params }: PostPageProps) {
                                 <p>{post.repost_count}</p>
                             </div>
 
-                            <div
-                                id="post-like"
-                                className="flex w-max items-center gap-2"
-                                title="Like"
-                                aria-label="Like Count"
-                            >
-                                <HiHeart size={24} />
-                                <p>{post.like_count}</p>
-                            </div>
+                            <PostLikeButton post={post} />
                         </div>
                     </footer>
                 </article>

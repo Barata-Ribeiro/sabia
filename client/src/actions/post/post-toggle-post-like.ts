@@ -2,15 +2,16 @@
 
 import logout from "@/actions/auth/logout"
 import { ApiResponse } from "@/interfaces/actions"
-import { POST_GET_IS_LIKED } from "@/utils/api-urls"
+import { POST_TOGGLE_LIKE } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import { getLocale } from "next-intl/server"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
-export default async function getIsPostLiked(postId: string) {
+export default async function postTogglePostLike(postId: string) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
-    const URL = POST_GET_IS_LIKED(postId)
+    const URL = POST_TOGGLE_LIKE(postId)
 
     try {
         const auth_token = cookies().get("auth_token")?.value
@@ -20,22 +21,26 @@ export default async function getIsPostLiked(postId: string) {
         }
 
         const response = await fetch(URL, {
-            method: "GET",
+            method: "POST",
             headers: {
                 Authorization: "Bearer " + auth_token,
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },
-            cache: "no-store"
+            body: JSON.stringify({})
         })
 
         const responseData = (await response.json()) as ApiResponse
 
         if (!response.ok) throw new Error(responseData.message)
 
-        const data = responseData.data as { liked: string }
+        revalidateTag("post")
 
-        return { ok: true, client_error: null, response: { ...responseData, data } }
+        return {
+            ok: true,
+            client_error: null,
+            response: responseData
+        }
     } catch (error) {
         return ResponseError(error, locale)
     }
