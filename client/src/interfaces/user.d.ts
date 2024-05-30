@@ -57,6 +57,19 @@ export interface FeedRequestParams {
     userId: string
 }
 
+export interface UserFollowersParams {
+    perPage?: number
+    page?: number
+    username: string
+}
+
+export interface FollowersResponse {
+    followers: UserPublicProfileResponse[]
+    total_pages: number
+    total_items: number
+    current_page: number
+}
+
 export interface FeedResponse {
     feed: PostResponse[]
     total_pages: number

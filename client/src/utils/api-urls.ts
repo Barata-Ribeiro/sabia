@@ -1,5 +1,5 @@
 import { PostHashtagParams, PostSearchParams } from "@/interfaces/post"
-import { FeedRequestParams } from "@/interfaces/user"
+import { FeedRequestParams, UserFollowersParams } from "@/interfaces/user"
 
 const BACKEND_URL = process.env.BACKEND_ORIGIN || "http://localhost:8080"
 
@@ -21,6 +21,10 @@ export const USER_GET_PUBLIC_PROFILE = (username: string) =>
 export const USER_GET_PUBLIC_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/public/${userId}/feed?perPage=${perPage}&page=${page}`
+}
+export const USER_GET_FOLLOWERS = (params: UserFollowersParams) => {
+    const { username, perPage, page } = params
+    return `${BACKEND_URL}/api/v1/users/public/${username}/followers?perPage=${perPage}&page=${page}`
 }
 export const IS_USER_FOLLOWING = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follows/${followId}`
