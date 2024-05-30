@@ -147,6 +147,12 @@ public class PostService {
         return createPostPageResponse(postPage);
     }
 
+    public Map<String, Object> isPostLiked(String postId, String requesting_user, String language) {
+        Boolean exists = likeRepository.existsByUser_UsernameAndPostId(requesting_user, postId);
+
+        return Map.of("liked", exists.toString());
+    }
+
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "posts", allEntries = true),

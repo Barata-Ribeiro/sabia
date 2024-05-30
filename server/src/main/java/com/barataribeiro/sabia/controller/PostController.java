@@ -119,6 +119,23 @@ public class PostController {
                                                               data));
     }
 
+    @PostMapping("/me/{postId}/reply")
+    public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> reply(@PathVariable String postId,
+                                                                         @RequestBody PostRequestDTO body,
+                                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                         Principal principal) {
+        PostResponseDTO data = postService.replyToPost(postId, body, principal.getName(), language);
+
+        String message = language == null || language.equals("en")
+                         ? "Post replied successfully."
+                         : "Post respondido com sucesso.";
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
+                                                              HttpStatus.CREATED.value(),
+                                                              message,
+                                                              data));
+    }
+
     @PostMapping("/me/{postId}/repost")
     public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> repost(@PathVariable String postId,
                                                                           @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
@@ -135,19 +152,18 @@ public class PostController {
                                                               data));
     }
 
-    @PostMapping("/me/{postId}/reply")
-    public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> reply(@PathVariable String postId,
-                                                                         @RequestBody PostRequestDTO body,
-                                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                                                         Principal principal) {
-        PostResponseDTO data = postService.replyToPost(postId, body, principal.getName(), language);
+    @GetMapping("/me/{postId}/is-liked")
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> isPostLiked(@PathVariable String postId,
+                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                   Principal principal) {
+        Map<String, Object> data = postService.isPostLiked(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
-                         ? "Post replied successfully."
-                         : "Post respondido com sucesso.";
+                         ? "Post liked status retrieved successfully."
+                         : "Status de curtida do post recuperado com sucesso.";
 
-        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
-                                                              HttpStatus.CREATED.value(),
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
                                                               message,
                                                               data));
     }
