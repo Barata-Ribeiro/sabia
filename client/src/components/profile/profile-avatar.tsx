@@ -13,10 +13,7 @@ export default async function ProfileAvatar({
     const t = await getTranslations("Profile.Avatar")
     const localeActive = await getLocale()
 
-    const avatarBlur = await getBase64(
-        profile.avatar_image_url ?? NULL_AVATAR,
-        localeActive
-    )
+    const avatarBlur = await getBase64(profile.avatar_image_url, localeActive)
 
     return (
         <div style={{ marginTop: "-6rem" }}>
@@ -28,7 +25,7 @@ export default async function ProfileAvatar({
                     className="pointer-events-none absolute rounded-full border-4 border-background-600 bg-background-600 object-cover object-center italic"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     src={profile.avatar_image_url ?? NULL_AVATAR}
-                    placeholder="blur"
+                    placeholder={profile.avatar_image_url ? "blur" : "empty"}
                     blurDataURL={avatarBlur}
                     alt={t("AltAvatar")}
                     priority
