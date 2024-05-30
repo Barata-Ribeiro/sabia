@@ -45,11 +45,11 @@ public class UserService {
     private final Validation validation;
     private final EntityMapper entityMapper;
 
-    @Cacheable(value = "userPublicFollowers", key = "{#userId, #page, #perPage}")
-    public Map<String, Object> getFollowers(String userId, int page, int perPage) {
+    @Cacheable(value = "userPublicFollowers", key = "{#username, #page, #perPage}")
+    public Map<String, Object> getFollowers(String username, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
-        Page<Follow> followersPage = followRepository.findByFollowedIdOrderByFollowedAtDesc(userId, paging);
+        Page<Follow> followersPage = followRepository.findByFollowedUsernameOrderByFollowedAtDesc(username, paging);
 
         List<Follow> followers = new ArrayList<>(followersPage.getContent());
 

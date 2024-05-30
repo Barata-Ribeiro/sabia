@@ -53,12 +53,12 @@ public class UserController {
                                                               data));
     }
 
-    @GetMapping(value = "/public/{userId}/followers")
-    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getFollowers(@PathVariable String userId,
+    @GetMapping(value = "/public/{username}/followers")
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getFollowers(@PathVariable String username,
                                                                                     @RequestParam(defaultValue = "0") int page,
-                                                                                    @RequestParam(defaultValue = "5") int perPage,
+                                                                                    @RequestParam(defaultValue = "10") int perPage,
                                                                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = userService.getFollowers(userId, page, perPage);
+        Map<String, Object> data = userService.getFollowers(username, page, perPage);
 
         String message = language == null || language.equals("en")
                          ? "Followers retrieved successfully."

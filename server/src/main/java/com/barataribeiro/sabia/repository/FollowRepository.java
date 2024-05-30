@@ -12,5 +12,5 @@ public interface FollowRepository extends JpaRepository<Follow, String> {
 
     Optional<Follow> findByFollowerIdAndFollowedId(String followerId, String followedId);
 
-    Page<Follow> findByFollowedIdOrderByFollowedAtDesc(String followedId, Pageable pageable);
+    Page<Follow> findByFollowedUsernameOrderByFollowedAtDesc(String followedId, Pageable pageable);
 }
