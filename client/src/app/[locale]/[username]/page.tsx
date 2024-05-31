@@ -112,19 +112,24 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                             </div>
                         </div>
 
-                        <div className="flex w-full items-start justify-start divide-x divide-solid divide-background-600 pt-3">
+                        <div className="flex w-max items-start justify-start divide-x divide-solid pt-3">
                             <div className="pr-3 text-center">
                                 <span className="font-bold text-secondary-600">
                                     {profile.following_count}
                                 </span>
                                 <span className="text-body-900">{t("Followings")}</span>
                             </div>
-                            <div className="px-3 text-center">
+                            <LinkButton
+                                href={"/" + profile.username + "/followers"}
+                                className="px-3 text-center"
+                            >
                                 <span className="font-bold text-secondary-600">
                                     {profile.followers_count}
                                 </span>
-                                <span className="text-body-900">{t("Followers")}</span>
-                            </div>
+                                <span className="text-body-900 hover:text-body-700">
+                                    {t("Followers")}
+                                </span>
+                            </LinkButton>
                         </div>
                     </div>
                 </div>
