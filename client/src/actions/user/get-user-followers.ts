@@ -8,7 +8,7 @@ import { getLocale } from "next-intl/server"
 
 export default async function getUserFollowers(username: string) {
     const locale = await getLocale()
-    const URL = USER_GET_FOLLOWERS({ username, perPage: 10, page: 1 })
+    const URL = USER_GET_FOLLOWERS({ username, perPage: 10, page: 0 })
 
     try {
         const response = await fetch(URL, {
@@ -17,7 +17,7 @@ export default async function getUserFollowers(username: string) {
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },
-            next: { tags: ["context", "profile", "followers"] }
+            next: { revalidate: 10, tags: ["context", "profile", "followers"] }
         })
 
         const responseData = (await response.json()) as ApiResponse
