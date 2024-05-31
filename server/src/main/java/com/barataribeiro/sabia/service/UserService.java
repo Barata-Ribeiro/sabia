@@ -49,7 +49,7 @@ public class UserService {
     public Map<String, Object> getFollowers(String username, int page, int perPage) {
         Pageable paging = PageRequest.of(page, perPage);
 
-        Page<Follow> followersPage = followRepository.findByFollowedUsernameOrderByFollowedAtDesc(username, paging);
+        Page<Follow> followersPage = followRepository.findByFollowed_UsernameOrderByFollowedAtDesc(username, paging);
 
         List<Follow> followers = new ArrayList<>(followersPage.getContent());
 
@@ -187,7 +187,6 @@ public class UserService {
     }
 
     public Map<String, String> checkIfUserFollows(String userId, String followedId) {
-
         Boolean exists = followRepository.existsByFollowerIdAndFollowedId(userId, followedId);
 
         return Map.of("follows", exists.toString());
