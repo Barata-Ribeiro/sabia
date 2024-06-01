@@ -41,7 +41,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                     quality={50}
                 />
                 <article className="flex flex-col gap-1">
-                    <div className="flex w-max gap-1">
+                    <div className="flex w-max flex-col gap-1 md:flex-row">
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
@@ -59,18 +59,20 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                                 </span>
                             )}
                         </p>
-                        <p className="font-body text-body-500">
-                            @{post.author.username}
-                        </p>
-                        <span className="text-body-300">·</span>
-                        <LinkButton
-                            href={post.author.username + "/status/" + post.id}
-                            className="text-body-500 hover:underline"
-                        >
-                            <time dateTime={post.created_at}>
-                                {dateToHowLongAgo(post.created_at, localeActive)}
-                            </time>
-                        </LinkButton>
+                        <div className="flex gap-1">
+                            <p className="font-body text-body-500">
+                                @{post.author.username}
+                            </p>
+                            <span className="text-body-300">·</span>
+                            <LinkButton
+                                href={post.author.username + "/status/" + post.id}
+                                className="text-body-500 hover:underline"
+                            >
+                                <time dateTime={post.created_at}>
+                                    {dateToHowLongAgo(post.created_at, localeActive)}
+                                </time>
+                            </LinkButton>
+                        </div>
                     </div>
 
                     <p className="text-pretty text-body-900">

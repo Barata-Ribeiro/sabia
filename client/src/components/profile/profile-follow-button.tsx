@@ -73,7 +73,7 @@ export default function ProfileFollowButton({ userId }: { userId: string }) {
                 isOwnProfile ? "Edit Profile" : isFollowing ? "Unfollow" : "Follow"
             }
             title={isOwnProfile ? "Edit Profile" : isFollowing ? "Unfollow" : "Follow"}
-            className="rounded-full px-4 py-2 font-heading"
+            className="px-2 py-0 font-heading text-sm md:rounded-full md:px-4 md:py-2 md:text-base"
             disabled={isLoading}
             aria-disabled={isLoading}
         >

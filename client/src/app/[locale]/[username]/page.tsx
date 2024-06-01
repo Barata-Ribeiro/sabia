@@ -43,7 +43,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
     return (
         <div className="w-max max-w-[37.5rem] flex-1 overflow-y-scroll border-x">
-            <header className="w-full p-4">
+            <header className="sticky top-0 z-10 w-full border-b bg-background-50 p-4">
                 <ProfileTop profile={profile} englishLang={isEnglishLang} />
             </header>
 
