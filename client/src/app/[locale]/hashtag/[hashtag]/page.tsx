@@ -1,17 +1,26 @@
 import getPostsByHashtag from "@/actions/post/get-posts-by-hashtag"
+import PaginatedFeed from "@/components/feed/paginated-feed"
 import AsideMenu from "@/components/menu/aside-menu"
 import LinkButton from "@/components/shared/link-button"
-import { PostResponse, PostsHashtagResponse } from "@/interfaces/post"
+import { PostsHashtagResponse } from "@/interfaces/post"
+import { redirect } from "@/navigation"
+import { notFound } from "next/navigation"
 import { HiArrowUturnLeft } from "react-icons/hi2"
 
 interface HashtagPageProps {
     params: { hashtag: string }
+    searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function HashtagPage({ params }: HashtagPageProps) {
-    const postsState = await getPostsByHashtag({ hashtag: params.hashtag })
-    const data = postsState.response?.data as PostsHashtagResponse
-    const posts = data.posts as PostResponse[]
+export default async function HashtagPage({ params, searchParams }: HashtagPageProps) {
+    if (!params.hashtag) return notFound()
+
+    let page = 0
+    if (!searchParams.page) return redirect(`/hashtag/${params.hashtag}?page=0`)
+    else page = parseInt(searchParams.page as string)
+
+    const postsState = await getPostsByHashtag({ hashtag: params.hashtag, page })
+    const hashtagResponse = postsState.response?.data as PostsHashtagResponse
 
     return (
         <main role="main" className="flex h-full">
@@ -33,6 +42,12 @@ export default async function HashtagPage({ params }: HashtagPageProps) {
                         </h2>
                     </div>
                 </div>
+
+                <PaginatedFeed
+                    feedResponse={hashtagResponse}
+                    hashtag={params.hashtag}
+                    page={page}
+                />
             </section>
         </main>
     )
