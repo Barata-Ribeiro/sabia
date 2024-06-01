@@ -12,7 +12,7 @@ export default function formatTextWithHashtags(text: string, hashtags: string[])
             return (
                 <Fragment key={index + "-" + hashtag}>
                     <LinkButton
-                        href={"/hashtag/" + hashtag}
+                        href={"/hashtag/" + hashtag + "?page=0"}
                         id="hashtag-link"
                         className="select-auto hover:underline"
                         aria-label={"#" + hashtag}
