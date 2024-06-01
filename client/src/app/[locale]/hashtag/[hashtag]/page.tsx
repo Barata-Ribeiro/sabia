@@ -26,11 +26,11 @@ export default async function HashtagPage({ params, searchParams }: HashtagPageP
         <main role="main" className="flex h-full">
             <AsideMenu />
             <section
-                id="content"
+                id="hashtag-section"
                 className="max-w-[37.5rem] flex-1 overflow-y-scroll border-x"
             >
-                <div className="sticky top-0 w-full border-b p-4">
-                    <div className="flex w-max items-center gap-6 text-2xl">
+                <div className="sticky top-0 flex w-full border-b bg-background-50 p-4">
+                    <div className="flex items-center gap-6 text-2xl">
                         <LinkButton
                             href="/home"
                             className="cursor-pointer rounded-full p-2 hover:bg-background-100"
@@ -43,11 +43,7 @@ export default async function HashtagPage({ params, searchParams }: HashtagPageP
                     </div>
                 </div>
 
-                <PaginatedFeed
-                    feedResponse={hashtagResponse}
-                    hashtag={params.hashtag}
-                    page={page}
-                />
+                <PaginatedFeed feedResponse={hashtagResponse} page={page} />
             </section>
         </main>
     )

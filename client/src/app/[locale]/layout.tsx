@@ -70,7 +70,7 @@ export default async function RootLayout({
                 >
                     <UserContextProvider user={user}>
                         {user && <Header user={user} />}
-                        <div className="flex flex-1 flex-col md:container has-[#new-post]:overflow-auto has-[#public-feed-section]:overflow-auto">
+                        <div className="flex flex-1 flex-col md:container has-[#new-post,#public-feed-section,#hashtag-section]:overflow-auto">
                             {children}
                         </div>
                         <Footer />
