@@ -120,7 +120,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                                 <span className="text-body-900">{t("Followings")}</span>
                             </div>
                             <LinkButton
-                                href={"/" + profile.username + "/followers"}
+                                href={"/" + profile.username + "/followers?page=0"}
                                 className="px-3 text-center"
                             >
                                 <span className="font-bold text-secondary-600">

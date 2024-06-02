@@ -6,7 +6,7 @@ import { USER_GET_FOLLOWERS } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import { getLocale } from "next-intl/server"
 
-export default async function getUserFollowers(username: string) {
+export default async function getUserFollowers(username: string, page?: number) {
     const locale = await getLocale()
     const URL = USER_GET_FOLLOWERS({ username, perPage: 10, page: 0 })
 

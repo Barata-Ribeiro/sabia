@@ -22,7 +22,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
         event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
     ) {
         if (event.target instanceof HTMLAnchorElement) return
-        router.push(username + "/status/" + postId)
+        router.push("/" + username + "/status/" + postId)
     }
 
     return (
@@ -65,7 +65,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                             </p>
                             <span className="text-body-300">·</span>
                             <LinkButton
-                                href={post.author.username + "/status/" + post.id}
+                                href={"/" + post.author.username + "/status/" + post.id}
                                 className="text-body-500 hover:underline"
                             >
                                 <time dateTime={post.created_at}>
