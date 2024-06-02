@@ -51,45 +51,42 @@ export default function CircularPagination({
             >
                 <HiMiniArrowLeft size={16} /> {t("PrevButton")}
             </IconButton>
-            <div className="flex items-center gap-2">
-                {[...Array(Math.min(totalPages, 2))].map((_, index) => (
-                    <IconButton
-                        key={index}
-                        className={twMerge(
-                            "h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200",
-                            page === index && "bg-background-300"
-                        )}
-                        onClick={() => goToPage(index)}
-                        aria-label={t("AriaLabelPage") + (index + 1)}
-                    >
-                        {index + 1}
-                    </IconButton>
-                ))}
-                {totalPages > 5 && (
-                    <IconButton
-                        className={twMerge(
-                            "h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200",
-                            page > 1 && page < totalPages - 2 && "bg-background-300"
-                        )}
-                        onClick={handlePageInput}
-                        aria-label={t("AriaLabelInput")}
-                    >
-                        ...
-                    </IconButton>
-                )}
-                {[...Array(Math.min(totalPages, 2))].map((_, index) => (
-                    <IconButton
-                        key={index}
-                        className={twMerge(
-                            "h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200",
-                            page === totalPages - 2 + index && "bg-background-300"
-                        )}
-                        onClick={() => goToPage(totalPages - 2 + index)}
-                        aria-label={t("AriaLabelPage") + (totalPages - 1 + index)}
-                    >
-                        {totalPages - 1 + index}
-                    </IconButton>
-                ))}
+            <div className="flex flex-wrap items-center gap-2">
+                {totalPages > 1 &&
+                    [...Array(totalPages)].map((_, index) => {
+                        if (
+                            totalPages <= 4 ||
+                            index === 0 ||
+                            index === totalPages - 1 ||
+                            Math.abs(page - index) <= 1
+                        ) {
+                            return (
+                                <IconButton
+                                    key={index}
+                                    className={twMerge(
+                                        "h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200",
+                                        page === index && "bg-background-300"
+                                    )}
+                                    onClick={() => goToPage(index)}
+                                    aria-label={t("AriaLabelPage") + (index + 1)}
+                                >
+                                    {index + 1}
+                                </IconButton>
+                            )
+                        } else if (index === page - 2 || index === page + 2) {
+                            return (
+                                <IconButton
+                                    key={index}
+                                    className="h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200"
+                                    onClick={handlePageInput}
+                                    aria-label={t("AriaLabelInput")}
+                                >
+                                    ...
+                                </IconButton>
+                            )
+                        }
+                        return null
+                    })}
             </div>
             <IconButton
                 type="button"
