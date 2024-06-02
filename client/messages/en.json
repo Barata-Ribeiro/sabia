@@ -32,6 +32,14 @@
         "Followers": " Followers",
         "PageEmptyPosts": "No posts to display. How about creating one?"
     },
+    "HashtagPage": {
+        "title": "Posts with #",
+        "description": "List of posts with the hashtag #",
+        "AriaLabelMain": "Main content",
+        "AriaLabelHashtag": "Hashtag Section",
+        "AriaLabelBackButton": "Go back to previous page",
+        "PageEmptyPosts": "No posts to display with this hashtag."
+    },
     "_comment-2": "Components related translations.",
     "LocaleSwitcher": {
         "SelectLanguage": "Select Language",
@@ -94,6 +102,18 @@
         "Public": {
             "AriaLabelList": "User's posts feed",
             "EndOfFeed": "You have reached the end of the feed."
+        },
+        "Paginated": {
+            "AriaLabelList": "List of posts"
+        },
+        "CircularPagination": {
+            "Prompt": "Type the page between 1 and ",
+            "PrevButton": "Previous",
+            "NextButton": "Next",
+            "AriaLabelPrevious": "Go to previous page",
+            "AriaLabelNext": "Go to next page",
+            "AriaLabelPage": "Go to page ",
+            "AriaLabelInput": "Choose a specific page"
         }
     },
     "Profile": {
