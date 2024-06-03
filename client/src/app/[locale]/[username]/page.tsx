@@ -20,6 +20,14 @@ export async function generateMetadata({ params }: ProfilePageProps) {
     const profileState = await getUserPublicProfile(params.username)
     const profile = profileState.response?.data as UserPublicProfileResponse
 
+    if (!params.username || !profileState.ok) {
+        return {
+            title: profileState.client_error + " | Sabiá" ?? "404 | Sabiá",
+            description:
+                "Sorry, we can't find that page. You'll find lots to explore on the home page."
+        }
+    }
+
     return {
         title: `@${profile.username} | Sabiá`,
         description: `${profile.display_name} (@${profile.username})${profile.biography ? ` – ${profile.biography}` : ""}`
@@ -37,6 +45,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
     const isEnglishLang = localeActive === "en"
     const profile = profileState.response?.data as UserPublicProfileResponse
+
+    if (!profile || profileState.client_error) return notFound()
 
     const feedState = await getUserPublicFeed({ userId: profile.id })
     const feedResponse = feedState.response?.data as FeedResponse
