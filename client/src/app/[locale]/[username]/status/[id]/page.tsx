@@ -1,5 +1,6 @@
 import getPost from "@/actions/post/get-post"
 import Post from "@/components/post/post"
+import Repost from "@/components/post/repost"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { Metadata } from "next"
@@ -43,7 +44,11 @@ export default async function PostPage({ params }: PostPageProps) {
                 </div>
             </div>
             <div className="w-full px-4">
-                <Post post={post} locale={localeActive} />
+                {post.repost_off !== null ? (
+                    <Repost post={post} locale={localeActive} />
+                ) : (
+                    <Post post={post} locale={localeActive} />
+                )}
             </div>
         </section>
     )
