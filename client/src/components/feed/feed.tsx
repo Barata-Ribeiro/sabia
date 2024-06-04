@@ -3,6 +3,7 @@
 import getUserFeed from "@/actions/user/get-user-feed"
 import getUserPublicFeed from "@/actions/user/get-user-public-feed"
 import FeedPost from "@/components/feed/feed-post"
+import FeedRepost from "@/components/feed/feed-repost"
 import Loading from "@/components/shared/loading"
 import { PostResponse } from "@/interfaces/post"
 import { FeedResponse } from "@/interfaces/user"
@@ -77,9 +78,19 @@ export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
                 role="list"
                 aria-label={t("AriaLabelList")}
             >
-                {feedPosts.map((post) => (
-                    <FeedPost key={post.author.username + "-" + post.id} post={post} />
-                ))}
+                {feedPosts.map((post) =>
+                    !post.repost_off ? (
+                        <FeedPost
+                            key={post.author.username + "-" + post.id}
+                            post={post}
+                        />
+                    ) : (
+                        <FeedRepost
+                            key={post.author.username + "-" + post.id}
+                            post={post}
+                        />
+                    )
+                )}
             </ul>
             <div ref={ref} className="mx-auto mt-auto flex h-max w-max pt-4">
                 {infinite ? (
