@@ -35,6 +35,7 @@ export default async function postTogglePostLike(postId: string) {
         if (!response.ok) throw new Error(responseData.message)
 
         revalidateTag("post")
+        revalidateTag("like")
 
         return {
             ok: true,

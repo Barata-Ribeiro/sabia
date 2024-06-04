@@ -26,7 +26,7 @@ export default async function getIsPostLiked(postId: string) {
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },
-            cache: "no-store"
+            next: { revalidate: 30, tags: ["like"] }
         })
 
         const responseData = (await response.json()) as ApiResponse
