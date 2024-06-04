@@ -1,14 +1,11 @@
 import PostLikeButton from "@/components/post/post-like-button"
+import PostRepostButton from "@/components/post/post-repost-button"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { NULL_AVATAR } from "@/utils/constants"
 import { dateTimeFormat } from "@/utils/date-format"
 import Image from "next/image"
-import {
-    HiCheckBadge,
-    HiMiniArrowPath,
-    HiOutlineChatBubbleOvalLeft
-} from "react-icons/hi2"
+import { HiCheckBadge, HiOutlineChatBubbleOvalLeft } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
 export default function Post(props: { post: PostResponse; locale: string }) {
@@ -80,15 +77,7 @@ export default function Post(props: { post: PostResponse; locale: string }) {
                         <p>{props.post.reply_count}</p>
                     </div>
 
-                    <div
-                        id="post-repost"
-                        className="flex w-max items-center gap-2"
-                        title="Repost"
-                        aria-label="Repost Count"
-                    >
-                        <HiMiniArrowPath size={24} />
-                        <p>{props.post.repost_count}</p>
-                    </div>
+                    <PostRepostButton post={props.post} />
 
                     <PostLikeButton post={props.post} />
                 </div>

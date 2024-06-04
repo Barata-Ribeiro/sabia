@@ -1,5 +1,7 @@
 "use client"
 
+import PostLikeButton from "@/components/post/post-like-button"
+import PostRepostButton from "@/components/post/post-repost-button"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { useRouter } from "@/navigation"
@@ -41,7 +43,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                     quality={50}
                 />
                 <article className="flex flex-col gap-1">
-                    <div className="flex w-max flex-col gap-1 md:flex-row">
+                    <header className="flex w-max flex-col gap-1 md:flex-row">
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
@@ -73,13 +75,18 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                                 </time>
                             </LinkButton>
                         </div>
-                    </div>
+                    </header>
 
                     <p className="text-pretty text-body-900">
                         {post.hashtags.length > 0
                             ? formatTextWithHashtags(post.text, post.hashtags)
                             : post.text}
                     </p>
+
+                    <footer className="mt-2 flex items-center justify-between">
+                        <PostRepostButton post={post} displayNumber={false} />
+                        <PostLikeButton post={post} displayNumber={false} />
+                    </footer>
                 </article>
             </div>
         </li>
