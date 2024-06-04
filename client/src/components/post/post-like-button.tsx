@@ -9,7 +9,15 @@ import { useEffect, useState } from "react"
 import { HiHeart } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
-export default function PostLikeButton({ post }: { post: PostResponse }) {
+interface PostLikeButtonProps {
+    post: PostResponse
+    displayNumber?: boolean
+}
+
+export default function PostLikeButton({
+    post,
+    displayNumber = true
+}: PostLikeButtonProps) {
     const [isLiked, setIsLiked] = useState(false)
     const [checkingIsLiked, setCheckingIsLiked] = useState(true)
     const [loading, setLoading] = useState(false)
@@ -73,7 +81,7 @@ export default function PostLikeButton({ post }: { post: PostResponse }) {
             >
                 <HiHeart size={24} />
             </button>
-            <p>{post.like_count}</p>
+            {displayNumber && <p aria-label="Like Count">{post.like_count}</p>}
         </div>
     )
 }
