@@ -159,7 +159,7 @@ public class UserService {
 
         authors.add(user);
 
-        Page<Post> postPage = postRepository.findByAuthorInOrderByCreatedAtDesc(authors, paging);
+        Page<Post> postPage = postRepository.findDistinctByAuthorInOrderByCreatedAtDesc(authors, paging);
 
         return createResponseFromPostPage(postPage);
     }
@@ -181,7 +181,7 @@ public class UserService {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
-        Page<Post> postPage = postRepository.findAllByAuthorId(user.getId(), paging);
+        Page<Post> postPage = postRepository.findDistinctAllByAuthorId(user.getId(), paging);
 
         return createResponseFromPostPage(postPage);
     }

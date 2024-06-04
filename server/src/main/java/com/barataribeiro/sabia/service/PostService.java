@@ -56,7 +56,7 @@ public class PostService {
             throw new BadRequest(invalidParamsMessage);
         }
 
-        Page<Post> postPage = postRepository.findAllByAuthorId(userId, paging);
+        Page<Post> postPage = postRepository.findDistinctAllByAuthorId(userId, paging);
 
         return createPostPageResponse(postPage);
     }

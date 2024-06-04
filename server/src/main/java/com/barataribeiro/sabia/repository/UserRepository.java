@@ -15,14 +15,14 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
     @Override
-    @EntityGraph(attributePaths = {"posts", "liked_posts", "followers", "followings"})
+    @EntityGraph(attributePaths = {"followers", "followings", "posts.hashtags", "liked_posts"})
     @NonNull
     Optional<User> findById(@NonNull String userId);
 
-    @EntityGraph(attributePaths = {"posts", "liked_posts", "followers", "followings"})
+    @EntityGraph(attributePaths = {"followers", "followings", "posts.hashtags", "liked_posts"})
     Optional<User> findByUsername(String username);
 
-    @EntityGraph(attributePaths = {"posts", "liked_posts", "followers", "followings"})
+    @EntityGraph(attributePaths = {"followers", "followings", "posts.hashtags", "liked_posts"})
     @Query("SELECT u FROM User u WHERE " +
             "LOWER(u.username) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(u.display_name) LIKE LOWER(CONCAT('%', :query, '%')) OR " +

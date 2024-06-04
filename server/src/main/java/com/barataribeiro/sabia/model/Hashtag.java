@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hashtags", indexes = @Index(name = "idx_tag", columnList = "tag"))
+@Table(name = "hashtags", indexes = {
+        @Index(name = "idx_tag", columnList = "tag"),
+        @Index(name = "idx_hashtag_tag_unq", columnList = "tag", unique = true)
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

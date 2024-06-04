@@ -1,5 +1,7 @@
 package com.barataribeiro.sabia.dto.user;
 
+import java.io.Serializable;
+
 public record PublicProfileResponseDTO(String id,
                                        String username,
                                        String display_name,
@@ -16,5 +18,5 @@ public record PublicProfileResponseDTO(String id,
                                        Integer posts_count,
                                        Integer likes_count,
                                        String created_at,
-                                       String updated_at) {
+                                       String updated_at) implements Serializable {
 }

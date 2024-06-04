@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.io.Serializable;
+
 public record ProfileRequestDTO(@Size(min = 3, max = 20) String username,
                                 @Size(min = 3, max = 20) String display_name,
                                 @Size(min = 3, max = 50) String full_name,
@@ -16,5 +18,5 @@ public record ProfileRequestDTO(@Size(min = 3, max = 20) String username,
                                 String cover_image_url,
                                 String biography,
                                 String website,
-                                String location) {
+                                String location) implements Serializable {
 }

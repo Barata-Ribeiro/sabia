@@ -64,7 +64,7 @@ public class DatabaseTestSeeder {
             userRepository.saveAll(Arrays.asList(user1, user2, jason));
 
             // Create posts
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 200; i++) {
                 Post post1 = new Post();
                 post1.setAuthor(user1);
                 post1.setText("Post " + i + " from User One");

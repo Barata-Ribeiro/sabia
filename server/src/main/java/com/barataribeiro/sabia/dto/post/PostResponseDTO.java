@@ -2,6 +2,7 @@ package com.barataribeiro.sabia.dto.post;
 
 import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
 
+import java.io.Serializable;
 import java.util.List;
 
 public record PostResponseDTO(String id,
@@ -15,5 +16,5 @@ public record PostResponseDTO(String id,
                               Long reply_count,
                               PostResponseDTO in_reply_to,
                               String created_at,
-                              String updated_at) {
+                              String updated_at) implements Serializable {
 }

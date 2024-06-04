@@ -8,7 +8,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name = "hashtag_posts")
+@Table(name = "hashtag_posts", indexes = {
+        @Index(name = "idx_hashtagposts_hashtags_id", columnList = "hashtags_id"),
+        @Index(name = "idx_hashtagposts_posts_id", columnList = "posts_id")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

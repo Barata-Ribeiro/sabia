@@ -2,6 +2,8 @@ package com.barataribeiro.sabia.dto.user;
 
 import com.barataribeiro.sabia.model.Roles;
 
+import java.io.Serializable;
+
 public record ContextResponseDTO(String id,
                                  String username,
                                  String display_name,
@@ -20,5 +22,5 @@ public record ContextResponseDTO(String id,
                                  Long follower_count,
                                  Long following_count,
                                  String created_at,
-                                 String updated_at) {
+                                 String updated_at) implements Serializable {
 }
