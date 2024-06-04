@@ -4,7 +4,7 @@ import postNewRepost from "@/actions/post/post-new-repost"
 import { PostResponse } from "@/interfaces/post"
 import { useRouter } from "@/navigation"
 import tw from "@/utils/tw"
-import { useState } from "react"
+import { type MouseEvent, useState } from "react"
 import { HiMiniArrowPath } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
@@ -27,7 +27,10 @@ export default function PostRepostButton({
 
     const buttonStyles = twMerge(buttonBaseStyles, setRepostedStyleLoading)
 
-    async function handleRepost() {
+    async function handleRepost(
+        event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+    ) {
+        event.stopPropagation()
         if (loading) return
 
         setLoading(true)
@@ -60,7 +63,7 @@ export default function PostRepostButton({
             <button
                 type="button"
                 className={buttonStyles}
-                onClick={handleRepost}
+                onClick={(event) => handleRepost(event)}
                 disabled={loading}
                 aria-disabled={loading}
             >

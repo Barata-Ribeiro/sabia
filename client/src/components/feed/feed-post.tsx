@@ -23,6 +23,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
         postId: string,
         event: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
     ) {
+        if (event.isPropagationStopped()) return
         if (event.target instanceof HTMLAnchorElement) return
         router.push("/" + username + "/status/" + postId)
     }

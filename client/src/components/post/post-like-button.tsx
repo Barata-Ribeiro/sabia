@@ -5,6 +5,7 @@ import postTogglePostLike from "@/actions/post/post-toggle-post-like"
 import { useUser } from "@/context/user-context-provider"
 import { PostResponse } from "@/interfaces/post"
 import tw from "@/utils/tw"
+import type { MouseEvent } from "react"
 import { useEffect, useState } from "react"
 import { HiHeart } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
@@ -31,7 +32,10 @@ export default function PostLikeButton({
         loading || checkingIsLiked ? tw`animate-pulse text-background-300` : ""
     const buttonStyles = twMerge(buttonBaseStyles, setLikedStyle, setLikedStyleLoading)
 
-    async function handleLike() {
+    async function handleLike(
+        event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+    ) {
+        event.stopPropagation()
         if (loading) return
 
         setLoading(true)
@@ -75,7 +79,7 @@ export default function PostLikeButton({
             <button
                 type="button"
                 className={buttonStyles}
-                onClick={handleLike}
+                onClick={(event) => handleLike(event)}
                 disabled={isOwnerPost || loading || checkingIsLiked}
                 aria-disabled={isOwnerPost || loading || checkingIsLiked}
             >
