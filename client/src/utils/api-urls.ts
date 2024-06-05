@@ -37,6 +37,8 @@ export const USER_DELETE_ACCOUNT = (userId: string) =>
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
+export const POST_REPLY = (postId: string) =>
+    `${BACKEND_URL}/api/v1/posts/me/${postId}/reply`
 export const POST_GET_BY_ID = (postId: string) =>
     `${BACKEND_URL}/api/v1/posts/public/${postId}`
 export const POST_GET_IS_LIKED = (postId: string) =>
