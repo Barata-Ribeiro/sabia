@@ -87,6 +87,17 @@
         "NewPostButtonLoading": "Posting...",
         "NewPostButtonSubmit": "Post"
     },
+    "ReplyPostModal": {
+        "ReplyPostTitle": "Reply to Post",
+        "ReplyPostSubtitle": "Reply to this post with your thoughts and ideas.",
+        "ReplyPostAvatarAlt": "Avatar of ",
+        "ReplyPostCloseButton": "Close"
+    },
+    "ReplyPostForm": {
+        "TextAreaLabel": "Reply Post",
+        "ReplyPostButtonLoading": "Replying...",
+        "ReplyPostButtonSubmit": "Reply"
+    },
     "AsideMenu": {
         "InputSearch": "Search",
         "ButtonProfile": "Profile",

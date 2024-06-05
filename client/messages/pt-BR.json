@@ -87,6 +87,17 @@
         "NewPostButtonLoading": "Postando...",
         "NewPostButtonSubmit": "Postar"
     },
+    "ReplyPostModal": {
+        "ReplyPostTitle": "Responder Postagem",
+        "ReplyPostSubtitle": "Responda a postagem com seus pensamentos e ideias!",
+        "ReplyPostAvatarAlt": "Avatar de ",
+        "ReplyPostCloseButton": "Fechar"
+    },
+    "ReplyPostForm": {
+        "TextAreaLabel": "Responder Postagem",
+        "ReplyPostButtonLoading": "Respondendo...",
+        "ReplyPostButtonSubmit": "Responder"
+    },
     "AsideMenu": {
         "InputSearch": "Pesquisar",
         "ButtonProfile": "Perfil",
