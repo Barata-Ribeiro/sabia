@@ -8,7 +8,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name = "likes", indexes = @Index(name = "idx_user_id", columnList = "user_id"))
+@Table(name = "likes", indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id"),
+        @Index(name = "idx_like_post_id", columnList = "post_id"),
+        @Index(name = "idx_like_user_id_post_id", columnList = "user_id, post_id")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,11 +26,11 @@ public class Like {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false, updatable = false)
+    @JoinColumn(name = "post_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Post post;
 
     @Column(name = "created_at")

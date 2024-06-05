@@ -24,8 +24,9 @@ public class PostController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getAllPostsFromUser(@RequestParam String userId,
                                                                                            @RequestParam(defaultValue = "0") int page,
                                                                                            @RequestParam(defaultValue = "6") int perPage,
-                                                                                           @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = postService.getAllPosts(userId, page, perPage, language);
+                                                                                           @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                           Principal principal) {
+        Map<String, Object> data = postService.getAllPosts(userId, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Posts retrieved successfully."
@@ -39,8 +40,9 @@ public class PostController {
 
     @GetMapping("/public/{postId}")
     public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> getPostById(@PathVariable String postId,
-                                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        PostResponseDTO data = postService.getPostById(postId, language);
+                                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                               Principal principal) {
+        PostResponseDTO data = postService.getPostById(postId, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Post retrieved successfully."
@@ -56,8 +58,9 @@ public class PostController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getReplies(@PathVariable String postId,
                                                                                   @RequestParam(defaultValue = "0") int page,
                                                                                   @RequestParam(defaultValue = "10") int perPage,
-                                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = postService.getPostReplies(postId, page, perPage, language);
+                                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                  Principal principal) {
+        Map<String, Object> data = postService.getPostReplies(postId, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Replies retrieved successfully."
@@ -73,8 +76,9 @@ public class PostController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> searchPosts(@RequestParam String q,
                                                                                    @RequestParam(defaultValue = "0") int page,
                                                                                    @RequestParam(defaultValue = "10") int perPage,
-                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = postService.searchPosts(q, page, perPage, language);
+                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                   Principal principal) {
+        Map<String, Object> data = postService.searchPosts(q, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Posts retrieved successfully."
@@ -90,8 +94,9 @@ public class PostController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getPostsByHashtag(@PathVariable String hashtag,
                                                                                          @RequestParam(defaultValue = "0") int page,
                                                                                          @RequestParam(defaultValue = "10") int perPage,
-                                                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = postService.getPostsByHashtag(hashtag, page, perPage, language);
+                                                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                         Principal principal) {
+        Map<String, Object> data = postService.getPostsByHashtag(hashtag, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Posts retrieved successfully."
@@ -148,22 +153,6 @@ public class PostController {
 
         return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
                                                               HttpStatus.CREATED.value(),
-                                                              message,
-                                                              data));
-    }
-
-    @GetMapping("/me/{postId}/is-liked")
-    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> isPostLiked(@PathVariable String postId,
-                                                                                   @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
-                                                                                   Principal principal) {
-        Map<String, Object> data = postService.isPostLiked(postId, principal.getName(), language);
-
-        String message = language == null || language.equals("en")
-                         ? "Post liked status retrieved successfully."
-                         : "Status de curtida do post recuperado com sucesso.";
-
-        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
-                                                              HttpStatus.OK.value(),
                                                               message,
                                                               data));
     }

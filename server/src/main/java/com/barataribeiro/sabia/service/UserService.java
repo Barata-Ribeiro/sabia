@@ -161,11 +161,11 @@ public class UserService {
 
         Page<Post> postPage = postRepository.findDistinctByAuthorInOrderByCreatedAtDesc(authors, paging);
 
-        return createResponseFromPostPage(postPage);
+        return createResponseFromPostPage(postPage, requesting_user);
     }
 
-    @Cacheable(value = "userPublicFeed", key = "{#userId, #page, #perPage, #language}")
-    public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String language) {
+    @Cacheable(value = "userPublicFeed", key = "{#userId, #page, #perPage, #requesting_user, #language}")
+    public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -183,7 +183,7 @@ public class UserService {
 
         Page<Post> postPage = postRepository.findDistinctAllByAuthorId(user.getId(), paging);
 
-        return createResponseFromPostPage(postPage);
+        return createResponseFromPostPage(postPage, requesting_user);
     }
 
     public Map<String, String> checkIfUserFollows(String userId, String followedId) {
@@ -405,11 +405,11 @@ public class UserService {
         }
     }
 
-    private Map<String, Object> createResponseFromPostPage(Page<Post> postPage) {
+    private Map<String, Object> createResponseFromPostPage(Page<Post> postPage, String requesting_user) {
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> mappedPosts = posts.stream()
-                .map(entityMapper::getPostResponseDTO)
+                .map(post -> entityMapper.getPostResponseDTO(post, requesting_user))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();

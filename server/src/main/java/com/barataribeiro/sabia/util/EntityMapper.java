@@ -7,6 +7,7 @@ import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.model.HashtagPosts;
 import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EntityMapper {
-    public PostResponseDTO getPostResponseDTO(Post post) {
+    public final LikeRepository likeRepository;
+
+    public PostResponseDTO getPostResponseDTO(Post post, String requesting_user) {
         User author = post.getAuthor();
         AuthorResponseDTO authorDTO = new AuthorResponseDTO(
                 author.getId(),
@@ -39,6 +42,8 @@ public class EntityMapper {
                 .map(hashtagPost -> hashtagPost.getHashtags().getTag())
                 .collect(Collectors.toList());
 
+        Boolean isLiked = likeRepository.existsByUser_UsernameAndPostId(requesting_user, post.getId());
+        
         return new PostResponseDTO(
                 post.getId(),
                 authorDTO,
@@ -46,10 +51,11 @@ public class EntityMapper {
                 hashtags,
                 post.getViews_count(),
                 post.getLike_count(),
-                post.getRepost_off() != null ? getPostResponseDTO(post.getRepost_off()) : null,
+                isLiked,
+                post.getRepost_off() != null ? getPostResponseDTO(post.getRepost_off(), requesting_user) : null,
                 post.getRepost_count(),
                 post.getReply_count(),
-                post.getIn_reply_to() != null ? getPostResponseDTO(post.getIn_reply_to()) : null,
+                post.getIn_reply_to() != null ? getPostResponseDTO(post.getIn_reply_to(), requesting_user) : null,
                 post.getCreatedAt().toString(),
                 post.getUpdatedAt().toString()
         );

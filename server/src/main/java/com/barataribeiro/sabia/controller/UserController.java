@@ -40,8 +40,9 @@ public class UserController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getPublicFeed(@PathVariable String userId,
                                                                                      @RequestParam(defaultValue = "0") int page,
                                                                                      @RequestParam(defaultValue = "20") int perPage,
-                                                                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = userService.getUserPublicFeed(userId, page, perPage, language);
+                                                                                     @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                     Principal principal) {
+        Map<String, Object> data = userService.getUserPublicFeed(userId, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "User feed retrieved successfully."

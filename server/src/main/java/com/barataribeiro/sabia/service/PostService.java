@@ -42,8 +42,8 @@ public class PostService {
     private final Validation validation;
     private final EntityMapper entityMapper;
 
-    @Cacheable(value = "posts", key = "{#userId, #page, #perPage, #language}")
-    public Map<String, Object> getAllPosts(String userId, int page, int perPage, String language) {
+    @Cacheable(value = "posts", key = "{#userId, #page, #perPage, #requesting_user, #language}")
+    public Map<String, Object> getAllPosts(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -58,22 +58,22 @@ public class PostService {
 
         Page<Post> postPage = postRepository.findDistinctAllByAuthorId(userId, paging);
 
-        return createPostPageResponse(postPage);
+        return createPostPageResponse(postPage, requesting_user);
     }
 
-    @Cacheable(value = "post", key = "{#postId, #language}")
-    public PostResponseDTO getPostById(String postId, String language) {
+    @Cacheable(value = "post", key = "{#postId, #requesting_user, #language}")
+    public PostResponseDTO getPostById(String postId, String requesting_user, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
         post.incrementViewCount();
         post = postRepository.saveAndFlush(post);
 
-        return entityMapper.getPostResponseDTO(post);
+        return entityMapper.getPostResponseDTO(post, requesting_user);
     }
 
-    @Cacheable(value = "posts", key = "{#postId, #page, #perPage, #language}")
-    public Map<String, Object> getPostReplies(String postId, int page, int perPage, String language) {
+    @Cacheable(value = "posts", key = "{#postId, #page, #perPage, #requesting_user, #language}")
+    public Map<String, Object> getPostReplies(String postId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -91,7 +91,7 @@ public class PostService {
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = posts.stream()
-                .map(entityMapper::getPostResponseDTO)
+                .map(post -> entityMapper.getPostResponseDTO(post, requesting_user))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -103,8 +103,8 @@ public class PostService {
         return response;
     }
 
-    @Cacheable(value = "posts", key = "{#query, #page, #perPage, #language}")
-    public Map<String, Object> searchPosts(String query, int page, int perPage, String language) {
+    @Cacheable(value = "posts", key = "{#query, #page, #perPage, #requesting_user, #language}")
+    public Map<String, Object> searchPosts(String query, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -126,10 +126,10 @@ public class PostService {
                               postRepository.findAllByHashtag(queryParams, paging) :
                               postRepository.findAllByTextContaining(queryParams, paging);
 
-        return createPostPageResponse(postPage);
+        return createPostPageResponse(postPage, requesting_user);
     }
 
-    public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String language) {
+    public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -144,13 +144,7 @@ public class PostService {
 
         Page<Post> postPage = postRepository.findAllByHashtag(hashtag, paging);
 
-        return createPostPageResponse(postPage);
-    }
-
-    public Map<String, Object> isPostLiked(String postId, String requesting_user, String language) {
-        Boolean exists = likeRepository.existsByUser_UsernameAndPostId(requesting_user, postId);
-
-        return Map.of("liked", exists.toString());
+        return createPostPageResponse(postPage, requesting_user);
     }
 
     @Transactional
@@ -204,7 +198,7 @@ public class PostService {
 
         savedPost = postRepository.saveAndFlush(post);
 
-        return entityMapper.getPostResponseDTO(savedPost);
+        return entityMapper.getPostResponseDTO(savedPost, requesting_user);
     }
 
     @Transactional
@@ -235,7 +229,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(repost);
+        return entityMapper.getPostResponseDTO(repost, requesting_user);
     }
 
     @Transactional
@@ -270,7 +264,7 @@ public class PostService {
         post.incrementReplyCount();
         postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(reply);
+        return entityMapper.getPostResponseDTO(reply, requesting_user);
     }
 
     @Transactional
@@ -302,7 +296,8 @@ public class PostService {
             @CacheEvict(value = "post", allEntries = true),
             @CacheEvict(value = "userPublicProfile", allEntries = true),
             @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true)
+            @CacheEvict(value = "userFeed", allEntries = true),
+            @CacheEvict(value = "userPublicFeed", allEntries = true)
     })
     public Boolean toggleLike(String postId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
@@ -321,33 +316,31 @@ public class PostService {
             throw new ForbiddenRequest(sameAuthorMessage);
         }
 
+        boolean liked = likeRepository.existsByUser_UsernameAndPostId(requesting_user, postId);
 
-        Like like = likeRepository.findByUserIdAndPostId(user.getId(), post.getId()).orElse(null);
-        if (like != null) {
-            likeRepository.delete(like);
+        if (liked) {
+            likeRepository.deleteByUserAndPost(user, post);
             post.decrementLikeCount();
-            postRepository.save(post);
-
-            return false;
         } else {
             Like newLike = Like.builder()
                     .user(user)
                     .post(post)
                     .build();
 
-            likeRepository.save(newLike);
+            likeRepository.saveAndFlush(newLike);
             post.incrementLikeCount();
-            postRepository.save(post);
-
-            return true;
         }
+
+        postRepository.saveAndFlush(post);
+
+        return !liked;
     }
 
-    private Map<String, Object> createPostPageResponse(Page<Post> postPage) {
+    private Map<String, Object> createPostPageResponse(Page<Post> postPage, String requesting_user) {
         List<Post> postsResult = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = postsResult.stream()
-                .map(entityMapper::getPostResponseDTO)
+                .map(post -> entityMapper.getPostResponseDTO(post, requesting_user))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();

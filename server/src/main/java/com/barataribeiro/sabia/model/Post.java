@@ -50,7 +50,7 @@ public class Post {
     private Long like_count = 0L;
 
     @Builder.Default
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
