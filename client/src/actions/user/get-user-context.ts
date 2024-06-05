@@ -4,18 +4,16 @@ import { ApiResponse } from "@/interfaces/actions"
 import { UserContextResponse } from "@/interfaces/user"
 import { USER_GET_CONTEXT } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
-import { cookies } from "next/headers"
 
 export default async function getUserContext() {
     const locale = await getLocale()
-    const URL = USER_GET_CONTEXT()
     const isEnglishLang = locale === "en"
+    const URL = USER_GET_CONTEXT()
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token)
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não Autorizado.")
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const response = await fetch(URL, {
             method: "GET",

@@ -3,8 +3,8 @@
 import { ApiResponse } from "@/interfaces/actions"
 import { IS_USER_FOLLOWING } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
-import { cookies } from "next/headers"
 
 export default async function getIfUserFollows(userId: string, followId: string) {
     const locale = await getLocale()
@@ -12,9 +12,7 @@ export default async function getIfUserFollows(userId: string, followId: string)
     const URL = IS_USER_FOLLOWING(userId, followId)
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token)
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não Autorizado.")
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const response = await fetch(URL, {
             method: "GET",

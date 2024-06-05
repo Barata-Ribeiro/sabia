@@ -1,12 +1,11 @@
 "use server"
 
-import logout from "@/actions/auth/logout"
 import { ApiResponse } from "@/interfaces/actions"
 import { POST_TOGGLE_LIKE } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 import { revalidateTag } from "next/cache"
-import { cookies } from "next/headers"
 
 export default async function postTogglePostLike(postId: string) {
     const locale = await getLocale()
@@ -14,11 +13,7 @@ export default async function postTogglePostLike(postId: string) {
     const URL = POST_TOGGLE_LIKE(postId)
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) {
-            await logout()
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
-        }
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const response = await fetch(URL, {
             method: "POST",
@@ -34,8 +29,8 @@ export default async function postTogglePostLike(postId: string) {
 
         if (!response.ok) throw new Error(responseData.message)
 
+        revalidateTag("feed")
         revalidateTag("post")
-        revalidateTag("like")
 
         return {
             ok: true,

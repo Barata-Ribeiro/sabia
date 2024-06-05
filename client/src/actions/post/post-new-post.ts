@@ -1,34 +1,22 @@
 "use server"
 
-import logout from "@/actions/auth/logout"
 import { ApiResponse, State } from "@/interfaces/actions"
 import { PostResponse } from "@/interfaces/post"
 import { POST_NEW_POST } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
-import verifyToken from "@/utils/validate-token"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 import { revalidateTag } from "next/cache"
-import { cookies } from "next/headers"
 
 export default async function postNewPost(state: State, formData: FormData) {
-    const URL = POST_NEW_POST()
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
+    const URL = POST_NEW_POST()
 
     const text = formData.get("newPost") as string | null
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) {
-            await logout()
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
-        }
-
-        const isTokenValid = verifyToken(auth_token)
-        if (!isTokenValid) {
-            await logout()
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
-        }
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         if (!text)
             throw new Error(

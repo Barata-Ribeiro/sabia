@@ -4,6 +4,7 @@ import { ApiResponse } from "@/interfaces/actions"
 import { PostResponse } from "@/interfaces/post"
 import { POST_GET_BY_ID } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 
 interface GetPostParams {
     id: string
@@ -11,12 +12,16 @@ interface GetPostParams {
 }
 
 export default async function getPost({ id, locale }: GetPostParams) {
+    const isEnglishLang = locale === "en"
     const URL = POST_GET_BY_ID(id)
 
     try {
+        const auth_token = await verifyAuthentication(isEnglishLang)
+
         const response = await fetch(URL, {
             method: "GET",
             headers: {
+                Authorization: "Bearer " + auth_token,
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },

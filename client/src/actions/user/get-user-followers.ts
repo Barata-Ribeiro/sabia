@@ -4,16 +4,21 @@ import { ApiResponse } from "@/interfaces/actions"
 import { FollowersResponse } from "@/interfaces/user"
 import { USER_GET_FOLLOWERS } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 
-export default async function getUserFollowers(username: string, page?: number) {
+export default async function getUserFollowers(username: string, page = 0) {
     const locale = await getLocale()
-    const URL = USER_GET_FOLLOWERS({ username, perPage: 10, page: 0 })
+    const isEnglishLang = locale === "en"
+    const URL = USER_GET_FOLLOWERS({ username, perPage: 10, page })
 
     try {
+        const auth_token = await verifyAuthentication(isEnglishLang)
+
         const response = await fetch(URL, {
             method: "GET",
             headers: {
+                Authorization: "Bearer " + auth_token,
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },

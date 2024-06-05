@@ -4,6 +4,7 @@ import { ApiResponse } from "@/interfaces/actions"
 import { FeedRequestParams, FeedResponse } from "@/interfaces/user"
 import { USER_GET_PUBLIC_FEED } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 
 export default async function getUserPublicFeed(
@@ -11,6 +12,7 @@ export default async function getUserPublicFeed(
     optionsFront?: RequestInit
 ) {
     const locale = await getLocale()
+    const isEnglishLang = locale === "en"
     const URL = USER_GET_PUBLIC_FEED({ perPage, page, userId })
 
     try {
@@ -18,9 +20,12 @@ export default async function getUserPublicFeed(
             next: { revalidate: 10, tags: ["feed"] }
         }
 
+        const auth_token = await verifyAuthentication(isEnglishLang)
+
         const response = await fetch(URL, {
             method: "GET",
             headers: {
+                Authorization: "Bearer " + auth_token,
                 "Content-Type": "application/json",
                 "Content-Language": locale
             },

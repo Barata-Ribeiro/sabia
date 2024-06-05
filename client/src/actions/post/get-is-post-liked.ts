@@ -1,11 +1,10 @@
 "use server"
 
-import logout from "@/actions/auth/logout"
 import { ApiResponse } from "@/interfaces/actions"
 import { POST_GET_IS_LIKED } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
-import { cookies } from "next/headers"
 
 export default async function getIsPostLiked(postId: string) {
     const locale = await getLocale()
@@ -13,11 +12,7 @@ export default async function getIsPostLiked(postId: string) {
     const URL = POST_GET_IS_LIKED(postId)
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) {
-            await logout()
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
-        }
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const response = await fetch(URL, {
             method: "GET",

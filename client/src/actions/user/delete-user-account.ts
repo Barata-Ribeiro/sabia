@@ -1,9 +1,9 @@
 "use server"
 
-import logout from "@/actions/auth/logout"
 import { ApiResponse, State } from "@/interfaces/actions"
 import { USER_DELETE_ACCOUNT } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
@@ -17,11 +17,7 @@ export default async function deleteUserAccount(state: State, formData: FormData
     const usernameFromInput = formData.get("usernameDelete") as string | null
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) {
-            await logout()
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
-        }
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         if (!userId)
             throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")

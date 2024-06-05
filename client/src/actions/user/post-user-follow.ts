@@ -1,12 +1,11 @@
 "use server"
 
-import logout from "@/actions/auth/logout"
 import { ApiResponse } from "@/interfaces/actions"
 import { FOLLOW_USER } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 import { revalidateTag } from "next/cache"
-import { cookies } from "next/headers"
 
 export default async function postUserFollow(userId: string, followId: string) {
     const URL = FOLLOW_USER(userId, followId)
@@ -14,11 +13,7 @@ export default async function postUserFollow(userId: string, followId: string) {
     const isEnglishLang = locale === "en"
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token) {
-            await logout()
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
-        }
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const response = await fetch(URL, {
             method: "POST",

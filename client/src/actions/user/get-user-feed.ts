@@ -4,8 +4,8 @@ import { ApiResponse } from "@/interfaces/actions"
 import { FeedRequestParams, FeedResponse } from "@/interfaces/user"
 import { USER_GET_FEED } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
+import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
-import { cookies } from "next/headers"
 
 export default async function getUserFeed(
     { page = 0, perPage = 20, userId }: FeedRequestParams = { userId: "" },
@@ -16,9 +16,7 @@ export default async function getUserFeed(
     const URL = USER_GET_FEED({ perPage, page, userId })
 
     try {
-        const auth_token = cookies().get("auth_token")?.value
-        if (!auth_token)
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não Autorizado.")
+        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const options = optionsFront || {
             next: { revalidate: 10, tags: ["feed"] }
