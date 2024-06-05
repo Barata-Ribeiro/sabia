@@ -7,6 +7,7 @@ export interface PostResponse {
     hashtags: string[]
     views_count: number
     like_count: number
+    is_liked: boolean
     repost_off?: PostResponse
     repost_count: number
     reply_count: number

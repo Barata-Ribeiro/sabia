@@ -1,12 +1,10 @@
 "use client"
 
-import getIsPostLiked from "@/actions/post/get-is-post-liked"
 import postTogglePostLike from "@/actions/post/post-toggle-post-like"
 import { useUser } from "@/context/user-context-provider"
 import { PostResponse } from "@/interfaces/post"
 import tw from "@/utils/tw"
-import type { MouseEvent } from "react"
-import { useEffect, useState } from "react"
+import { MouseEvent, useState } from "react"
 import { HiHeart } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
@@ -19,18 +17,11 @@ export default function PostLikeButton({
     post,
     displayNumber = true
 }: PostLikeButtonProps) {
-    const [isLiked, setIsLiked] = useState(false)
-    const [checkingIsLiked, setCheckingIsLiked] = useState(true)
+    const [isLiked, setIsLiked] = useState(post.is_liked)
     const [loading, setLoading] = useState(false)
+
     const { user } = useUser()
     const isOwnerPost = user?.id === post.author.id
-
-    const buttonBaseStyles = tw`cursor-pointer text-background-900 hover:text-background-800 active:text-background-700 disabled:cursor-default
-                                       disabled:text-background-300 disabled:opacity-50 disabled:shadow-none disabled:hover:text-background-900 disabled:active:text-background-900`
-    const setLikedStyle = isLiked ? "text-red-500" : "text-background-900"
-    const setLikedStyleLoading =
-        loading || checkingIsLiked ? tw`animate-pulse text-background-300` : ""
-    const buttonStyles = twMerge(buttonBaseStyles, setLikedStyle, setLikedStyleLoading)
 
     async function handleLike(
         event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -55,19 +46,11 @@ export default function PostLikeButton({
         }
     }
 
-    useEffect(() => {
-        async function checkIsLiked() {
-            setCheckingIsLiked(true)
-
-            const isLikedState = await getIsPostLiked(post.id)
-            const isLikedResponse = isLikedState.response?.data as { liked: string }
-            setIsLiked(isLikedResponse.liked === "true")
-
-            setCheckingIsLiked(false)
-        }
-
-        checkIsLiked().catch(console.error)
-    }, [post.id])
+    const buttonBaseStyles = tw`cursor-pointer text-background-900 hover:text-background-800 active:text-background-700 disabled:cursor-default
+                                       disabled:text-background-300 disabled:opacity-50 disabled:shadow-none disabled:hover:text-background-900 disabled:active:text-background-900`
+    let setLikedStyle = isLiked ? "text-red-500" : "text-background-900"
+    const setLikedStyleLoading = loading ? tw`animate-pulse text-background-300` : ""
+    const buttonStyles = twMerge(buttonBaseStyles, setLikedStyleLoading, setLikedStyle)
 
     return (
         <div
@@ -80,8 +63,8 @@ export default function PostLikeButton({
                 type="button"
                 className={buttonStyles}
                 onClick={(event) => handleLike(event)}
-                disabled={isOwnerPost || loading || checkingIsLiked}
-                aria-disabled={isOwnerPost || loading || checkingIsLiked}
+                disabled={isOwnerPost || loading}
+                aria-disabled={isOwnerPost || loading}
             >
                 <HiHeart size={24} />
             </button>
