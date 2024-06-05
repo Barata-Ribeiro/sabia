@@ -3,7 +3,7 @@ import { ReactNode } from "react"
 
 interface SettingsLayoutProps {
     children: Readonly<ReactNode>
-    deleteModal?: ReactNode | null
+    deleteModal: ReactNode | null
 }
 
 export default function SettingsLayout({

@@ -1,3 +1,5 @@
-import SettingsPage from "@/app/[locale]/settings/page"
+import { type ReactNode } from "react"
 
-export default SettingsPage
+export default function Default({ children }: { children: Readonly<ReactNode> }) {
+    return <>{children}</>
+}

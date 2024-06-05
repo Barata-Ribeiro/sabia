@@ -27,7 +27,7 @@ const avarage_sans = Average_Sans({
 })
 
 interface LocaleLayoutProps {
-    children: ReactNode
+    children: Readonly<ReactNode>
     newPostModal: ReactNode
     params: { locale: string }
 }
