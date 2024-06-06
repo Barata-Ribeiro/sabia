@@ -1,6 +1,7 @@
 "use client"
 
 import PostLikeButton from "@/components/post/post-like-button"
+import PostReplyButton from "@/components/post/post-reply-button"
 import PostRepostButton from "@/components/post/post-repost-button"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
@@ -85,6 +86,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                     </p>
 
                     <footer className="mt-2 flex items-center justify-between">
+                        <PostReplyButton post={post} displayNumber={false} />
                         <PostRepostButton post={post} displayNumber={false} />
                         <PostLikeButton post={post} displayNumber={false} />
                     </footer>
