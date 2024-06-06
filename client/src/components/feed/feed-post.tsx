@@ -33,7 +33,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
         <li
             id={post.author.username + "-" + post.id}
             onClick={(e) => handlePostClick(post.author.username, post.id, e)}
-            className="flex w-full cursor-pointer flex-col gap-2 overflow-hidden p-4 hover:bg-background-100"
+            className="flex cursor-pointer flex-col gap-2 overflow-hidden p-4 hover:bg-background-100"
         >
             <div className="flex w-full flex-col items-start gap-2 md:flex-row md:gap-5">
                 <Image
@@ -44,7 +44,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                     height={128}
                     quality={50}
                 />
-                <article className="flex flex-col gap-1">
+                <article className="flex w-full flex-col gap-1">
                     <header className="flex w-max flex-col gap-1 md:flex-row">
                         <p
                             className={twMerge(

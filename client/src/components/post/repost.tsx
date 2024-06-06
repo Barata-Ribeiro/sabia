@@ -3,6 +3,7 @@ import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { NULL_AVATAR } from "@/utils/constants"
 import { dateTimeFormat } from "@/utils/date-format"
+import formatTextWithHashtags from "@/utils/format-text-with-hashtags"
 import Image from "next/image"
 import { HiCheckBadge, HiMiniArrowPath } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
@@ -59,7 +60,14 @@ export default function Repost(props: { post: PostResponse; locale: string }) {
                 </header>
             </LinkButton>
 
-            <p className="text-pretty text-body-900">{props.post.repost_off?.text}</p>
+            <p className="text-pretty text-body-900">
+                {props.post.repost_off!.hashtags.length > 0
+                    ? formatTextWithHashtags(
+                          props.post.repost_off!.text,
+                          props.post.repost_off!.hashtags
+                      )
+                    : props.post.repost_off?.text}
+            </p>
 
             <footer>
                 <div className="flex w-max items-center gap-1">

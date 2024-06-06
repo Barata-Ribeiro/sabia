@@ -5,13 +5,18 @@ import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { NULL_AVATAR } from "@/utils/constants"
 import { dateTimeFormat } from "@/utils/date-format"
+import formatTextWithHashtags from "@/utils/format-text-with-hashtags"
 import Image from "next/image"
 import { HiCheckBadge } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
 export default function Post(props: { post: PostResponse; locale: string }) {
     return (
-        <article id="post-article" role="article" className="flex flex-col gap-1">
+        <article
+            id="post-article"
+            role="article"
+            className="flex w-full flex-col gap-1"
+        >
             <LinkButton
                 href={"/" + props.post.author.username}
                 className="cursor-pointer"
@@ -47,7 +52,11 @@ export default function Post(props: { post: PostResponse; locale: string }) {
                     </div>
                 </header>
             </LinkButton>
-            <p className="text-pretty text-body-900">{props.post.text}</p>
+            <p className="text-pretty text-body-900">
+                {props.post.hashtags.length > 0
+                    ? formatTextWithHashtags(props.post.text, props.post.hashtags)
+                    : props.post.text}
+            </p>
             <footer>
                 <div className="flex w-max items-center gap-1">
                     <LinkButton
