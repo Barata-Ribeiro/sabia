@@ -23,8 +23,9 @@ public class UserController {
 
     @GetMapping("/public/{username}")
     public ResponseEntity<RestSuccessResponseDTO<PublicProfileResponseDTO>> getPublicUser(@PathVariable String username,
-                                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        PublicProfileResponseDTO user = userService.getPublicProfile(username, language);
+                                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                          Principal principal) {
+        PublicProfileResponseDTO user = userService.getPublicProfile(username, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "User retrieved successfully."
@@ -58,8 +59,9 @@ public class UserController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getFollowers(@PathVariable String username,
                                                                                     @RequestParam(defaultValue = "0") int page,
                                                                                     @RequestParam(defaultValue = "10") int perPage,
-                                                                                    @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = userService.getFollowers(username, page, perPage);
+                                                                                    @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                    Principal principal) {
+        Map<String, Object> data = userService.getFollowers(username, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Followers retrieved successfully."
@@ -75,8 +77,9 @@ public class UserController {
     public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> searchUser(@RequestParam String q,
                                                                                   @RequestParam(defaultValue = "0") int page,
                                                                                   @RequestParam(defaultValue = "15") int perPage,
-                                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, Object> data = userService.searchUser(q, page, perPage, language);
+                                                                                  @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                  Principal principal) {
+        Map<String, Object> data = userService.searchUser(q, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Users retrieved successfully."
@@ -123,22 +126,6 @@ public class UserController {
                                                               HttpStatus.OK.value(),
                                                               message,
                                                               data));
-    }
-
-    @GetMapping("/me/{userId}/follows/{followedId}")
-    public ResponseEntity<RestSuccessResponseDTO<Map<String, String>>> checkIfUserFollows(@PathVariable String userId,
-                                                                                          @PathVariable String followedId,
-                                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
-        Map<String, String> follows = userService.checkIfUserFollows(userId, followedId);
-
-        String message = language == null || language.equals("en")
-                         ? "User follow retrieved successfully."
-                         : "Seguimento do usuário recuperado com sucesso.";
-
-        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
-                                                              HttpStatus.OK.value(),
-                                                              message,
-                                                              follows));
     }
 
     @PutMapping("/me/{userId}")

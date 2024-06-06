@@ -7,6 +7,7 @@ import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.model.HashtagPosts;
 import com.barataribeiro.sabia.model.Post;
 import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.repository.FollowRepository;
 import com.barataribeiro.sabia.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EntityMapper {
     public final LikeRepository likeRepository;
+    public final FollowRepository followRepository;
 
     public PostResponseDTO getPostResponseDTO(Post post, String requesting_user) {
         User author = post.getAuthor();
@@ -43,7 +45,7 @@ public class EntityMapper {
                 .collect(Collectors.toList());
 
         Boolean isLiked = likeRepository.existsByUser_UsernameAndPostId(requesting_user, post.getId());
-        
+
         return new PostResponseDTO(
                 post.getId(),
                 authorDTO,
@@ -83,7 +85,9 @@ public class EntityMapper {
                                       user.getUpdatedAt().toString());
     }
 
-    public PublicProfileResponseDTO getPublicProfileResponseDTO(User user) {
+    public PublicProfileResponseDTO getPublicProfileResponseDTO(User user, String requesting_user) {
+        boolean is_following = followRepository.existsByFollower_UsernameAndFollowed_Username(requesting_user, user.getUsername());
+
         return new PublicProfileResponseDTO(user.getId(),
                                             user.getUsername(),
                                             user.getDisplay_name(),
@@ -95,6 +99,7 @@ public class EntityMapper {
                                             user.getLocation(),
                                             user.getIs_verified(),
                                             user.getIs_private(),
+                                            is_following,
                                             Math.toIntExact(user.getFollower_count()),
                                             Math.toIntExact(user.getFollowing_count()),
                                             user.getPosts().size(),

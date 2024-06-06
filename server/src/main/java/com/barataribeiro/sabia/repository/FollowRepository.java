@@ -16,4 +16,6 @@ public interface FollowRepository extends JpaRepository<Follow, String> {
 
     @EntityGraph(attributePaths = {"follower", "followed"})
     Page<Follow> findByFollowed_UsernameOrderByFollowedAtDesc(String username, Pageable pageable);
+
+    boolean existsByFollower_UsernameAndFollowed_Username(String followerUsername, String followedUsername);
 }

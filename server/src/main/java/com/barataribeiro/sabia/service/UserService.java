@@ -46,7 +46,7 @@ public class UserService {
     private final EntityMapper entityMapper;
 
     @Cacheable(value = "userPublicFollowers", key = "{#username, #page, #perPage}")
-    public Map<String, Object> getFollowers(String username, int page, int perPage) {
+    public Map<String, Object> getFollowers(String username, int page, int perPage, String requesting_user, String language) {
         Pageable paging = PageRequest.of(page, perPage);
 
         Page<Follow> followersPage = followRepository.findByFollowed_UsernameOrderByFollowedAtDesc(username, paging);
@@ -54,7 +54,7 @@ public class UserService {
         List<Follow> followers = new ArrayList<>(followersPage.getContent());
 
         List<PublicProfileResponseDTO> followersDTOs = followers.stream()
-                .map(follow -> entityMapper.getPublicProfileResponseDTO(follow.getFollower()))
+                .map(follow -> entityMapper.getPublicProfileResponseDTO(follow.getFollower(), requesting_user))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -67,7 +67,7 @@ public class UserService {
     }
 
     @Cacheable(value = "userPublicProfile", key = "{#username, #language}")
-    public PublicProfileResponseDTO getPublicProfile(String username, String language) {
+    public PublicProfileResponseDTO getPublicProfile(String username, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         User user = userRepository.findByUsername(username)
@@ -79,11 +79,11 @@ public class UserService {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
-        return entityMapper.getPublicProfileResponseDTO(user);
+        return entityMapper.getPublicProfileResponseDTO(user, requesting_user);
     }
 
-    @Cacheable(value = "users", key = "{#query, #page, #perPage, #language}")
-    public Map<String, Object> searchUser(String query, int page, int perPage, String language) {
+    @Cacheable(value = "users", key = "{#query, #page, #perPage, #requesting_user, #language}")
+    public Map<String, Object> searchUser(String query, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -105,7 +105,7 @@ public class UserService {
         List<User> usersResult = new ArrayList<>(usersPage.getContent());
 
         List<PublicProfileResponseDTO> usersDTOs = usersResult.stream()
-                .map(entityMapper::getPublicProfileResponseDTO)
+                .map(user -> entityMapper.getPublicProfileResponseDTO(user, requesting_user))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -184,12 +184,6 @@ public class UserService {
         Page<Post> postPage = postRepository.findDistinctAllByAuthorId(user.getId(), paging);
 
         return createResponseFromPostPage(postPage, requesting_user);
-    }
-
-    public Map<String, String> checkIfUserFollows(String userId, String followedId) {
-        Boolean exists = followRepository.existsByFollowerIdAndFollowedId(userId, followedId);
-
-        return Map.of("follows", exists.toString());
     }
 
     @Transactional
