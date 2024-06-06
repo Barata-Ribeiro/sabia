@@ -1,20 +1,25 @@
 "use client"
 
 import deleteUserFollow from "@/actions/user/delete-user-follow"
-import getIfUserFollows from "@/actions/user/get-if-user-follows"
 import postUserFollow from "@/actions/user/post-user-follow"
 import Button from "@/components/shared/button"
 import { useUser } from "@/context/user-context-provider"
+import { UserPublicProfileResponse } from "@/interfaces/user"
 import { useRouter } from "@/navigation"
 import { useLocale } from "next-intl"
 import { type MouseEvent, useEffect, useState } from "react"
 
-export default function ProfileFollowButton({ userId }: { userId: string }) {
-    const { user } = useUser()
-    const isOwnProfile = user?.id === userId
+export default function ProfileFollowButton({
+    profile
+}: {
+    profile: UserPublicProfileResponse
+}) {
     const localeActive = useLocale()
     const isEnglishLang = localeActive === "en"
     const router = useRouter()
+
+    const { user } = useUser()
+    const isOwnProfile = user?.id === profile.id
 
     const [isFollowing, setIsFollowing] = useState(false)
     const [isLoading, setIsLoading] = useState(!isOwnProfile)
@@ -26,15 +31,10 @@ export default function ProfileFollowButton({ userId }: { userId: string }) {
     useEffect(() => {
         if (user && !isOwnProfile) {
             setIsLoading(true)
-            getIfUserFollows(user.id, userId)
-                .then((response) => {
-                    const data = response.response?.data as { follows: string }
-                    setIsFollowing(data.follows === "true")
-                    setIsLoading(false)
-                })
-                .catch(() => setIsLoading(false))
+            setIsFollowing(profile.is_following)
+            setIsLoading(false)
         }
-    }, [isOwnProfile, user, userId])
+    }, [isOwnProfile, user, profile.is_following])
 
     function handleEditProfile(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
@@ -50,8 +50,8 @@ export default function ProfileFollowButton({ userId }: { userId: string }) {
                 setIsFollowing(!isFollowing)
 
                 const response = isFollowing
-                    ? await deleteUserFollow(user?.id, userId)
-                    : await postUserFollow(user?.id, userId)
+                    ? await deleteUserFollow(user?.id, profile.id)
+                    : await postUserFollow(user?.id, profile.id)
 
                 if (!response.ok) {
                     setIsFollowing(!isFollowing)

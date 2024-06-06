@@ -71,7 +71,7 @@ export default function ProfileFollowerEntity({
                     </div>
                 </LinkButton>
                 <div className="w-fit">
-                    <ProfileFollowButton userId={follower.id} />
+                    <ProfileFollowButton profile={follower} />
                 </div>
             </div>
             {totalPages > 1 && (

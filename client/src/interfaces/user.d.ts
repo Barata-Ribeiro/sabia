@@ -34,6 +34,7 @@ export interface UserPublicProfileResponse {
     location: string
     is_verified: boolean
     is_private: boolean
+    is_following: boolean
     followers_count: number
     following_count: number
     posts_count: number

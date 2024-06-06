@@ -68,7 +68,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                         </div>
 
                         <div className="flex flex-col text-right">
-                            <ProfileFollowButton userId={profile.id} />
+                            <ProfileFollowButton profile={profile} />
                         </div>
                     </div>
 
