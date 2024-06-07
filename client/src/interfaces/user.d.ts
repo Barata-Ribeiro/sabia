@@ -77,3 +77,16 @@ export interface FeedResponse {
     total_items: number
     current_page: number
 }
+
+export interface UserSearchParams {
+    perPage: number
+    page?: number
+    query?: string
+}
+
+export interface UserSearchResponse {
+    users: UserPublicProfileResponse[]
+    total_pages: number
+    total_items: number
+    current_page: number
+}

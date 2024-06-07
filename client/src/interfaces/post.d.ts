@@ -34,3 +34,10 @@ export interface PostsHashtagResponse {
     total_items: number
     current_page: number
 }
+
+export interface PostSearchResponse {
+    posts: PostResponse[]
+    total_pages: number
+    total_items: number
+    current_page: number
+}

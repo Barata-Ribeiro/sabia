@@ -1,5 +1,9 @@
 import { PostHashtagParams, PostSearchParams } from "@/interfaces/post"
-import { FeedRequestParams, UserFollowersParams } from "@/interfaces/user"
+import {
+    FeedRequestParams,
+    UserFollowersParams,
+    UserSearchParams
+} from "@/interfaces/user"
 
 const BACKEND_URL = process.env.BACKEND_ORIGIN || "http://localhost:8080"
 
@@ -26,14 +30,16 @@ export const USER_GET_FOLLOWERS = (params: UserFollowersParams) => {
     const { username, perPage, page } = params
     return `${BACKEND_URL}/api/v1/users/public/${username}/followers?perPage=${perPage}&page=${page}`
 }
-export const IS_USER_FOLLOWING = (userId: string, followId: string) =>
-    `${BACKEND_URL}/api/v1/users/me/${userId}/follows/${followId}`
 export const FOLLOW_USER = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
 export const UNFOLLOW_USER = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
 export const USER_DELETE_ACCOUNT = (userId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}`
+export const USER_SEARCH = (params: UserSearchParams) => {
+    const { perPage, page, query } = params
+    return `${BACKEND_URL}/api/v1/users/public/search?q=${query}&page=${page}&perPage=${perPage}`
+}
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
@@ -49,7 +55,7 @@ export const POST_GET_ALL_BY_HASHTAG = (params: PostHashtagParams) => {
 }
 export const POST_SEARCH = (params: PostSearchParams) => {
     const { perPage, page, query } = params
-    return `${BACKEND_URL}/api/v1/posts/search?q=${query}&page=${page}&perPage=${perPage}`
+    return `${BACKEND_URL}/api/v1/posts/public/search?q=${query}&page=${page}&perPage=${perPage}`
 }
 export const POST_REPOST = (postId: string) =>
     `${BACKEND_URL}/api/v1/posts/me/${postId}/repost`
