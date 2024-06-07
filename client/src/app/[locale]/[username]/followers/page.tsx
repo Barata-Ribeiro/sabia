@@ -1,5 +1,5 @@
 import getUserFollowers from "@/actions/user/get-user-followers"
-import ProfileFollowerEntity from "@/components/profile/profile-follower-entity"
+import ProfileEntity from "@/components/profile/profile-entity"
 import LinkButton from "@/components/shared/link-button"
 import { FollowersResponse } from "@/interfaces/user"
 import { redirect } from "@/navigation"
@@ -43,7 +43,7 @@ export default async function FollowersPage({
     const listOfBlurredDataUrl = followersResponse?.followers.map(async (follower) => {
         if (!follower.avatar_image_url) return null
         return {
-            followerId: follower.id,
+            userId: follower.id,
             blurredDataUrl: await getBase64(follower.avatar_image_url, localeActive)
         }
     })
@@ -72,9 +72,9 @@ export default async function FollowersPage({
 
             <div className="divide-y">
                 {followersResponse?.followers.map((follower) => (
-                    <ProfileFollowerEntity
+                    <ProfileEntity
                         key={follower.id}
-                        follower={follower}
+                        user={follower}
                         resolvedListOfBlurredDataUrl={resolvedListOfBlurredDataUrl}
                         totalPages={followersResponse.total_pages}
                         page={page}

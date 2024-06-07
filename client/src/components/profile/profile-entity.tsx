@@ -9,39 +9,39 @@ import Image from "next/image"
 import { HiCheckBadge } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
-interface ProfileFollowerEntityProps {
-    follower: UserPublicProfileResponse
+interface ProfileEntityProps {
+    user: UserPublicProfileResponse
     resolvedListOfBlurredDataUrl: ({
-        followerId: string
+        userId: string
         blurredDataUrl: string | undefined
     } | null)[]
     totalPages: number
     page: number
 }
 
-export default function ProfileFollowerEntity({
-    follower,
+export default function ProfileEntity({
+    user,
     resolvedListOfBlurredDataUrl,
     totalPages,
     page
-}: ProfileFollowerEntityProps) {
+}: ProfileEntityProps) {
     return (
-        <div key={follower.id} className="p-4">
+        <div key={user.id} className="p-4">
             <div className="flex items-center justify-between">
                 <LinkButton
-                    href={"/" + follower.username}
+                    href={"/" + user.username}
                     className="flex w-fit cursor-pointer items-center gap-4"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     <Image
-                        src={follower.avatar_image_url ?? NULL_AVATAR}
-                        alt={follower.username}
+                        src={user.avatar_image_url ?? NULL_AVATAR}
+                        alt={user.username}
                         className="h-12 w-12 rounded-full object-cover"
-                        placeholder={follower.avatar_image_url ? "blur" : "empty"}
+                        placeholder={user.avatar_image_url ? "blur" : "empty"}
                         blurDataURL={
                             resolvedListOfBlurredDataUrl.find(
-                                (data) => data?.followerId === follower.id
+                                (data) => data?.userId === user.id
                             )?.blurredDataUrl
                         }
                         width={48}
@@ -51,11 +51,11 @@ export default function ProfileFollowerEntity({
                         <h3
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                follower.is_verified && "flex items-center gap-1"
+                                user.is_verified && "flex items-center gap-1"
                             )}
                         >
-                            {follower.display_name}{" "}
-                            {follower.is_verified && (
+                            {user.display_name}{" "}
+                            {user.is_verified && (
                                 <span
                                     className="text-accent-600"
                                     title="Verified"
@@ -66,12 +66,12 @@ export default function ProfileFollowerEntity({
                             )}
                         </h3>
                         <p className="font-body text-sm text-body-500">
-                            @{follower.username}
+                            @{user.username}
                         </p>
                     </div>
                 </LinkButton>
                 <div className="w-fit">
-                    <ProfileFollowButton profile={follower} />
+                    <ProfileFollowButton profile={user} />
                 </div>
             </div>
             {totalPages > 1 && (

@@ -1,7 +1,7 @@
 import getQuerySearch from "@/actions/get-query-search"
 import PaginatedFeed from "@/components/feed/paginated-feed"
 import AsideMenu from "@/components/menu/aside-menu"
-import ProfileFollowerEntity from "@/components/profile/profile-follower-entity"
+import ProfileEntity from "@/components/profile/profile-entity"
 import LinkButton from "@/components/shared/link-button"
 import { PostSearchResponse } from "@/interfaces/post"
 import { UserSearchResponse } from "@/interfaces/user"
@@ -16,7 +16,7 @@ interface SearchPageProps {
 }
 
 type resolvedListOfBlurredDataUrl = ({
-    followerId: string
+    userId: string
     blurredDataUrl: string | undefined
 } | null)[]
 
@@ -44,7 +44,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             async (user) => {
                 if (!user.avatar_image_url) return null
                 return {
-                    followerId: user.id,
+                    userId: user.id,
                     blurredDataUrl: await getBase64(user.avatar_image_url, localeActive)
                 }
             }
@@ -77,9 +77,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
                 {searchResponse && fetchType === "user" ? (
                     (searchResponse as UserSearchResponse).users.map((user, index) => (
-                        <ProfileFollowerEntity
+                        <ProfileEntity
                             key={user.id}
-                            follower={user}
+                            user={user}
                             resolvedListOfBlurredDataUrl={resolvedListOfBlurredDataUrl}
                             totalPages={
                                 (searchResponse as UserSearchResponse).total_pages
