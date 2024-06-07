@@ -7,18 +7,23 @@ import { twMerge } from "tailwind-merge"
 interface CircularPaginationProps {
     totalPages: number
     page: number
+    searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 export default function CircularPagination({
     totalPages,
-    page
+    page,
+    searchParams
 }: CircularPaginationProps) {
     const t = useTranslations("Feed.CircularPagination")
     const router = useRouter()
     const pathname = usePathname()
 
     const goToPage = (pageNumber: number) => {
-        router.push(`${pathname}?page=${pageNumber}`)
+        if (searchParams) {
+            searchParams.page = pageNumber.toString()
+            router.push(`${pathname}?q=${searchParams.q as string}&page=${pageNumber}`)
+        } else router.push(`${pathname}?page=${pageNumber}`)
     }
 
     const handlePrev = () => {

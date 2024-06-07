@@ -2,15 +2,20 @@
 
 import CircularPagination from "@/components/feed/circular-pagination"
 import FeedPost from "@/components/feed/feed-post"
-import { PostsHashtagResponse } from "@/interfaces/post"
+import { PostSearchResponse, PostsHashtagResponse } from "@/interfaces/post"
 import { useTranslations } from "next-intl"
 
 interface PaginatedFeedProps {
-    feedResponse: PostsHashtagResponse
+    feedResponse: PostsHashtagResponse | PostSearchResponse
     page: number
+    searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-export default function PaginatedFeed({ feedResponse, page }: PaginatedFeedProps) {
+export default function PaginatedFeed({
+    feedResponse,
+    page,
+    searchParams
+}: PaginatedFeedProps) {
     const t = useTranslations("Feed.Paginated")
 
     return (
@@ -26,7 +31,11 @@ export default function PaginatedFeed({ feedResponse, page }: PaginatedFeedProps
             </ul>
 
             {feedResponse.total_pages > 1 && (
-                <CircularPagination totalPages={feedResponse.total_pages} page={page} />
+                <CircularPagination
+                    totalPages={feedResponse.total_pages}
+                    page={page}
+                    searchParams={searchParams}
+                />
             )}
         </>
     )
