@@ -1,4 +1,5 @@
 import AsideMenu from "@/components/menu/aside-menu"
+import TrendingMenu from "@/components/menu/trending-menu"
 import type { ReactNode } from "react"
 
 interface UsernameLayoutProps {
@@ -15,6 +16,7 @@ export default function UsernameLayout({
             <AsideMenu />
             {children}
             {replyModal}
+            <TrendingMenu />
         </main>
     )
 }

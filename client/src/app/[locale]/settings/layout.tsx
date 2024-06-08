@@ -1,4 +1,5 @@
 import AsideMenu from "@/components/menu/aside-menu"
+import TrendingMenu from "@/components/menu/trending-menu"
 import { ReactNode } from "react"
 
 interface SettingsLayoutProps {
@@ -15,6 +16,7 @@ export default function SettingsLayout({
             <AsideMenu />
             {children}
             {deleteModal}
+            <TrendingMenu />
         </main>
     )
 }

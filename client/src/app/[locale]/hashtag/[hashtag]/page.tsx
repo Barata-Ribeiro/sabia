@@ -1,6 +1,7 @@
 import getPostsByHashtag from "@/actions/post/get-posts-by-hashtag"
 import PaginatedFeed from "@/components/feed/paginated-feed"
 import AsideMenu from "@/components/menu/aside-menu"
+import TrendingMenu from "@/components/menu/trending-menu"
 import LinkButton from "@/components/shared/link-button"
 import { PostsHashtagResponse } from "@/interfaces/post"
 import { redirect } from "@/navigation"
@@ -68,6 +69,7 @@ export default async function HashtagPage({ params, searchParams }: HashtagPageP
                     <p className="text-center">{t("PageEmptyPosts")}</p>
                 )}
             </section>
+            <TrendingMenu />
         </main>
     )
 }

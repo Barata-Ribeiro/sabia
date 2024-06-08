@@ -3,6 +3,7 @@ import getUserFeed from "@/actions/user/get-user-feed"
 import Feed from "@/components/feed/feed"
 import NewPostFeedForm from "@/components/forms/new-post-feed-form"
 import AsideMenu from "@/components/menu/aside-menu"
+import TrendingMenu from "@/components/menu/trending-menu"
 import { FeedResponse, UserContextResponse } from "@/interfaces/user"
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
@@ -61,6 +62,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                     )}
                 </section>
             </div>
+            <TrendingMenu />
         </main>
     )
 }
