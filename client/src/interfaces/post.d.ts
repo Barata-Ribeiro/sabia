@@ -41,3 +41,14 @@ export interface PostSearchResponse {
     total_items: number
     current_page: number
 }
+
+export interface TrendingHashtagsResponse {
+    trending_hashtags: TrendingHashtag[]
+    total_items: number
+}
+
+export interface TrendingHashtag {
+    total_posts: number
+    created_at: string
+    hashtag: string
+}
