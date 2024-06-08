@@ -30,6 +30,9 @@ public class Hashtag {
     @Column(unique = true, nullable = false)
     private String tag;
 
+    @Transient
+    private Long postsCount;
+
     @OneToMany(mappedBy = "hashtags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
@@ -42,4 +45,8 @@ public class Hashtag {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private Instant updatedAt;
+
+    public Long getPostsCount() {
+        return (long) this.hashtagPosts.size();
+    }
 }

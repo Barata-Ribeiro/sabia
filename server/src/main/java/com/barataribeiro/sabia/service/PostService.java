@@ -129,6 +129,7 @@ public class PostService {
         return createPostPageResponse(postPage, requesting_user);
     }
 
+    @Cacheable(value = "posts", key = "{#hashtag, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -146,6 +147,30 @@ public class PostService {
 
         return createPostPageResponse(postPage, requesting_user);
     }
+
+    public Map<String, Object> getTrendingHashtags() {
+        Pageable paging = PageRequest.of(0, 5);
+
+        List<Hashtag> hashtags = hashtagRepository.findTrendingHashtags(paging);
+
+        List<Map<String, Object>> trendingHashtags = hashtags.stream()
+                .map(hashtag -> {
+                    Map<String, Object> hashtagMap = new HashMap<>();
+                    hashtagMap.put("hashtag", hashtag.getTag());
+                    hashtagMap.put("total_posts", hashtag.getHashtagPosts().size());
+                    hashtagMap.put("created_at", hashtag.getCreatedAt().toString());
+
+                    return hashtagMap;
+                })
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("trending_hashtags", trendingHashtags);
+        response.put("total_items", hashtags.size());
+
+        return response;
+    }
+
 
     @Transactional
     @Caching(evict = {

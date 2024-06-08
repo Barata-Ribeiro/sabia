@@ -108,6 +108,21 @@ public class PostController {
                                                               data));
     }
 
+    @GetMapping("/public/trending")
+    public ResponseEntity<RestSuccessResponseDTO<Map<String, Object>>> getTrendingHashtags(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                                           Principal principal) {
+        Map<String, Object> data = postService.getTrendingHashtags();
+
+        String message = language == null || language.equals("en")
+                         ? "Trending hashtags retrieved successfully."
+                         : "Hashtags em alta recuperadas com sucesso.";
+
+        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
+                                                              HttpStatus.OK.value(),
+                                                              message,
+                                                              data));
+    }
+
     @PostMapping("/me/new-post")
     public ResponseEntity<RestSuccessResponseDTO<PostResponseDTO>> createPost(@RequestBody PostRequestDTO body,
                                                                               @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
