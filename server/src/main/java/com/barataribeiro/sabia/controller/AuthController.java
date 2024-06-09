@@ -1,6 +1,6 @@
 package com.barataribeiro.sabia.controller;
 
-import com.barataribeiro.sabia.dto.RestSuccessResponseDTO;
+import com.barataribeiro.sabia.dto.RestResponseDTO;
 import com.barataribeiro.sabia.dto.auth.LoginRequestDTO;
 import com.barataribeiro.sabia.dto.auth.LoginResponseDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterRequestDTO;
@@ -20,8 +20,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<RestSuccessResponseDTO<LoginResponseDTO>> login(@RequestBody LoginRequestDTO body,
-                                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestResponseDTO> login(@RequestBody LoginRequestDTO body,
+                                                 @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         LoginResponseDTO data = authService.login(body.username(),
                                                   body.password(),
                                                   body.rememberMe(),
@@ -31,24 +31,24 @@ public class AuthController {
                          ? "User logged in successfully."
                          : "Usuário logado com sucesso.";
 
-        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.OK,
-                                                              HttpStatus.OK.value(),
-                                                              message,
-                                                              data));
+        return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
+                                                     HttpStatus.OK.value(),
+                                                     message,
+                                                     data));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RestSuccessResponseDTO<RegisterResponseDTO>> register(@RequestBody RegisterRequestDTO body,
-                                                                                @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
+    public ResponseEntity<RestResponseDTO> register(@RequestBody RegisterRequestDTO body,
+                                                    @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language) {
         RegisterResponseDTO data = authService.register(body, language);
 
         String message = language == null || language.equals("en")
                          ? "Account created successfully."
                          : "Conta criada com sucesso.";
 
-        return ResponseEntity.ok(new RestSuccessResponseDTO<>(HttpStatus.CREATED,
-                                                              HttpStatus.CREATED.value(),
-                                                              message,
-                                                              data));
+        return ResponseEntity.ok(new RestResponseDTO(HttpStatus.CREATED,
+                                                     HttpStatus.CREATED.value(),
+                                                     message,
+                                                     data));
     }
 }
