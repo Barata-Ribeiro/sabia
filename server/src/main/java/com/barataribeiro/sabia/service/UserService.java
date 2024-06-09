@@ -45,6 +45,32 @@ public class UserService {
     private final Validation validation;
     private final EntityMapper entityMapper;
 
+    public Map<String, Object> getUserRecommendations(String requesting_user, String language) {
+        List<User> users = userRepository.findAll();
+
+        Map<String, Integer> userScores = getUserScores(users);
+
+        users.sort(Comparator.comparingInt(user -> userScores.get(user.getId())));
+        Collections.reverse(users);
+
+        List<PublicProfileResponseDTO> recommendations = new ArrayList<>();
+
+        for (User user : users) {
+            if (recommendations.size() >= 5) {
+                break;
+            }
+
+            if (!user.getUsername().equals(requesting_user)) {
+                recommendations.add(entityMapper.getPublicProfileResponseDTO(user, requesting_user));
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("recommendations", recommendations);
+
+        return response;
+    }
+
     @Cacheable(value = "userPublicFollowers", key = "{#username, #page, #perPage}")
     public Map<String, Object> getFollowers(String username, int page, int perPage, String requesting_user, String language) {
         Pageable paging = PageRequest.of(page, perPage);
@@ -519,6 +545,32 @@ public class UserService {
                                    ? "You must provide your current password to update your account."
                                    : "Você deve fornecer sua senha atual para atualizar sua conta.");
         }
+    }
+
+    private static Map<String, Integer> getUserScores(List<User> users) {
+        Map<String, Integer> userScores = new HashMap<>();
+
+        for (User user : users) {
+            if (user.getIs_private()) {
+                userScores.put(user.getId(), 0);
+                continue;
+            }
+
+            long score = user.getFollower_count() * 2;
+            for (Post post : user.getPosts()) {
+                score += 1;
+                score += post.getLikes().size();
+                score += post.getViews_count() * 3;
+            }
+
+            if (user.getIs_verified()) {
+                score += 1000;
+            }
+
+            userScores.put(user.getId(), (int) score);
+        }
+
+        return userScores;
     }
 
     private static Map<String, Object> sanitizeBody(ProfileRequestDTO body) {

@@ -21,6 +21,22 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/public/recommendations")
+    public ResponseEntity<RestResponseDTO> getUserRecommendations(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
+                                                                  Principal principal) {
+        Map<String, Object> data = userService.getUserRecommendations(principal.getName(), language);
+
+        String message = language == null || language.equals("en")
+                         ? "Recommendations retrieved successfully."
+                         : "Recomendações recuperadas com sucesso.";
+
+        return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
+                                                     HttpStatus.OK.value(),
+                                                     message,
+                                                     data));
+    }
+
+
     @GetMapping("/public/{username}")
     public ResponseEntity<RestResponseDTO> getPublicUser(@PathVariable String username,
                                                          @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
