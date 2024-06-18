@@ -1,6 +1,6 @@
 package com.barataribeiro.sabia.repository;
 
-import com.barataribeiro.sabia.model.Hashtag;
+import com.barataribeiro.sabia.model.entities.Hashtag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

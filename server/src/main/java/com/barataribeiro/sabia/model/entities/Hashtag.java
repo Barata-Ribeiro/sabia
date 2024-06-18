@@ -1,5 +1,6 @@
-package com.barataribeiro.sabia.model;
+package com.barataribeiro.sabia.model.entities;
 
+import com.barataribeiro.sabia.model.HashtagPosts;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

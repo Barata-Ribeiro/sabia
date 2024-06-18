@@ -1,4 +1,4 @@
-package com.barataribeiro.sabia.model;
+package com.barataribeiro.sabia.model.enums;
 
 public enum Roles {
     NONE,

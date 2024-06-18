@@ -1,7 +1,7 @@
 package com.barataribeiro.sabia.repository;
 
-import com.barataribeiro.sabia.model.Post;
-import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.model.entities.Post;
+import com.barataribeiro.sabia.model.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

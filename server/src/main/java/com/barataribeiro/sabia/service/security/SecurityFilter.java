@@ -1,7 +1,7 @@
 package com.barataribeiro.sabia.service.security;
 
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
-import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.model.entities.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

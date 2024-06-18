@@ -1,6 +1,6 @@
 package com.barataribeiro.sabia.service.security;
 
-import com.barataribeiro.sabia.model.User;
+import com.barataribeiro.sabia.model.entities.User;
 import com.barataribeiro.sabia.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

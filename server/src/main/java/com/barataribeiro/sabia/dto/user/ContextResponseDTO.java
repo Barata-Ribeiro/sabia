@@ -1,6 +1,6 @@
 package com.barataribeiro.sabia.dto.user;
 
-import com.barataribeiro.sabia.model.Roles;
+import com.barataribeiro.sabia.model.enums.Roles;
 
 import java.io.Serializable;
 

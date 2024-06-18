@@ -1,4 +1,4 @@
-package com.barataribeiro.sabia.model;
+package com.barataribeiro.sabia.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

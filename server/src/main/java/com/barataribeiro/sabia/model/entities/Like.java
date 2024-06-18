@@ -1,4 +1,4 @@
-package com.barataribeiro.sabia.model;
+package com.barataribeiro.sabia.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,7 +31,7 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false, updatable = false, referencedColumnName = "id")
-    private Post post;
+    private com.barataribeiro.sabia.model.Post post;
 
     @Column(name = "created_at")
     @CreationTimestamp

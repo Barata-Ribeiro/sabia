@@ -1,6 +1,10 @@
 package com.barataribeiro.sabia.config;
 
 import com.barataribeiro.sabia.model.*;
+import com.barataribeiro.sabia.model.entities.Hashtag;
+import com.barataribeiro.sabia.model.entities.Post;
+import com.barataribeiro.sabia.model.entities.User;
+import com.barataribeiro.sabia.model.enums.Roles;
 import com.barataribeiro.sabia.repository.HashtagPostsRepository;
 import com.barataribeiro.sabia.repository.HashtagRepository;
 import com.barataribeiro.sabia.repository.PostRepository;

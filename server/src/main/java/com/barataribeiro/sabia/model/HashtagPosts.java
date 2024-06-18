@@ -1,5 +1,7 @@
 package com.barataribeiro.sabia.model;
 
+import com.barataribeiro.sabia.model.entities.Hashtag;
+import com.barataribeiro.sabia.model.entities.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
