@@ -1,9 +1,10 @@
 package com.barataribeiro.sabia.service;
 
+import com.barataribeiro.sabia.builder.UserMapper;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
-import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
 import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
+import com.barataribeiro.sabia.dto.user.UserDTO;
 import com.barataribeiro.sabia.exceptions.others.BadRequest;
 import com.barataribeiro.sabia.exceptions.others.ForbiddenRequest;
 import com.barataribeiro.sabia.exceptions.others.InternalServerError;
@@ -44,6 +45,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final Validation validation;
     private final EntityMapper entityMapper;
+    private final UserMapper userMapper;
 
     public Map<String, Object> getUserRecommendations(String requesting_user, String language) {
         List<User> users = userRepository.findAll();
@@ -144,11 +146,11 @@ public class UserService {
     }
 
     @Cacheable(value = "userContext", key = "{#requesting_user, #language}")
-    public ContextResponseDTO getUserContext(String requesting_user, String language) {
+    public UserDTO getUserContext(String requesting_user, String language) {
         User user = userRepository.findByUsername(requesting_user)
                 .orElseThrow(() -> new UserNotFound(language));
 
-        return entityMapper.getContextResponseDTO(user);
+        return userMapper.toDTO(user);
     }
 
     @Transactional
@@ -220,7 +222,7 @@ public class UserService {
             @CacheEvict(value = "userFeed", allEntries = true),
             @CacheEvict(value = "userPublicFeed", allEntries = true)
     })
-    public ContextResponseDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body, String language) {
+    public UserDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         String genericErrorMessage = isEnglishLang
@@ -239,9 +241,7 @@ public class UserService {
                 throw new ForbiddenRequest(notAllowedMessage);
             }
 
-
             Map<String, Object> validatedInputData = validateInputData(body, user, isEnglishLang);
-
 
             user.setUsername(validatedInputData.get("username").toString());
             user.setDisplay_name(validatedInputData.get("display_name").toString());
@@ -258,7 +258,7 @@ public class UserService {
 
             user = userRepository.saveAndFlush(user);
 
-            return entityMapper.getContextResponseDTO(user);
+            return userMapper.toDTO(user);
         } catch (Exception error) {
             System.err.println("An error occurred while updating the user's account: " + error.getMessage());
             throw new InternalServerError(genericErrorMessage);

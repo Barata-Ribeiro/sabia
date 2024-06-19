@@ -1,5 +1,6 @@
 package com.barataribeiro.sabia.config;
 
+import com.barataribeiro.sabia.builder.UserMapper;
 import com.barataribeiro.sabia.model.*;
 import com.barataribeiro.sabia.model.entities.Hashtag;
 import com.barataribeiro.sabia.model.entities.Post;
@@ -33,6 +34,7 @@ public class MainSeeder {
     private final HashtagRepository hashtagRepository;
     private final HashtagPostsRepository hashtagPostsRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
 
     @Value("${api.security.seeder.admin.username}")
@@ -68,7 +70,7 @@ public class MainSeeder {
 
         seedDatabaseWithPostContainingHashtag(Post.builder().author(admin), postRepository, hashtagRepository, hashtagPostsRepository);
 
-        System.out.printf("Admin: %s%n", admin);
+        System.out.printf("Admin: %s%n", userMapper.toDTO(admin));
     }
 
     @PostConstruct

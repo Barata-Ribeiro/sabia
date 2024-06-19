@@ -2,7 +2,6 @@ package com.barataribeiro.sabia.util;
 
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.dto.user.AuthorResponseDTO;
-import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
 import com.barataribeiro.sabia.model.HashtagPosts;
 import com.barataribeiro.sabia.model.entities.Post;
@@ -61,28 +60,6 @@ public class EntityMapper {
                 post.getCreatedAt().toString(),
                 post.getUpdatedAt().toString()
         );
-    }
-
-    public ContextResponseDTO getContextResponseDTO(User user) {
-        return new ContextResponseDTO(user.getId(),
-                                      user.getUsername(),
-                                      user.getDisplay_name(),
-                                      user.getFull_name(),
-                                      user.getBirth_date(),
-                                      user.getGender(),
-                                      user.getEmail(),
-                                      user.getAvatar_image_url(),
-                                      user.getCover_image_url(),
-                                      user.getBiography(),
-                                      user.getWebsite(),
-                                      user.getLocation(),
-                                      user.getRole(),
-                                      user.getIs_verified(),
-                                      user.getIs_private(),
-                                      user.getFollower_count(),
-                                      user.getFollowing_count(),
-                                      user.getCreatedAt().toString(),
-                                      user.getUpdatedAt().toString());
     }
 
     public PublicProfileResponseDTO getPublicProfileResponseDTO(User user, String requesting_user) {

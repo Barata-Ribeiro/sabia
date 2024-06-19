@@ -1,9 +1,9 @@
 package com.barataribeiro.sabia.controller;
 
 import com.barataribeiro.sabia.dto.RestResponseDTO;
-import com.barataribeiro.sabia.dto.user.ContextResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
 import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
+import com.barataribeiro.sabia.dto.user.UserDTO;
 import com.barataribeiro.sabia.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +110,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<RestResponseDTO> getUser(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
                                                    Principal principal) {
-        ContextResponseDTO user = userService.getUserContext(principal.getName(), language);
+        UserDTO user = userService.getUserContext(principal.getName(), language);
 
         String message = language == null || language.equals("en")
                          ? "Context retrieved successfully."
@@ -149,7 +149,7 @@ public class UserController {
                                                       @RequestBody ProfileRequestDTO body,
                                                       @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
                                                       Principal principal) {
-        ContextResponseDTO user = userService.updateOwnAccount(userId, principal.getName(), body, language);
+        UserDTO user = userService.updateOwnAccount(userId, principal.getName(), body, language);
 
         String message = language == null || language.equals("en")
                          ? "Account updated successfully."
