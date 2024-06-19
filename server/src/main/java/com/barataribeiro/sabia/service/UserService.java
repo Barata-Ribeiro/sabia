@@ -22,9 +22,6 @@ import com.barataribeiro.sabia.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,7 +70,6 @@ public class UserService {
         return response;
     }
 
-    @Cacheable(value = "userPublicFollowers", key = "{#username, #page, #perPage}")
     public Map<String, Object> getFollowers(String username, int page, int perPage, String requesting_user, String language) {
         Pageable paging = PageRequest.of(page, perPage);
 
@@ -94,7 +90,6 @@ public class UserService {
         return response;
     }
 
-    @Cacheable(value = "userPublicProfile", key = "{#username, #language}")
     public PublicProfileResponseDTO getPublicProfile(String username, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -110,7 +105,6 @@ public class UserService {
         return entityMapper.getPublicProfileResponseDTO(user, requesting_user);
     }
 
-    @Cacheable(value = "users", key = "{#query, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> searchUser(String query, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -145,7 +139,6 @@ public class UserService {
         return response;
     }
 
-    @Cacheable(value = "userContext", key = "{#requesting_user, #language}")
     public UserDTO getUserContext(String requesting_user, String language) {
         User user = userRepository.findByUsername(requesting_user)
                 .orElseThrow(() -> new UserNotFound(language));
@@ -154,7 +147,6 @@ public class UserService {
     }
 
     @Transactional
-    @Cacheable(value = "userFeed", key = "{#userId, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getUserFeed(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -192,7 +184,6 @@ public class UserService {
         return createResponseFromPostPage(postPage, requesting_user);
     }
 
-    @Cacheable(value = "userPublicFeed", key = "{#userId, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -215,13 +206,6 @@ public class UserService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "users", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true),
-            @CacheEvict(value = "userPublicFeed", allEntries = true)
-    })
     public UserDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -266,14 +250,6 @@ public class UserService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "userPublicFollowers", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "users", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true),
-            @CacheEvict(value = "userPublicFeed", allEntries = true)
-    })
     public void deleteOwnAccount(String userId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -302,13 +278,6 @@ public class UserService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "userPublicFollowers", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "users", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true),
-    })
     public void followUser(String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -376,13 +345,6 @@ public class UserService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "userPublicFollowers", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "users", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true),
-    })
     public void unfollowUser(String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 

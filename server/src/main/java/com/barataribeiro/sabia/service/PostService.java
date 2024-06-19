@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +45,6 @@ public class PostService {
     private final Validation validation;
     private final EntityMapper entityMapper;
 
-    @Cacheable(value = "posts", key = "{#userId, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getAllPosts(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -65,7 +63,6 @@ public class PostService {
         return createPostPageResponse(postPage, requesting_user);
     }
 
-    @Cacheable(value = "post", key = "{#postId, #requesting_user, #language}")
     public PostResponseDTO getPostById(String postId, String requesting_user, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
@@ -76,7 +73,6 @@ public class PostService {
         return entityMapper.getPostResponseDTO(post, requesting_user);
     }
 
-    @Cacheable(value = "posts", key = "{#postId, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getPostReplies(String postId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -107,7 +103,6 @@ public class PostService {
         return response;
     }
 
-    @Cacheable(value = "posts", key = "{#query, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> searchPosts(String query, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -133,7 +128,6 @@ public class PostService {
         return createPostPageResponse(postPage, requesting_user);
     }
 
-    @Cacheable(value = "posts", key = "{#hashtag, #page, #perPage, #requesting_user, #language}")
     public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -177,13 +171,6 @@ public class PostService {
 
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "posts", allEntries = true),
-            @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true)
-    })
     public PostResponseDTO createPost(PostRequestDTO body, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -231,13 +218,6 @@ public class PostService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "posts", allEntries = true),
-            @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true)
-    })
     public PostResponseDTO repost(String postId, String requesting_user, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
@@ -297,10 +277,6 @@ public class PostService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "posts", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true)
-    })
     public void deletePost(String postId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -320,14 +296,6 @@ public class PostService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "posts", allEntries = true),
-            @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true),
-            @CacheEvict(value = "userPublicFeed", allEntries = true)
-    })
     public Boolean toggleLike(String postId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
