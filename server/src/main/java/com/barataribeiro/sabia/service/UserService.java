@@ -21,6 +21,8 @@ import com.barataribeiro.sabia.util.EntityMapper;
 import com.barataribeiro.sabia.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -105,7 +107,7 @@ public class UserService {
         return entityMapper.getPublicProfileResponseDTO(user, requesting_user);
     }
 
-    public Map<String, Object> searchUser(String query, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> searchUser(@NotNull String query, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -184,6 +186,7 @@ public class UserService {
         return createResponseFromPostPage(postPage, requesting_user);
     }
 
+    @Transactional
     public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -213,40 +216,35 @@ public class UserService {
                                      ? "An error occurred while updating your account. Please try again."
                                      : "Ocorreu um erro ao atualizar sua conta. Por favor, tente novamente.";
 
-        try {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UserNotFound(language));
+        String notAllowedMessage = isEnglishLang
+                                   ? "You are not allowed to edit this user's information."
+                                   : "Você não tem permissão para editar as informações deste usuário.";
 
-            String notAllowedMessage = isEnglishLang
-                                       ? "You are not allowed to edit this user's information."
-                                       : "Você não tem permissão para editar as informações deste usuário.";
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(language));
 
-            if (!user.getUsername().equals(requesting_user)) {
-                throw new ForbiddenRequest(notAllowedMessage);
-            }
-
-            Map<String, Object> validatedInputData = validateInputData(body, user, isEnglishLang);
-
-            user.setUsername(validatedInputData.get("username").toString());
-            user.setDisplay_name(validatedInputData.get("display_name").toString());
-            user.setFull_name(validatedInputData.get("full_name").toString());
-            user.setBirth_date(body.birth_date());
-            user.setGender(body.gender());
-            user.setEmail(validatedInputData.get("email").toString());
-            user.setPassword(passwordEncoder.encode(body.new_password()));
-            user.setAvatar_image_url(validatedInputData.get("avatar_image_url").toString());
-            user.setCover_image_url(validatedInputData.get("cover_image_url").toString());
-            user.setBiography(validatedInputData.get("biography").toString());
-            user.setWebsite(validatedInputData.get("website").toString());
-            user.setLocation(body.location());
-
-            user = userRepository.saveAndFlush(user);
-
-            return userMapper.toDTO(user);
-        } catch (Exception error) {
-            System.err.println("An error occurred while updating the user's account: " + error.getMessage());
-            throw new InternalServerError(genericErrorMessage);
+        if (!user.getUsername().equals(requesting_user)) {
+            throw new ForbiddenRequest(notAllowedMessage);
         }
+
+        Map<String, Object> validatedInputData = validateInputData(body, user, isEnglishLang);
+
+        user.setUsername(validatedInputData.get("username").toString());
+        user.setDisplay_name(validatedInputData.get("display_name").toString());
+        user.setFull_name(validatedInputData.get("full_name").toString());
+        user.setBirth_date(body.birth_date());
+        user.setGender(body.gender());
+        user.setEmail(validatedInputData.get("email").toString());
+        user.setPassword(passwordEncoder.encode(body.new_password()));
+        user.setAvatar_image_url(validatedInputData.get("avatar_image_url").toString());
+        user.setCover_image_url(validatedInputData.get("cover_image_url").toString());
+        user.setBiography(validatedInputData.get("biography").toString());
+        user.setWebsite(validatedInputData.get("website").toString());
+        user.setLocation(body.location());
+
+        User savedUser = userRepository.save(user);
+
+        return userMapper.toDTO(savedUser);
     }
 
     @Transactional
@@ -278,70 +276,66 @@ public class UserService {
     }
 
     @Transactional
-    public void followUser(String userId, String followedId, String requesting_user, String language) {
+    public void followUser(@NotNull String userId, String followedId, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         String genericErrorMessage = isEnglishLang
                                      ? "An error occurred while following the user. Please try again."
                                      : "Ocorreu um erro ao seguir o usuário. Por favor, tente novamente.";
 
-        try {
-            String sameUserMessage = isEnglishLang
-                                     ? "You cannot follow yourself."
-                                     : "Você não pode seguir a si mesmo.";
 
-            String notAllowedMessage = isEnglishLang
-                                       ? "You are not allowed to follow this user."
-                                       : "Você não tem permissão para seguir este usuário.";
+        String sameUserMessage = isEnglishLang
+                                 ? "You cannot follow yourself."
+                                 : "Você não pode seguir a si mesmo.";
 
-            String alreadyFollowingMessage = isEnglishLang
-                                             ? "You are already following this user."
-                                             : "Você já está seguindo este usuário.";
+        String notAllowedMessage = isEnglishLang
+                                   ? "You are not allowed to follow this user."
+                                   : "Você não tem permissão para seguir este usuário.";
 
-            if (userId.equals(followedId)) {
-                throw new SameUser(sameUserMessage);
-            }
+        String alreadyFollowingMessage = isEnglishLang
+                                         ? "You are already following this user."
+                                         : "Você já está seguindo este usuário.";
 
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UserNotFound(language));
-
-            User followedUser = userRepository.findById(followedId)
-                    .orElseThrow(() -> new UserNotFound(language));
-
-            if (!user.getUsername().equals(requesting_user)) {
-                throw new ForbiddenRequest(notAllowedMessage);
-            }
-
-            var isAlreadyFollowing = user.getFollowings().stream().anyMatch(follow -> follow.getFollowed().getId().equals(followedId)) ||
-                    followRepository.existsByFollowerIdAndFollowedId(userId, followedId);
-
-            if (isAlreadyFollowing) {
-                throw new BadRequest(alreadyFollowingMessage);
-            }
-
-            if (followedUser.getIs_private()) {
-                throw new ForbiddenRequest(notAllowedMessage);
-            }
-
-            Follow newFollow = Follow.builder()
-                    .follower(user)
-                    .followed(followedUser)
-                    .build();
-
-            followRepository.save(newFollow);
-
-            user.getFollowings().add(newFollow);
-            user.incrementFollowingCount();
-
-            followedUser.getFollowers().add(newFollow);
-            followedUser.incrementFollowerCount();
-
-            userRepository.save(user);
-            userRepository.save(followedUser);
-        } catch (Exception error) {
-            System.err.println("An error occurred while following the user: " + error.getMessage());
-            throw new InternalServerError(genericErrorMessage);
+        if (userId.equals(followedId)) {
+            throw new SameUser(sameUserMessage);
         }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(language));
+
+        User followedUser = userRepository.findById(followedId)
+                .orElseThrow(() -> new UserNotFound(language));
+
+        if (!user.getUsername().equals(requesting_user)) {
+            throw new ForbiddenRequest(notAllowedMessage);
+        }
+
+        var isAlreadyFollowing = user.getFollowings().stream().anyMatch(follow -> follow.getFollowed().getId().equals(followedId)) ||
+                followRepository.existsByFollowerIdAndFollowedId(userId, followedId);
+
+        if (isAlreadyFollowing) {
+            throw new BadRequest(alreadyFollowingMessage);
+        }
+
+        if (followedUser.getIs_private()) {
+            throw new ForbiddenRequest(notAllowedMessage);
+        }
+
+        Follow newFollow = Follow.builder()
+                .follower(user)
+                .followed(followedUser)
+                .build();
+
+        followRepository.save(newFollow);
+
+        user.getFollowings().add(newFollow);
+        user.incrementFollowingCount();
+
+        followedUser.getFollowers().add(newFollow);
+        followedUser.incrementFollowerCount();
+
+        userRepository.save(user);
+        userRepository.save(followedUser);
     }
 
     @Transactional
@@ -352,42 +346,38 @@ public class UserService {
                                      ? "An error occurred while unfollowing the user. Please try again."
                                      : "Ocorreu um erro ao deixar de seguir o usuário. Por favor, tente novamente.";
 
-        try {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UserNotFound(language));
 
-            User followedUser = userRepository.findById(followedId)
-                    .orElseThrow(() -> new UserNotFound(language));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(language));
 
-            String notAllowedMessage = isEnglishLang
-                                       ? "You are not allowed to unfollow this user."
-                                       : "Você não tem permissão para deixar de seguir este usuário.";
+        User followedUser = userRepository.findById(followedId)
+                .orElseThrow(() -> new UserNotFound(language));
 
-            String notFollowingMessage = isEnglishLang
-                                         ? "You are not following this user."
-                                         : "Você não está seguindo este usuário.";
+        String notAllowedMessage = isEnglishLang
+                                   ? "You are not allowed to unfollow this user."
+                                   : "Você não tem permissão para deixar de seguir este usuário.";
 
-            if (!user.getUsername().equals(requesting_user)) {
-                throw new ForbiddenRequest(notAllowedMessage);
-            }
+        String notFollowingMessage = isEnglishLang
+                                     ? "You are not following this user."
+                                     : "Você não está seguindo este usuário.";
 
-            Follow follow = followRepository.findByFollowerIdAndFollowedId(userId, followedId)
-                    .orElseThrow(() -> new BadRequest(notFollowingMessage));
-
-            followRepository.delete(follow);
-
-            user.decrementFollowingCount();
-            followedUser.decrementFollowerCount();
-
-            userRepository.save(user);
-            userRepository.save(followedUser);
-        } catch (Exception error) {
-            System.err.println("An error occurred while unfollowing the user: " + error.getMessage());
-            throw new InternalServerError(genericErrorMessage);
+        if (!user.getUsername().equals(requesting_user)) {
+            throw new ForbiddenRequest(notAllowedMessage);
         }
+
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(userId, followedId)
+                .orElseThrow(() -> new BadRequest(notFollowingMessage));
+
+        followRepository.delete(follow);
+
+        user.decrementFollowingCount();
+        followedUser.decrementFollowerCount();
+
+        userRepository.save(user);
+        userRepository.save(followedUser);
     }
 
-    private Map<String, Object> createResponseFromPostPage(Page<Post> postPage, String requesting_user) {
+    private @NotNull Map<String, Object> createResponseFromPostPage(@NotNull Page<Post> postPage, String requesting_user) {
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> mappedPosts = posts.stream()
@@ -403,7 +393,7 @@ public class UserService {
         return response;
     }
 
-    private Map<String, Object> validateInputData(ProfileRequestDTO body, User user, boolean isEnglishLang) {
+    private @NotNull Map<String, Object> validateInputData(@NotNull ProfileRequestDTO body, User user, boolean isEnglishLang) {
         if (body.password() != null && !body.password().isEmpty()) {
             if (!passwordEncoder.matches(body.password(), user.getPassword())) {
                 throw new InvalidInput(isEnglishLang
@@ -509,7 +499,7 @@ public class UserService {
         }
     }
 
-    private static Map<String, Integer> getUserScores(List<User> users) {
+    private static @NotNull Map<String, Integer> getUserScores(@NotNull List<User> users) {
         Map<String, Integer> userScores = new HashMap<>();
 
         for (User user : users) {
@@ -535,7 +525,7 @@ public class UserService {
         return userScores;
     }
 
-    private static Map<String, Object> sanitizeBody(ProfileRequestDTO body) {
+    private static @NotNull @Unmodifiable Map<String, Object> sanitizeBody(@NotNull ProfileRequestDTO body) {
         var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
         var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
         var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());

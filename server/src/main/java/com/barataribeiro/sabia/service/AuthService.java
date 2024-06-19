@@ -4,18 +4,17 @@ import com.barataribeiro.sabia.dto.auth.LoginResponseDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterRequestDTO;
 import com.barataribeiro.sabia.dto.auth.RegisterResponseDTO;
 import com.barataribeiro.sabia.exceptions.auth.InvalidCredentials;
-import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import com.barataribeiro.sabia.exceptions.user.UserAlreadyExists;
 import com.barataribeiro.sabia.exceptions.user.UserIsBanned;
 import com.barataribeiro.sabia.exceptions.user.UserNotFound;
-import com.barataribeiro.sabia.model.enums.Roles;
 import com.barataribeiro.sabia.model.entities.User;
+import com.barataribeiro.sabia.model.enums.Roles;
 import com.barataribeiro.sabia.repository.UserRepository;
 import com.barataribeiro.sabia.service.security.TokenService;
 import com.barataribeiro.sabia.util.Validation;
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -70,7 +69,7 @@ public class AuthService {
     }
 
     @Transactional
-    public RegisterResponseDTO register(RegisterRequestDTO body, String language) {
+    public RegisterResponseDTO register(@NotNull RegisterRequestDTO body, String language) {
         var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
         var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
         var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());
@@ -121,27 +120,19 @@ public class AuthService {
             throw new InvalidCredentials(invalidBirthday);
         }
 
-        try {
-            User newUser = User.builder()
-                    .username(sanitizedUsername)
-                    .display_name(sanitizedDisplayName)
-                    .full_name(sanitizedFullName)
-                    .birth_date(birthDate)
-                    .email(sanitizedEmail)
-                    .password(passwordEncoder.encode(sanitizedPassword))
-                    .build();
+        User newUser = User.builder()
+                .username(sanitizedUsername)
+                .display_name(sanitizedDisplayName)
+                .full_name(sanitizedFullName)
+                .birth_date(birthDate)
+                .email(sanitizedEmail)
+                .password(passwordEncoder.encode(sanitizedPassword))
+                .build();
 
-            newUser = userRepository.saveAndFlush(newUser);
+        userRepository.save(newUser);
 
-            return new RegisterResponseDTO(newUser.getUsername(),
-                                           newUser.getDisplay_name(),
-                                           newUser.getEmail());
-        } catch (ConstraintViolationException error) {
-            System.err.println(error.getMessage());
-            throw new InvalidCredentials(error.getMessage());
-        } catch (Exception error) {
-            System.err.println("Error creating account: " + error.getMessage());
-            throw new InternalServerError(genericErrorMessage);
-        }
+        return new RegisterResponseDTO(newUser.getUsername(),
+                                       newUser.getDisplay_name(),
+                                       newUser.getEmail());
     }
 }

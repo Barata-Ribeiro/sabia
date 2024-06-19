@@ -16,9 +16,8 @@ import com.barataribeiro.sabia.util.EntityMapper;
 import com.barataribeiro.sabia.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,14 +62,15 @@ public class PostService {
         return createPostPageResponse(postPage, requesting_user);
     }
 
+    @Transactional
     public PostResponseDTO getPostById(String postId, String requesting_user, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
         post.incrementViewCount();
-        post = postRepository.saveAndFlush(post);
+        Post savedPost = postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(post, requesting_user);
+        return entityMapper.getPostResponseDTO(savedPost, requesting_user);
     }
 
     public Map<String, Object> getPostReplies(String postId, int page, int perPage, String requesting_user, String language) {
@@ -103,7 +103,7 @@ public class PostService {
         return response;
     }
 
-    public Map<String, Object> searchPosts(String query, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> searchPosts(@NotNull String query, int page, int perPage, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -212,7 +212,7 @@ public class PostService {
             savedPost.setPostHashtags(postHashtags);
         }
 
-        savedPost = postRepository.saveAndFlush(post);
+        savedPost = postRepository.save(post);
 
         return entityMapper.getPostResponseDTO(savedPost, requesting_user);
     }
@@ -231,24 +231,17 @@ public class PostService {
                 .repost_off(post)
                 .build();
 
-        repost = postRepository.saveAndFlush(repost);
+        Post savedRepost = postRepository.save(repost);
 
         post.incrementRepostCount();
         post.incrementViewCount();
 
         postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(repost, requesting_user);
+        return entityMapper.getPostResponseDTO(savedRepost, requesting_user);
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "posts", allEntries = true),
-            @CacheEvict(value = "post", allEntries = true),
-            @CacheEvict(value = "userPublicProfile", allEntries = true),
-            @CacheEvict(value = "userContext", allEntries = true),
-            @CacheEvict(value = "userFeed", allEntries = true)
-    })
     public PostResponseDTO replyToPost(String postId, PostRequestDTO body, String requesting_user, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
@@ -268,12 +261,12 @@ public class PostService {
                 .in_reply_to(post)
                 .build();
 
-        reply = postRepository.saveAndFlush(reply);
+        Post savedReply = postRepository.save(reply);
 
         post.incrementReplyCount();
         postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(reply, requesting_user);
+        return entityMapper.getPostResponseDTO(savedReply, requesting_user);
     }
 
     @Transactional
@@ -290,7 +283,6 @@ public class PostService {
         if (!post.getAuthor().getUsername().equals(requesting_user)) {
             throw new ForbiddenRequest(notAuthorMessage);
         }
-
 
         postRepository.delete(post);
     }
@@ -324,16 +316,16 @@ public class PostService {
                     .post(post)
                     .build();
 
-            likeRepository.saveAndFlush(newLike);
+            likeRepository.save(newLike);
             post.incrementLikeCount();
         }
 
-        postRepository.saveAndFlush(post);
+        postRepository.save(post);
 
         return !liked;
     }
 
-    private Map<String, Object> createPostPageResponse(Page<Post> postPage, String requesting_user) {
+    private @NotNull Map<String, Object> createPostPageResponse(@NotNull Page<Post> postPage, String requesting_user) {
         List<Post> postsResult = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = postsResult.stream()
@@ -349,7 +341,7 @@ public class PostService {
         return response;
     }
 
-    private String getSanitizedText(PostRequestDTO body, boolean isEnglishLang) {
+    private String getSanitizedText(@NotNull PostRequestDTO body, boolean isEnglishLang) {
         var text = StringEscapeUtils.escapeHtml4(body.text().strip());
 
         validation.validateBodyText(isEnglishLang, text);
