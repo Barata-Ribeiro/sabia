@@ -59,7 +59,9 @@ public class AuthService {
 
         Map.Entry<String, Instant> tokenAndExpiration = tokenService.generateToken(user, rememberMe);
         String token = tokenAndExpiration.getKey();
-        String expirationDate = tokenAndExpiration.getValue().atZone(ZoneOffset.of("-03:00")).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String expirationDate = tokenAndExpiration.getValue()
+                .atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         return new LoginResponseDTO(user.getId(),
                                     user.getUsername(),
