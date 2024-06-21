@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "@/navigation"
 import { NULL_AVATAR } from "@/utils/constants"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { HiBars3BottomLeft, HiXMark } from "react-icons/hi2"
 import { TbPencilPlus } from "react-icons/tb"
 import { twMerge } from "tailwind-merge"
@@ -18,12 +18,14 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
     const pathname = usePathname()
     const router = useRouter()
     const { setUser } = useUser()
+    const mobileMenuRef = useRef<HTMLDivElement | null>(null)
 
     const shouldNotRender =
         pathname === "/privacy-policy" ||
         pathname === "/terms-of-use" ||
         pathname === "/about" ||
-        pathname === "/auth/register"
+        pathname === "/auth/register" ||
+        pathname === "/"
 
     const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -41,9 +43,24 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
     async function handleLogout() {
         await logout()
         setUser(null)
+        setIsAvatarMenuOpen(false)
         router.push("/")
         router.refresh()
     }
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(event.target as Node)
+            ) {
+                setIsAvatarMenuOpen(false)
+            }
+        }
+
+        document.addEventListener("click", handleClickOutside)
+        return () => document.removeEventListener("click", handleClickOutside)
+    }, [])
 
     return (
         !shouldNotRender && (
@@ -141,7 +158,9 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                             />
                                         </button>
                                     </div>
+                                    {/*MOBILE MENU*/}
                                     <div
+                                        ref={mobileMenuRef}
                                         className={`${isAvatarMenuOpen ? "absolute" : "hidden"} right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition-all focus:outline-none`}
                                         role="menu"
                                         aria-orientation="vertical"
@@ -159,6 +178,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                             className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
                                             role="menuitem"
                                             tabIndex={-1}
+                                            onClick={() => setIsAvatarMenuOpen(false)}
                                             id="user-menu-item-0"
                                         >
                                             {t("NavUserMenuProfile")}
@@ -168,6 +188,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                             className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
                                             role="menuitem"
                                             tabIndex={-1}
+                                            onClick={() => setIsAvatarMenuOpen(false)}
                                             id="user-menu-item-1"
                                         >
                                             {t("NavUserMenuSettings")}
