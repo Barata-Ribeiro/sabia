@@ -25,7 +25,7 @@ export default function AsideMenu() {
     return (
         <aside
             id="sidebar"
-            className="relative hidden h-full w-full max-w-[20rem] flex-col divide-y bg-clip-border text-gray-700 md:flex"
+            className="relative hidden h-full w-full max-w-[20rem] flex-col divide-y bg-clip-border text-gray-700 lg:flex"
         >
             <SearchForm />
             <nav

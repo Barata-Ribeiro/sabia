@@ -38,7 +38,7 @@ export default function TrendingMenu() {
         return (
             <aside
                 id="hashtag-trending-loading"
-                className="flex h-full w-full max-w-[20rem] animate-pulse flex-col gap-4 bg-clip-border p-4 text-gray-700"
+                className="hidden h-full w-full max-w-[20rem] animate-pulse flex-col gap-4 bg-clip-border p-4 text-gray-700 lg:flex"
             >
                 {[1, 2].map((index) => (
                     <div key={index} className="w-full rounded-lg border bg-white">
@@ -61,7 +61,7 @@ export default function TrendingMenu() {
     return (
         <aside
             id="hashtag-trending"
-            className="flex h-full w-full max-w-[20rem] flex-col gap-4 bg-clip-border p-4 text-gray-700"
+            className="hidden h-full w-full max-w-[20rem] flex-col gap-4 bg-clip-border p-4 text-gray-700 md:flex"
         >
             <div className="w-full rounded-lg border bg-white">
                 <h2 className="px-4 pt-2 font-heading text-2xl font-bold text-body-900">
