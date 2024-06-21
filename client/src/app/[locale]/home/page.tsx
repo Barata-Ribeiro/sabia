@@ -36,7 +36,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
             <AsideMenu />
             <div
                 id="content"
-                className="flex w-max flex-col gap-4 divide-y overflow-y-scroll border-x"
+                className="flex w-full flex-col gap-4 divide-y overflow-y-scroll border-x md:w-max"
             >
                 <section
                     id="private-new-post"
@@ -48,7 +48,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                 </section>
                 <section
                     id="private-feed"
-                    className="max-w-[37.5rem] flex-1"
+                    className="w-full flex-1 md:max-w-[37.5rem]"
                     aria-label={t("AriaLabelFeed")}
                 >
                     {feedResponse ? (

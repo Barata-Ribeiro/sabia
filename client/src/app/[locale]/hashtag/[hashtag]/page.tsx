@@ -44,7 +44,7 @@ export default async function HashtagPage({ params, searchParams }: HashtagPageP
             <AsideMenu />
             <section
                 id="hashtag-section"
-                className="max-w-[38rem] flex-1 overflow-y-scroll border-x"
+                className="w-full flex-1 overflow-y-scroll border-x md:max-w-[38rem]"
                 aria-label={t("AriaLabelHashtag")}
             >
                 <div className="sticky top-0 flex w-full border-b bg-background-50 p-4">

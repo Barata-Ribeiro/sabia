@@ -31,7 +31,7 @@ export default async function PostPage({ params }: PostPageProps) {
     const post = postState.response?.data as PostResponse
 
     return (
-        <section className="max-w-[37.5rem] flex-1 border-x">
+        <section className="w-full flex-1 border-x md:max-w-[37.5rem]">
             <div className="mb-4 w-full p-4 shadow-md">
                 <div className="flex w-max items-center gap-6 text-2xl">
                     <LinkButton

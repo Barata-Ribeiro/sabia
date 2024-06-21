@@ -51,7 +51,7 @@ export default async function FollowersPage({
     const resolvedListOfBlurredDataUrl = await Promise.all(listOfBlurredDataUrl)
 
     return (
-        <section className="w-max max-w-[38rem] flex-1 overflow-y-scroll border-x">
+        <section className="w-full flex-1 overflow-y-scroll border-x md:max-w-[38rem]">
             <header className="w-full border-b p-4">
                 <div className="flex w-max items-center gap-6">
                     <LinkButton

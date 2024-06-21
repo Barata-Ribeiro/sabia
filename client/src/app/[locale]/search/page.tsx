@@ -58,7 +58,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <AsideMenu />
             <section
                 id="search-section"
-                className="max-w-[38rem] flex-1 overflow-y-scroll border-x"
+                className="w-full flex-1 overflow-y-scroll border-x md:max-w-[38rem]"
             >
                 <div className="sticky top-0 flex w-full border-b bg-background-50 p-4">
                     <div className="flex items-center gap-6 text-2xl">
@@ -78,7 +78,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 {searchResponse && fetchType === "user" ? (
                     (searchResponse as UserSearchResponse).users.map((user, index) => (
                         <ProfileEntity
-                            key={user.id}
+                            key={user.id + "-" + index}
                             user={user}
                             resolvedListOfBlurredDataUrl={resolvedListOfBlurredDataUrl}
                             totalPages={
