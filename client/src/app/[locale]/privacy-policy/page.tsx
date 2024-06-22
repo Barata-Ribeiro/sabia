@@ -1,4 +1,5 @@
 import SecondaryHeader from "@/components/global/secondary-header"
+import LinkButton from "@/components/shared/link-button"
 import ReadingIndicator from "@/components/shared/reading-indicator"
 import ScrollToTopButton from "@/components/shared/scroll-to-top-button"
 import { Metadata } from "next"
@@ -27,10 +28,7 @@ export default async function PrivacyPolicyPage({
         <main role="main">
             <ReadingIndicator />
             <SecondaryHeader />
-            <section
-                className="mx-auto my-6 flex max-w-5xl flex-col gap-6 px-4
-            sm:px-0"
-            >
+            <section className="mx-auto my-6 flex max-w-5xl flex-col gap-6 px-4 sm:px-0">
                 <h1 className="text-center text-4xl font-medium">{t("PolicyTitle")}</h1>
 
                 <p>{t("PolicyLastUpdated")}</p>
@@ -42,29 +40,39 @@ export default async function PrivacyPolicyPage({
                     role="privacy policy navigation"
                 >
                     <li>
-                        <a href="#privacy-start">{t("SectionTitle-0")}</a>
+                        <LinkButton href="#privacy-start">
+                            {t("SectionTitle-0")}
+                        </LinkButton>
                     </li>
                     <li>
-                        <a href="#interpretation-and-definitions">
+                        <LinkButton href="#interpretation-and-definitions">
                             {t("Section-1.title")}
-                        </a>
+                        </LinkButton>
                     </li>
                     <li>
-                        <a href="#collecting-using-personal-data">
+                        <LinkButton href="#collecting-using-personal-data">
                             {t("Section-2.title")}
-                        </a>
+                        </LinkButton>
                     </li>
                     <li>
-                        <a href="#childrens-privacy">{t("Section-3.title")}</a>
+                        <LinkButton href="#childrens-privacy">
+                            {t("Section-3.title")}
+                        </LinkButton>
                     </li>
                     <li>
-                        <a href="#links-to-other-websites">{t("Section-4.title")}</a>
+                        <LinkButton href="#links-to-other-websites">
+                            {t("Section-4.title")}
+                        </LinkButton>
                     </li>
                     <li>
-                        <a href="#change-privacy-policy">{t("Section-5.title")}</a>
+                        <LinkButton href="#change-privacy-policy">
+                            {t("Section-5.title")}
+                        </LinkButton>
                     </li>
                     <li>
-                        <a href="#contact-us">{t("Section-6.title")}</a>
+                        <LinkButton href="#contact-us">
+                            {t("Section-6.title")}
+                        </LinkButton>
                     </li>
                 </ul>
 
@@ -489,9 +497,9 @@ export default async function PrivacyPolicyPage({
                     </article>
                 </div>
 
-                <a className="sr-only" href="#screen-reader-navigation">
+                <LinkButton className="sr-only" href="#screen-reader-navigation">
                     {t("GoBackScreenReader")}
-                </a>
+                </LinkButton>
             </section>
             <ScrollToTopButton />
         </main>
