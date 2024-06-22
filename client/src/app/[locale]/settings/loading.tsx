@@ -8,10 +8,7 @@ export default async function SettingsLoading() {
     const loadingElementStyle = tw`h-10 rounded bg-background-200`
 
     return (
-        <section
-            id="settings-section"
-            className="flex w-full flex-col gap-4 border-l px-2 font-body md:pl-4"
-        >
+        <div className="flex w-full flex-col gap-4 border-l px-2 font-body md:pl-4">
             <header>
                 <h1 className="pt-6 font-heading text-2xl font-semibold text-body-900 dark:text-body-100">
                     Account Settings
@@ -21,46 +18,46 @@ export default async function SettingsLoading() {
                 </p>
             </header>
 
-            <form action="">
-                <fieldset className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
-                    <legend className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
+            <div>
+                <div className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
+                    <div className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
                         Account Information
-                    </legend>
+                    </div>
                     <div className={loadingContainerStyle}>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                     </div>
-                </fieldset>
-                <fieldset className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
-                    <legend className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
+                </div>
+                <div className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
+                    <div className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
                         Personal Information
-                    </legend>
+                    </div>
                     <div className={loadingContainerStyle}>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                     </div>
-                </fieldset>
-                <fieldset className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
-                    <legend className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
+                </div>
+                <div className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
+                    <div className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
                         Public Information
-                    </legend>
+                    </div>
                     <div className={loadingContainerStyle}>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                     </div>
-                </fieldset>
-                <fieldset className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
-                    <legend className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
+                </div>
+                <div className="mb-6 flex flex-col gap-6 rounded-lg border p-4 transition-colors hover:bg-background-100">
+                    <div className="px-2 font-heading text-sm text-body-900 antialiased dark:text-body-100">
                         Security Information
-                    </legend>
+                    </div>
                     <div className={loadingContainerStyle}>
                         <div className={loadingElementStyle}></div>
                         <div className={loadingElementStyle}></div>
                     </div>
-                </fieldset>
+                </div>
                 <div className="flex flex-col gap-6 self-center">
                     <div className={loadingContainerStyle}>
                         <div className={loadingElementStyle}></div>
@@ -75,7 +72,7 @@ export default async function SettingsLoading() {
                         <Loading />
                     </div>
                 </div>
-            </form>
+            </div>
 
             <footer>
                 <h2 className="py-2 font-heading text-xl font-semibold text-body-900 dark:text-body-100">
@@ -98,6 +95,6 @@ export default async function SettingsLoading() {
                     Continue with deletion
                 </LinkButton>
             </footer>
-        </section>
+        </div>
     )
 }
