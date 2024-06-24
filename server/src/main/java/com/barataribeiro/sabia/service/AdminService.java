@@ -79,10 +79,6 @@ public class AdminService {
     public void deleteUser(String userId, String principalName, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
-        String genericErrorMessage = isEnglishLang
-                                     ? "An error occurred while deleting the user's account. Please try again."
-                                     : "Ocorreu um erro ao excluir a conta do usuário. Por favor, tente novamente.";
-
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(language));
 
         String sameUserBadRequestMessage = isEnglishLang
@@ -107,11 +103,6 @@ public class AdminService {
     @Transactional
     public void deletePost(String postId, String principalName, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
-
-        String genericErrorMessage = isEnglishLang
-                                     ? "An error occurred while deleting the post. Please try again."
-                                     : "Ocorreu um erro ao excluir a postagem. Por favor, tente novamente.";
-
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound(language));
 

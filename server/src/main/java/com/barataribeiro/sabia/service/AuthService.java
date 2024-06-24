@@ -95,10 +95,6 @@ public class AuthService {
                                  ? "You must be at least 18 years old to register."
                                  : "Você deve ter pelo menos 18 anos para se registrar.";
 
-        String genericErrorMessage = language == null || language.equals("en")
-                                     ? "Error creating account. Please try again."
-                                     : "Erro ao criar conta. Por favor, tente novamente.";
-
         if (validation.isEmailValid(sanitizedEmail)) {
             throw new InvalidCredentials(invalidEmailMessage);
         }
