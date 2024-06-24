@@ -1,5 +1,6 @@
 package com.barataribeiro.sabia.controller;
 
+import com.barataribeiro.sabia.config.AppConstants;
 import com.barataribeiro.sabia.dto.RestResponseDTO;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
@@ -29,8 +30,8 @@ public class PostController {
         Map<String, Object> data = postService.getAllPosts(userId, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
-                         ? "Posts retrieved successfully."
-                         : "Posts recuperados com sucesso.";
+                         ? AppConstants.POSTS_RETRIEVED_SUCCESSFULLY
+                         : AppConstants.POSTS_RECUPERADOS_COM_SUCESSO;
 
         return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
                                                      HttpStatus.OK.value(),
@@ -81,8 +82,8 @@ public class PostController {
         Map<String, Object> data = postService.searchPosts(q, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
-                         ? "Posts retrieved successfully."
-                         : "Posts recuperados com sucesso.";
+                         ? AppConstants.POSTS_RETRIEVED_SUCCESSFULLY
+                         : AppConstants.POSTS_RECUPERADOS_COM_SUCESSO;
 
         return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
                                                      HttpStatus.OK.value(),
@@ -99,8 +100,8 @@ public class PostController {
         Map<String, Object> data = postService.getPostsByHashtag(hashtag, page, perPage, principal.getName(), language);
 
         String message = language == null || language.equals("en")
-                         ? "Posts retrieved successfully."
-                         : "Posts recuperados com sucesso.";
+                         ? AppConstants.POSTS_RETRIEVED_SUCCESSFULLY
+                         : AppConstants.POSTS_RECUPERADOS_COM_SUCESSO;
 
         return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
                                                      HttpStatus.OK.value(),

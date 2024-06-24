@@ -1,5 +1,6 @@
 package com.barataribeiro.sabia.service;
 
+import com.barataribeiro.sabia.config.AppConstants;
 import com.barataribeiro.sabia.dto.post.PostRequestDTO;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.exceptions.others.BadRequest;
@@ -96,9 +97,9 @@ public class PostService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("replies", postsDTOs);
-        response.put("current_page", postPage.getNumber());
-        response.put("total_items", postPage.getTotalElements());
-        response.put("total_pages", postPage.getTotalPages());
+        response.put(AppConstants.CURRENT_PAGE, postPage.getNumber());
+        response.put(AppConstants.TOTAL_ITEMS, postPage.getTotalElements());
+        response.put(AppConstants.TOTAL_PAGES, postPage.getTotalPages());
 
         return response;
     }
@@ -164,7 +165,7 @@ public class PostService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("trending_hashtags", trendingHashtags);
-        response.put("total_items", hashtags.size());
+        response.put(AppConstants.TOTAL_ITEMS, hashtags.size());
 
         return response;
     }
@@ -334,9 +335,9 @@ public class PostService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("posts", postsDTOs);
-        response.put("current_page", postPage.getNumber());
-        response.put("total_items", postPage.getTotalElements());
-        response.put("total_pages", postPage.getTotalPages());
+        response.put(AppConstants.CURRENT_PAGE, postPage.getNumber());
+        response.put(AppConstants.TOTAL_ITEMS, postPage.getTotalElements());
+        response.put(AppConstants.TOTAL_PAGES, postPage.getTotalPages());
 
         return response;
     }

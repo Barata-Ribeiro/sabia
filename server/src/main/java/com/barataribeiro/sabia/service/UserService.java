@@ -1,6 +1,7 @@
 package com.barataribeiro.sabia.service;
 
 import com.barataribeiro.sabia.builder.UserMapper;
+import com.barataribeiro.sabia.config.AppConstants;
 import com.barataribeiro.sabia.dto.post.PostResponseDTO;
 import com.barataribeiro.sabia.dto.user.ProfileRequestDTO;
 import com.barataribeiro.sabia.dto.user.PublicProfileResponseDTO;
@@ -85,9 +86,9 @@ public class UserService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("followers", followersDTOs);
-        response.put("current_page", followersPage.getNumber());
-        response.put("total_items", followersPage.getTotalElements());
-        response.put("total_pages", followersPage.getTotalPages());
+        response.put(AppConstants.CURRENT_PAGE, followersPage.getNumber());
+        response.put(AppConstants.TOTAL_ITEMS, followersPage.getTotalElements());
+        response.put(AppConstants.TOTAL_PAGES, followersPage.getTotalPages());
 
         return response;
     }
@@ -134,9 +135,9 @@ public class UserService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("users", usersDTOs);
-        response.put("current_page", usersPage.getNumber());
-        response.put("total_items", usersPage.getTotalElements());
-        response.put("total_pages", usersPage.getTotalPages());
+        response.put(AppConstants.CURRENT_PAGE, usersPage.getNumber());
+        response.put(AppConstants.TOTAL_ITEMS, usersPage.getTotalElements());
+        response.put(AppConstants.TOTAL_PAGES, usersPage.getTotalPages());
 
         return response;
     }
@@ -373,9 +374,9 @@ public class UserService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("feed", mappedPosts);
-        response.put("current_page", postPage.getNumber());
-        response.put("total_items", postPage.getTotalElements());
-        response.put("total_pages", postPage.getTotalPages());
+        response.put(AppConstants.CURRENT_PAGE, postPage.getNumber());
+        response.put(AppConstants.TOTAL_ITEMS, postPage.getTotalElements());
+        response.put(AppConstants.TOTAL_PAGES, postPage.getTotalPages());
 
         return response;
     }
@@ -446,19 +447,19 @@ public class UserService {
                                        : "A biografia deve ter menos de 160 caracteres.");
             }
 
-            if (!sanitizedBody.get("avatar_image_url").toString().startsWith("https://")) {
+            if (!sanitizedBody.get("avatar_image_url").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The avatar image URL must start with 'https://'."
                                        : "A URL da imagem do avatar deve começar com 'https://'.");
             }
 
-            if (!sanitizedBody.get("cover_image_url").toString().startsWith("https://")) {
+            if (!sanitizedBody.get("cover_image_url").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The avatar image URL must start with 'https://'."
                                        : "A URL da imagem de capa deve começar com 'https://'.");
             }
 
-            if (!sanitizedBody.get("website").toString().startsWith("https://")) {
+            if (!sanitizedBody.get("website").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The avatar image URL must start with 'https://'."
                                        : "A URL do site deve começar com 'https://'.");
