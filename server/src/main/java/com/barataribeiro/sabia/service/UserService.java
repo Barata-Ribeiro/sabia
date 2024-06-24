@@ -46,7 +46,7 @@ public class UserService {
     private final EntityMapper entityMapper;
     private final UserMapper userMapper;
 
-    public Map<String, Object> getUserRecommendations(String requesting_user, String language) {
+    public Map<String, Object> getUserRecommendations(String requestingUser, String language) {
         List<User> users = userRepository.findAll();
 
         Map<String, Integer> userScores = getUserScores(users);
@@ -61,8 +61,8 @@ public class UserService {
                 break;
             }
 
-            if (!user.getUsername().equals(requesting_user)) {
-                recommendations.add(entityMapper.getPublicProfileResponseDTO(user, requesting_user));
+            if (!user.getUsername().equals(requestingUser)) {
+                recommendations.add(entityMapper.getPublicProfileResponseDTO(user, requestingUser));
             }
         }
 
@@ -72,7 +72,7 @@ public class UserService {
         return response;
     }
 
-    public Map<String, Object> getFollowers(String username, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> getFollowers(String username, int page, int perPage, String requestingUser, String language) {
         Pageable paging = PageRequest.of(page, perPage);
 
         Page<Follow> followersPage = followRepository.findByFollowed_UsernameOrderByFollowedAtDesc(username, paging);
@@ -80,7 +80,7 @@ public class UserService {
         List<Follow> followers = new ArrayList<>(followersPage.getContent());
 
         List<PublicProfileResponseDTO> followersDTOs = followers.stream()
-                .map(follow -> entityMapper.getPublicProfileResponseDTO(follow.getFollower(), requesting_user))
+                .map(follow -> entityMapper.getPublicProfileResponseDTO(follow.getFollower(), requestingUser))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -92,7 +92,7 @@ public class UserService {
         return response;
     }
 
-    public PublicProfileResponseDTO getPublicProfile(String username, String requesting_user, String language) {
+    public PublicProfileResponseDTO getPublicProfile(String username, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         User user = userRepository.findByUsername(username)
@@ -104,10 +104,10 @@ public class UserService {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
-        return entityMapper.getPublicProfileResponseDTO(user, requesting_user);
+        return entityMapper.getPublicProfileResponseDTO(user, requestingUser);
     }
 
-    public Map<String, Object> searchUser(@NotNull String query, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> searchUser(@NotNull String query, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -129,7 +129,7 @@ public class UserService {
         List<User> usersResult = new ArrayList<>(usersPage.getContent());
 
         List<PublicProfileResponseDTO> usersDTOs = usersResult.stream()
-                .map(user -> entityMapper.getPublicProfileResponseDTO(user, requesting_user))
+                .map(user -> entityMapper.getPublicProfileResponseDTO(user, requestingUser))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -141,15 +141,15 @@ public class UserService {
         return response;
     }
 
-    public UserDTO getUserContext(String requesting_user, String language) {
-        User user = userRepository.findByUsername(requesting_user)
+    public UserDTO getUserContext(String requestingUser, String language) {
+        User user = userRepository.findByUsername(requestingUser)
                 .orElseThrow(() -> new UserNotFound(language));
 
         return userMapper.toDTO(user);
     }
 
     @Transactional
-    public Map<String, Object> getUserFeed(String userId, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> getUserFeed(String userId, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage);
@@ -165,7 +165,7 @@ public class UserService {
                                       ? "The number of items per page must be between 1 and 20."
                                       : "O número de itens por página deve estar entre 1 e 20.";
 
-        if (!user.getUsername().equals(requesting_user)) {
+        if (!user.getUsername().equals(requestingUser)) {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
@@ -183,11 +183,11 @@ public class UserService {
 
         Page<Post> postPage = postRepository.findDistinctByAuthorInOrderByCreatedAtDesc(authors, paging);
 
-        return createResponseFromPostPage(postPage, requesting_user);
+        return createResponseFromPostPage(postPage, requestingUser);
     }
 
     @Transactional
-    public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> getUserPublicFeed(String userId, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -205,16 +205,12 @@ public class UserService {
 
         Page<Post> postPage = postRepository.findDistinctAllByAuthorId(user.getId(), paging);
 
-        return createResponseFromPostPage(postPage, requesting_user);
+        return createResponseFromPostPage(postPage, requestingUser);
     }
 
     @Transactional
-    public UserDTO updateOwnAccount(String userId, String requesting_user, ProfileRequestDTO body, String language) {
+    public UserDTO updateOwnAccount(String userId, String requestingUser, ProfileRequestDTO body, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
-
-        String genericErrorMessage = isEnglishLang
-                                     ? "An error occurred while updating your account. Please try again."
-                                     : "Ocorreu um erro ao atualizar sua conta. Por favor, tente novamente.";
 
         String notAllowedMessage = isEnglishLang
                                    ? "You are not allowed to edit this user's information."
@@ -223,7 +219,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFound(language));
 
-        if (!user.getUsername().equals(requesting_user)) {
+        if (!user.getUsername().equals(requestingUser)) {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
@@ -248,7 +244,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteOwnAccount(String userId, String requesting_user, String language) {
+    public void deleteOwnAccount(String userId, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         String genericErrorMessage = isEnglishLang
@@ -263,7 +259,7 @@ public class UserService {
                                        ? "You are not allowed to delete this user's information."
                                        : "Você não tem permissão para excluir as informações deste usuário.";
 
-            if (!user.getUsername().equals(requesting_user)) {
+            if (!user.getUsername().equals(requestingUser)) {
                 throw new ForbiddenRequest(notAllowedMessage);
             }
 
@@ -276,13 +272,8 @@ public class UserService {
     }
 
     @Transactional
-    public void followUser(@NotNull String userId, String followedId, String requesting_user, String language) {
+    public void followUser(@NotNull String userId, String followedId, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
-
-        String genericErrorMessage = isEnglishLang
-                                     ? "An error occurred while following the user. Please try again."
-                                     : "Ocorreu um erro ao seguir o usuário. Por favor, tente novamente.";
-
 
         String sameUserMessage = isEnglishLang
                                  ? "You cannot follow yourself."
@@ -306,7 +297,7 @@ public class UserService {
         User followedUser = userRepository.findById(followedId)
                 .orElseThrow(() -> new UserNotFound(language));
 
-        if (!user.getUsername().equals(requesting_user)) {
+        if (!user.getUsername().equals(requestingUser)) {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
@@ -339,12 +330,8 @@ public class UserService {
     }
 
     @Transactional
-    public void unfollowUser(String userId, String followedId, String requesting_user, String language) {
+    public void unfollowUser(String userId, String followedId, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
-
-        String genericErrorMessage = isEnglishLang
-                                     ? "An error occurred while unfollowing the user. Please try again."
-                                     : "Ocorreu um erro ao deixar de seguir o usuário. Por favor, tente novamente.";
 
 
         User user = userRepository.findById(userId)
@@ -361,7 +348,7 @@ public class UserService {
                                      ? "You are not following this user."
                                      : "Você não está seguindo este usuário.";
 
-        if (!user.getUsername().equals(requesting_user)) {
+        if (!user.getUsername().equals(requestingUser)) {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
@@ -377,11 +364,11 @@ public class UserService {
         userRepository.save(followedUser);
     }
 
-    private @NotNull Map<String, Object> createResponseFromPostPage(@NotNull Page<Post> postPage, String requesting_user) {
+    private @NotNull Map<String, Object> createResponseFromPostPage(@NotNull Page<Post> postPage, String requestingUser) {
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> mappedPosts = posts.stream()
-                .map(post -> entityMapper.getPostResponseDTO(post, requesting_user))
+                .map(post -> entityMapper.getPostResponseDTO(post, requestingUser))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();

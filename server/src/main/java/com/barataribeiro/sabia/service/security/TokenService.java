@@ -18,12 +18,12 @@ import java.util.Map.Entry;
 @Service
 public class TokenService {
     @Value("${api.security.token.secret}")
-    private String secret_key;
+    private String secretKey;
 
     public Entry<String, Instant> generateToken(User user, Boolean rememberMe) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret_key);
-            Instant expirationDate = this.generateExpirationDateInDays(rememberMe != null && rememberMe ? 365 : 1);
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            Instant expirationDate = generateExpirationDateInDays(rememberMe != null && rememberMe ? 365 : 1);
 
             String token = JWT.create()
                     .withIssuer("auth0")
@@ -41,7 +41,7 @@ public class TokenService {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret_key);
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
             return JWT.require(algorithm)
                     .withIssuer("auth0")

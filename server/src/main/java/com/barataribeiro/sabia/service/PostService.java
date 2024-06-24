@@ -44,7 +44,7 @@ public class PostService {
     private final Validation validation;
     private final EntityMapper entityMapper;
 
-    public Map<String, Object> getAllPosts(String userId, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> getAllPosts(String userId, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -59,21 +59,21 @@ public class PostService {
 
         Page<Post> postPage = postRepository.findDistinctAllByAuthorId(userId, paging);
 
-        return createPostPageResponse(postPage, requesting_user);
+        return createPostPageResponse(postPage, requestingUser);
     }
 
     @Transactional
-    public PostResponseDTO getPostById(String postId, String requesting_user, String language) {
+    public PostResponseDTO getPostById(String postId, String requestingUser, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
         post.incrementViewCount();
         Post savedPost = postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(savedPost, requesting_user);
+        return entityMapper.getPostResponseDTO(savedPost, requestingUser);
     }
 
-    public Map<String, Object> getPostReplies(String postId, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> getPostReplies(String postId, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -91,7 +91,7 @@ public class PostService {
         List<Post> posts = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = posts.stream()
-                .map(post -> entityMapper.getPostResponseDTO(post, requesting_user))
+                .map(post -> entityMapper.getPostResponseDTO(post, requestingUser))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -103,7 +103,7 @@ public class PostService {
         return response;
     }
 
-    public Map<String, Object> searchPosts(@NotNull String query, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> searchPosts(@NotNull String query, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -125,10 +125,10 @@ public class PostService {
                               postRepository.findAllByHashtag(queryParams, paging) :
                               postRepository.findAllByTextContaining(queryParams, paging);
 
-        return createPostPageResponse(postPage, requesting_user);
+        return createPostPageResponse(postPage, requestingUser);
     }
 
-    public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String requesting_user, String language) {
+    public Map<String, Object> getPostsByHashtag(String hashtag, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
@@ -143,7 +143,7 @@ public class PostService {
 
         Page<Post> postPage = postRepository.findAllByHashtag(hashtag, paging);
 
-        return createPostPageResponse(postPage, requesting_user);
+        return createPostPageResponse(postPage, requestingUser);
     }
 
     public Map<String, Object> getTrendingHashtags() {
@@ -171,10 +171,10 @@ public class PostService {
 
 
     @Transactional
-    public PostResponseDTO createPost(PostRequestDTO body, String requesting_user, String language) {
+    public PostResponseDTO createPost(PostRequestDTO body, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
-        User author = userRepository.findByUsername(requesting_user)
+        User author = userRepository.findByUsername(requestingUser)
                 .orElseThrow(() -> new UserNotFound(language));
 
         var text = getSanitizedText(body, isEnglishLang);
@@ -214,15 +214,15 @@ public class PostService {
 
         savedPost = postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(savedPost, requesting_user);
+        return entityMapper.getPostResponseDTO(savedPost, requestingUser);
     }
 
     @Transactional
-    public PostResponseDTO repost(String postId, String requesting_user, String language) {
+    public PostResponseDTO repost(String postId, String requestingUser, String language) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
-        User user = userRepository.findByUsername(requesting_user)
+        User user = userRepository.findByUsername(requestingUser)
                 .orElseThrow(() -> new UserNotFound(language));
 
         Post repost = Post.builder()
@@ -238,17 +238,17 @@ public class PostService {
 
         postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(savedRepost, requesting_user);
+        return entityMapper.getPostResponseDTO(savedRepost, requestingUser);
     }
 
     @Transactional
-    public PostResponseDTO replyToPost(String postId, PostRequestDTO body, String requesting_user, String language) {
+    public PostResponseDTO replyToPost(String postId, PostRequestDTO body, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
-        User user = userRepository.findByUsername(requesting_user)
+        User user = userRepository.findByUsername(requestingUser)
                 .orElseThrow(() -> new UserNotFound(language));
 
         var text = getSanitizedText(body, isEnglishLang);
@@ -266,11 +266,11 @@ public class PostService {
         post.incrementReplyCount();
         postRepository.save(post);
 
-        return entityMapper.getPostResponseDTO(savedReply, requesting_user);
+        return entityMapper.getPostResponseDTO(savedReply, requestingUser);
     }
 
     @Transactional
-    public void deletePost(String postId, String requesting_user, String language) {
+    public void deletePost(String postId, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Post post = postRepository.findById(postId)
@@ -280,7 +280,7 @@ public class PostService {
                                   ? "You are not the author of this post."
                                   : "Você não é o autor deste post.";
 
-        if (!post.getAuthor().getUsername().equals(requesting_user)) {
+        if (!post.getAuthor().getUsername().equals(requestingUser)) {
             throw new ForbiddenRequest(notAuthorMessage);
         }
 
@@ -288,13 +288,13 @@ public class PostService {
     }
 
     @Transactional
-    public Boolean toggleLike(String postId, String requesting_user, String language) {
+    public Boolean toggleLike(String postId, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFound(language));
 
-        User user = userRepository.findByUsername(requesting_user)
+        User user = userRepository.findByUsername(requestingUser)
                 .orElseThrow(() -> new UserNotFound(language));
 
         String sameAuthorMessage = isEnglishLang
@@ -305,7 +305,7 @@ public class PostService {
             throw new ForbiddenRequest(sameAuthorMessage);
         }
 
-        boolean liked = likeRepository.existsByUser_UsernameAndPostId(requesting_user, postId);
+        boolean liked = likeRepository.existsByUser_UsernameAndPostId(requestingUser, postId);
 
         if (liked) {
             likeRepository.deleteByUserAndPost(user, post);
@@ -325,11 +325,11 @@ public class PostService {
         return !liked;
     }
 
-    private @NotNull Map<String, Object> createPostPageResponse(@NotNull Page<Post> postPage, String requesting_user) {
+    private @NotNull Map<String, Object> createPostPageResponse(@NotNull Page<Post> postPage, String requestingUser) {
         List<Post> postsResult = new ArrayList<>(postPage.getContent());
 
         List<PostResponseDTO> postsDTOs = postsResult.stream()
-                .map(post -> entityMapper.getPostResponseDTO(post, requesting_user))
+                .map(post -> entityMapper.getPostResponseDTO(post, requestingUser))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();

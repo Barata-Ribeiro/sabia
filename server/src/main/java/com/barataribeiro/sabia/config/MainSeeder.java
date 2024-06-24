@@ -1,7 +1,7 @@
 package com.barataribeiro.sabia.config;
 
 import com.barataribeiro.sabia.builder.UserMapper;
-import com.barataribeiro.sabia.model.*;
+import com.barataribeiro.sabia.model.HashtagPosts;
 import com.barataribeiro.sabia.model.entities.Hashtag;
 import com.barataribeiro.sabia.model.entities.Post;
 import com.barataribeiro.sabia.model.entities.User;
@@ -38,33 +38,33 @@ public class MainSeeder {
 
 
     @Value("${api.security.seeder.admin.username}")
-    private String ADMIN_USERNAME;
+    private String adminUsername;
 
     @Value("${api.security.seeder.admin.displayName}")
-    private String ADMIN_DISPLAY_NAME;
+    private String adminDisplayName;
 
     @Value("${api.security.seeder.admin.fullName}")
-    private String ADMIN_FULL_NAME;
+    private String adminFullName;
 
     @Value("${api.security.seeder.admin.birthDate}")
-    private String ADMIN_BIRTH_DATE;
+    private String adminBirthDate;
 
     @Value("${api.security.seeder.admin.password}")
-    private String ADMIN_PASSWORD;
+    private String adminPassword;
 
     @Value("${api.security.seeder.admin.email}")
-    private String ADMIN_EMAIL;
+    private String adminEmail;
 
     @Value("${api.security.seeder.admin.avatarUrl}")
-    private String ADMIN_AVATAR_URL;
+    private String adminAvatarUrl;
 
     @Value("${api.security.seeder.admin.coverUrl}")
-    private String ADMIN_COVER_URL;
+    private String adminCoverUrl;
 
     @PostConstruct
     @Transactional
     public void adminSeeding() {
-        User admin = userRepository.findByUsername(ADMIN_USERNAME).orElseGet(this::attemptToCreateUserWithAdminRights);
+        User admin = userRepository.findByUsername(adminUsername).orElseGet(this::attemptToCreateUserWithAdminRights);
 
         seedDatabaseWithLoremImpsunPosts(Post.builder().author(admin), postRepository);
 
@@ -77,42 +77,42 @@ public class MainSeeder {
     @Transactional
     public void userSeeding() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        
+
         User user1 = userRepository.findByUsername("user1")
                 .orElseGet(() -> User.builder()
-                                .username("user1")
-                                .display_name("User One")
-                                .full_name("User One Full Name")
-                                .birth_date(LocalDate.of(2001, 1, 1).format(formatter))
-                                .email("user1@example.com")
-                                .password(passwordEncoder.encode("password1"))
-                                .role(Roles.MEMBER)
-                                .build());
+                        .username("user1")
+                        .display_name("User One")
+                        .full_name("User One Full Name")
+                        .birth_date(LocalDate.of(2001, 1, 1).format(formatter))
+                        .email("user1@example.com")
+                        .password(passwordEncoder.encode("password1"))
+                        .role(Roles.MEMBER)
+                        .build());
 
         User user2 = userRepository.findByUsername("user2")
                 .orElseGet(() -> User.builder()
-                                .username("user2")
-                                .display_name("User Two")
-                                .full_name("User Two Full name")
-                                .birth_date(LocalDate.of(2000, 1, 1).format(formatter))
-                                .email("user2@example.com")
-                                .password(passwordEncoder.encode("password2"))
-                                .role(Roles.MEMBER)
-                                .build());
+                        .username("user2")
+                        .display_name("User Two")
+                        .full_name("User Two Full name")
+                        .birth_date(LocalDate.of(2000, 1, 1).format(formatter))
+                        .email("user2@example.com")
+                        .password(passwordEncoder.encode("password2"))
+                        .role(Roles.MEMBER)
+                        .build());
 
         User jason = userRepository.findByUsername("jasonbourne")
                 .orElseGet(() -> User.builder()
-                                .username("jasonbourne")
-                                .display_name("Jason Bourne")
-                                .full_name("Jason Bourne")
-                                .birth_date(LocalDate.of(1969, 8, 21).format(formatter))
-                                .email("jasonbourne@cia.com")
-                                .avatar_image_url("https://avatarfiles.alphacoders.com/153/153804.jpg")
-                                .cover_image_url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?fm=jpg&fit=crop&w=1920&q=80&fit=max")
-                                .password(passwordEncoder.encode("25)9vteIYzPYLivd"))
-                                .is_verified(true)
-                                .role(Roles.MEMBER)
-                                .build());
+                        .username("jasonbourne")
+                        .display_name("Jason Bourne")
+                        .full_name("Jason Bourne")
+                        .birth_date(LocalDate.of(1969, 8, 21).format(formatter))
+                        .email("jasonbourne@cia.com")
+                        .avatar_image_url("https://avatarfiles.alphacoders.com/153/153804.jpg")
+                        .cover_image_url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?fm=jpg&fit=crop&w=1920&q=80&fit=max")
+                        .password(passwordEncoder.encode("25)9vteIYzPYLivd"))
+                        .is_verified(true)
+                        .role(Roles.MEMBER)
+                        .build());
 
         List<User> usersSeed = userRepository.saveAll(List.of(user1, user2, jason));
 
@@ -190,17 +190,17 @@ public class MainSeeder {
 
     private User attemptToCreateUserWithAdminRights() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate birthDate = LocalDate.parse(ADMIN_BIRTH_DATE, formatter);
+        LocalDate birthDate = LocalDate.parse(adminBirthDate, formatter);
 
         User admin = User.builder()
-                .username(ADMIN_USERNAME)
-                .display_name(ADMIN_DISPLAY_NAME)
-                .full_name(ADMIN_FULL_NAME)
+                .username(adminUsername)
+                .display_name(adminDisplayName)
+                .full_name(adminFullName)
                 .birth_date(birthDate.format(formatter))
-                .email(ADMIN_EMAIL)
-                .avatar_image_url(ADMIN_AVATAR_URL)
-                .cover_image_url(ADMIN_COVER_URL)
-                .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                .email(adminEmail)
+                .avatar_image_url(adminAvatarUrl)
+                .cover_image_url(adminCoverUrl)
+                .password(passwordEncoder.encode(adminPassword))
                 .role(Roles.ADMIN)
                 .is_verified(true)
                 .build();

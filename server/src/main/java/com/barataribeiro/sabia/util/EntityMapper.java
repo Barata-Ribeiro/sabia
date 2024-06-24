@@ -22,7 +22,7 @@ public class EntityMapper {
     public final LikeRepository likeRepository;
     public final FollowRepository followRepository;
 
-    public PostResponseDTO getPostResponseDTO(Post post, String requesting_user) {
+    public PostResponseDTO getPostResponseDTO(Post post, String requestingUser) {
         User author = post.getAuthor();
         AuthorResponseDTO authorDTO = new AuthorResponseDTO(
                 author.getId(),
@@ -43,7 +43,7 @@ public class EntityMapper {
                 .map(hashtagPost -> hashtagPost.getHashtags().getTag())
                 .collect(Collectors.toList());
 
-        Boolean isLiked = likeRepository.existsByUser_UsernameAndPostId(requesting_user, post.getId());
+        Boolean isLiked = likeRepository.existsByUser_UsernameAndPostId(requestingUser, post.getId());
 
         return new PostResponseDTO(
                 post.getId(),
@@ -53,17 +53,17 @@ public class EntityMapper {
                 post.getViews_count(),
                 post.getLike_count(),
                 isLiked,
-                post.getRepost_off() != null ? getPostResponseDTO(post.getRepost_off(), requesting_user) : null,
+                post.getRepost_off() != null ? getPostResponseDTO(post.getRepost_off(), requestingUser) : null,
                 post.getRepost_count(),
                 post.getReply_count(),
-                post.getIn_reply_to() != null ? getPostResponseDTO(post.getIn_reply_to(), requesting_user) : null,
+                post.getIn_reply_to() != null ? getPostResponseDTO(post.getIn_reply_to(), requestingUser) : null,
                 post.getCreatedAt().toString(),
                 post.getUpdatedAt().toString()
         );
     }
 
-    public PublicProfileResponseDTO getPublicProfileResponseDTO(User user, String requesting_user) {
-        boolean is_following = followRepository.existsByFollower_UsernameAndFollowed_Username(requesting_user, user.getUsername());
+    public PublicProfileResponseDTO getPublicProfileResponseDTO(User user, String requestingUser) {
+        boolean isFollowing = followRepository.existsByFollower_UsernameAndFollowed_Username(requestingUser, user.getUsername());
 
         return new PublicProfileResponseDTO(user.getId(),
                                             user.getUsername(),
@@ -76,7 +76,7 @@ public class EntityMapper {
                                             user.getLocation(),
                                             user.getIs_verified(),
                                             user.getIs_private(),
-                                            is_following,
+                                            isFollowing,
                                             Math.toIntExact(user.getFollower_count()),
                                             Math.toIntExact(user.getFollowing_count()),
                                             user.getPosts().size(),
