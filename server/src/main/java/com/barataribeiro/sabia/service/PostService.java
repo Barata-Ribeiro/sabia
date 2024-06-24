@@ -48,7 +48,7 @@ public class PostService {
     public Map<String, Object> getAllPosts(String userId, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
-        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
+        Pageable paging = PageRequest.of(page, perPage);
 
         String invalidParamsMessage = isEnglishLang
                                       ? "The number of items per page must be between 0 and 15."
@@ -58,7 +58,7 @@ public class PostService {
             throw new BadRequest(invalidParamsMessage);
         }
 
-        Page<Post> postPage = postRepository.findDistinctAllByAuthorId(userId, paging);
+        Page<Post> postPage = postRepository.findDistinctAllByAuthorIdOrderByCreatedAtDesc(userId, paging);
 
         return createPostPageResponse(postPage, requestingUser);
     }
@@ -77,7 +77,7 @@ public class PostService {
     public Map<String, Object> getPostReplies(String postId, int page, int perPage, String requestingUser, String language) {
         boolean isEnglishLang = language == null || language.equals("en");
 
-        Pageable paging = PageRequest.of(page, perPage, Sort.by("createdAt").descending());
+        Pageable paging = PageRequest.of(page, perPage);
 
         String invalidParamsMessage = isEnglishLang
                                       ? "The number of items per page must be between 0 and 10."

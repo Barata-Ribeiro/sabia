@@ -204,7 +204,7 @@ public class UserService {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
-        Page<Post> postPage = postRepository.findDistinctAllByAuthorId(user.getId(), paging);
+        Page<Post> postPage = postRepository.findDistinctAllByAuthorIdOrderByCreatedAtDesc(user.getId(), paging);
 
         return createResponseFromPostPage(postPage, requestingUser);
     }
