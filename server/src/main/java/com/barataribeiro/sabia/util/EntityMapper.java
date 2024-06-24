@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -41,7 +40,7 @@ public class EntityMapper {
 
         List<String> hashtags = postHashtags.stream()
                 .map(hashtagPost -> hashtagPost.getHashtags().getTag())
-                .collect(Collectors.toList());
+                .toList();
 
         Boolean isLiked = likeRepository.existsByUser_UsernameAndPostId(requestingUser, post.getId());
 

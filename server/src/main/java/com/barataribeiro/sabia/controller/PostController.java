@@ -195,9 +195,11 @@ public class PostController {
                                                       Principal principal) {
         Boolean response = postService.toggleLike(postId, principal.getName(), language);
 
+        String isLikedEng = Boolean.TRUE.equals(response) ? "liked" : "disliked";
+        String isLikedBr = Boolean.TRUE.equals(response) ? "curtido" : "descurtido";
         String message = language == null || language.equals("en")
-                         ? "Post " + (response ? "liked" : "disliked") + " successfully."
-                         : "Post " + (response ? "curtido" : "descurtido") + " com sucesso.";
+                         ? "Post " + isLikedEng + " successfully."
+                         : "Post " + isLikedBr + " com sucesso.";
 
         return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
                                                      HttpStatus.OK.value(),

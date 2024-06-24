@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/public/recommendations")
     public ResponseEntity<RestResponseDTO> getUserRecommendations(@RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
                                                                   Principal principal) {
-        Map<String, Object> data = userService.getUserRecommendations(principal.getName(), language);
+        Map<String, Object> data = userService.getUserRecommendations(principal.getName());
 
         String message = language == null || language.equals("en")
                          ? "Recommendations retrieved successfully."
@@ -77,7 +77,7 @@ public class UserController {
                                                         @RequestParam(defaultValue = "10") int perPage,
                                                         @RequestHeader(HttpHeaders.CONTENT_LANGUAGE) String language,
                                                         Principal principal) {
-        Map<String, Object> data = userService.getFollowers(username, page, perPage, principal.getName(), language);
+        Map<String, Object> data = userService.getFollowers(username, page, perPage, principal.getName());
 
         String message = language == null || language.equals("en")
                          ? "Followers retrieved successfully."

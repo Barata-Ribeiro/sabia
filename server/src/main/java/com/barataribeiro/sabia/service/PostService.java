@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -93,7 +92,7 @@ public class PostService {
 
         List<PostResponseDTO> postsDTOs = posts.stream()
                 .map(post -> entityMapper.getPostResponseDTO(post, requestingUser))
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
         response.put("replies", postsDTOs);
@@ -161,7 +160,7 @@ public class PostService {
 
                     return hashtagMap;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
         response.put("trending_hashtags", trendingHashtags);
@@ -331,7 +330,7 @@ public class PostService {
 
         List<PostResponseDTO> postsDTOs = postsResult.stream()
                 .map(post -> entityMapper.getPostResponseDTO(post, requestingUser))
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
         response.put("posts", postsDTOs);

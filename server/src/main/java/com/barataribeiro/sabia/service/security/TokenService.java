@@ -6,6 +6,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.barataribeiro.sabia.exceptions.others.InternalServerError;
 import com.barataribeiro.sabia.model.entities.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import java.util.Map.Entry;
 
 @Service
 public class TokenService {
+    Logger logger = LoggerFactory.getLogger(TokenService.class);
+
     @Value("${api.security.token.secret}")
     private String secretKey;
 
@@ -33,7 +37,7 @@ public class TokenService {
 
             return new SimpleEntry<>(token, expirationDate);
         } catch (JWTCreationException exception) {
-            System.err.println(exception.getMessage());
+            logger.error(exception.getMessage());
             throw new InternalServerError("Error while authenticating.");
         }
 
@@ -49,7 +53,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            System.err.println(exception.getMessage());
+            logger.error(exception.getMessage());
             return null;
         }
     }

@@ -23,9 +23,11 @@ public class AdminController {
                                                             Principal principal) {
         Boolean response = adminService.toggleVerifyUser(userId, principal.getName(), language);
 
+        String isVerifiedEng = Boolean.TRUE.equals(response) ? "verified" : "unverified";
+        String isVerifiedBr = Boolean.TRUE.equals(response) ? "verificado" : "não verificado";
         String message = language == null || language.equals("en")
-                         ? "User " + (response ? "verified" : "unverified") + " successfully."
-                         : "Usuário " + (response ? "verificado" : "não verificado") + " com sucesso.";
+                         ? "User " + isVerifiedEng + " successfully."
+                         : "Usuário " + isVerifiedBr + " com sucesso.";
 
         return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
                                                      HttpStatus.OK.value(),
@@ -39,9 +41,11 @@ public class AdminController {
                                                    Principal principal) {
         Boolean response = adminService.toggleUserBan(userId, principal.getName(), language);
 
+        String isBannedEng = Boolean.TRUE.equals(response) ? "banned" : "unbanned";
+        String isBannedBr = Boolean.TRUE.equals(response) ? "banido" : "desbanido";
         String message = language == null || language.equals("en")
-                         ? "User " + (response ? "banned" : "unbanned") + " successfully."
-                         : "Usuário " + (response ? "banido" : "desbanido") + " com sucesso.";
+                         ? "User " + isBannedEng + " successfully."
+                         : "Usuário " + isBannedBr + " com sucesso.";
 
         return ResponseEntity.ok(new RestResponseDTO(HttpStatus.OK,
                                                      HttpStatus.OK.value(),

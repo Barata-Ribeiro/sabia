@@ -13,6 +13,9 @@ import com.barataribeiro.sabia.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +32,8 @@ import java.util.regex.Pattern;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MainSeeder {
+    Logger logger = LoggerFactory.getLogger(MainSeeder.class);
+
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final HashtagRepository hashtagRepository;
@@ -70,7 +75,7 @@ public class MainSeeder {
 
         seedDatabaseWithPostContainingHashtag(Post.builder().author(admin), postRepository, hashtagRepository, hashtagPostsRepository);
 
-        System.out.printf("Admin: %s%n", userMapper.toDTO(admin));
+        logger.atLevel(Level.DEBUG).log("Admin: ", userMapper.toDTO(admin));
     }
 
     @PostConstruct

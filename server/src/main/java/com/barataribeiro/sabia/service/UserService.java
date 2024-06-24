@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
+    Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
@@ -47,7 +51,7 @@ public class UserService {
     private final EntityMapper entityMapper;
     private final UserMapper userMapper;
 
-    public Map<String, Object> getUserRecommendations(String requestingUser, String language) {
+    public Map<String, Object> getUserRecommendations(String requestingUser) {
         List<User> users = userRepository.findAll();
 
         Map<String, Integer> userScores = getUserScores(users);
@@ -73,7 +77,7 @@ public class UserService {
         return response;
     }
 
-    public Map<String, Object> getFollowers(String username, int page, int perPage, String requestingUser, String language) {
+    public Map<String, Object> getFollowers(String username, int page, int perPage, String requestingUser) {
         Pageable paging = PageRequest.of(page, perPage);
 
         Page<Follow> followersPage = followRepository.findByFollowed_UsernameOrderByFollowedAtDesc(username, paging);
@@ -82,7 +86,7 @@ public class UserService {
 
         List<PublicProfileResponseDTO> followersDTOs = followers.stream()
                 .map(follow -> entityMapper.getPublicProfileResponseDTO(follow.getFollower(), requestingUser))
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
         response.put("followers", followersDTOs);
@@ -101,7 +105,7 @@ public class UserService {
 
         String privateProfileMessage = isEnglishLang ? "This user's profile is private." : "O perfil deste usuário é privado.";
 
-        if (user.getIs_private()) {
+        if (Boolean.TRUE.equals(user.getIs_private())) {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
@@ -131,7 +135,7 @@ public class UserService {
 
         List<PublicProfileResponseDTO> usersDTOs = usersResult.stream()
                 .map(user -> entityMapper.getPublicProfileResponseDTO(user, requestingUser))
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
         response.put("users", usersDTOs);
@@ -200,7 +204,7 @@ public class UserService {
                                        ? "This user's profile is private."
                                        : "O perfil deste usuário é privado.";
 
-        if (user.getIs_private()) {
+        if (Boolean.TRUE.equals(user.getIs_private())) {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
@@ -267,7 +271,7 @@ public class UserService {
 
             userRepository.deleteById(userId);
         } catch (Exception error) {
-            System.err.println("An error occurred while deleting the user's account: " + error.getMessage());
+            logger.error("An error occurred while deleting the user's account: %s".formatted(error.getMessage()));
             throw new InternalServerError(genericErrorMessage);
         }
     }
@@ -309,7 +313,7 @@ public class UserService {
             throw new BadRequest(alreadyFollowingMessage);
         }
 
-        if (followedUser.getIs_private()) {
+        if (Boolean.TRUE.equals(followedUser.getIs_private())) {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
@@ -370,7 +374,7 @@ public class UserService {
 
         List<PostResponseDTO> mappedPosts = posts.stream()
                 .map(post -> entityMapper.getPostResponseDTO(post, requestingUser))
-                .collect(Collectors.toList());
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
         response.put("feed", mappedPosts);
@@ -389,30 +393,29 @@ public class UserService {
                                        : "A senha fornecida está incorreta.");
             }
 
-            if (body.new_password() != null && !body.new_password().isEmpty()) {
-                if (validation.isPasswordValid(body.new_password())) {
-                    throw new InvalidInput(isEnglishLang
-                                           ? "The new password must contain at least one uppercase " +
-                                                   "letter, " +
-                                                   "one lowercase letter, one digit, " +
-                                                   "one special character, " +
-                                                   "and be at least 8 characters long."
-                                           : "A nova senha deve conter pelo menos uma letra maiúscula, " +
-                                                   "uma letra minúscula, um dígito, " +
-                                                   "um caractere especial, " +
-                                                   "e ter pelo menos 8 caracteres.");
-                }
+            if (body.new_password() != null && !body.new_password().isEmpty() && validation.isPasswordValid(body.new_password())) {
+                throw new InvalidInput(isEnglishLang
+                                       ? "The new password must contain at least one uppercase " +
+                                               "letter, " +
+                                               "one lowercase letter, one digit, " +
+                                               "one special character, " +
+                                               "and be at least 8 characters long."
+                                       : "A nova senha deve conter pelo menos uma letra maiúscula, " +
+                                               "uma letra minúscula, um dígito, " +
+                                               "um caractere especial, " +
+                                               "e ter pelo menos 8 caracteres.");
             }
+
 
             Map<String, Object> sanitizedBody = sanitizeBody(body);
 
-            if (userRepository.existsByUsername(sanitizedBody.get("username").toString())) {
+            if (Boolean.TRUE.equals(userRepository.existsByUsername(sanitizedBody.get("username").toString()))) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The provided username is already in use."
                                        : "O nome de usuário fornecido já está em uso.");
             }
 
-            if (userRepository.existsByEmail(sanitizedBody.get("email").toString())) {
+            if (Boolean.TRUE.equals(userRepository.existsByEmail(sanitizedBody.get("email").toString()))) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The provided email is already in use." : "O e-mail fornecido já está em uso.");
             }
@@ -491,7 +494,7 @@ public class UserService {
         Map<String, Integer> userScores = new HashMap<>();
 
         for (User user : users) {
-            if (user.getIs_private()) {
+            if (Boolean.TRUE.equals(user.getIs_private())) {
                 userScores.put(user.getId(), 0);
                 continue;
             }
@@ -503,7 +506,7 @@ public class UserService {
                 score += post.getViews_count() * 3;
             }
 
-            if (user.getIs_verified()) {
+            if (Boolean.TRUE.equals(user.getIs_verified())) {
                 score += 1000;
             }
 
