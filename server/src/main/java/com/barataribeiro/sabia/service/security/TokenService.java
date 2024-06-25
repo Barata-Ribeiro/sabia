@@ -19,7 +19,7 @@ import java.util.Map.Entry;
 
 @Service
 public class TokenService {
-    Logger logger = LoggerFactory.getLogger(TokenService.class);
+    private final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
     @Value("${api.security.token.secret}")
     private String secretKey;

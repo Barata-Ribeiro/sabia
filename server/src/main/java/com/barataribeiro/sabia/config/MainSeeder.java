@@ -26,13 +26,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MainSeeder {
-    Logger logger = LoggerFactory.getLogger(MainSeeder.class);
+    private final Logger logger = LoggerFactory.getLogger(MainSeeder.class);
+    private final Random random = new Random();
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -75,7 +77,7 @@ public class MainSeeder {
 
         seedDatabaseWithPostContainingHashtag(Post.builder().author(admin), postRepository, hashtagRepository, hashtagPostsRepository);
 
-        logger.atLevel(Level.DEBUG).log("Admin: ", userMapper.toDTO(admin));
+        logger.atLevel(Level.INFO).log("Admin: {}", userMapper.toDTO(admin).toString());
     }
 
     @PostConstruct
@@ -86,35 +88,35 @@ public class MainSeeder {
         User user1 = userRepository.findByUsername("user1")
                 .orElseGet(() -> User.builder()
                         .username("user1")
-                        .display_name("User One")
-                        .full_name("User One Full Name")
-                        .birth_date(LocalDate.of(2001, 1, 1).format(formatter))
+                        .displayName("User One")
+                        .fullName("User One Full Name")
+                        .birthDate(LocalDate.of(2001, 1, 1).format(formatter))
                         .email("user1@example.com")
-                        .password(passwordEncoder.encode("password1"))
+                        .password(passwordEncoder.encode(generateRandomPassword(random)))
                         .role(Roles.MEMBER)
                         .build());
 
         User user2 = userRepository.findByUsername("user2")
                 .orElseGet(() -> User.builder()
                         .username("user2")
-                        .display_name("User Two")
-                        .full_name("User Two Full name")
-                        .birth_date(LocalDate.of(2000, 1, 1).format(formatter))
+                        .displayName("User Two")
+                        .fullName("User Two Full name")
+                        .birthDate(LocalDate.of(2000, 1, 1).format(formatter))
                         .email("user2@example.com")
-                        .password(passwordEncoder.encode("password2"))
+                        .password(passwordEncoder.encode(generateRandomPassword(random)))
                         .role(Roles.MEMBER)
                         .build());
 
         User jason = userRepository.findByUsername("jasonbourne")
                 .orElseGet(() -> User.builder()
                         .username("jasonbourne")
-                        .display_name("Jason Bourne")
-                        .full_name("Jason Bourne")
-                        .birth_date(LocalDate.of(1969, 8, 21).format(formatter))
+                        .displayName("Jason Bourne")
+                        .fullName("Jason Bourne")
+                        .birthDate(LocalDate.of(1969, 8, 21).format(formatter))
                         .email("jasonbourne@cia.com")
-                        .avatar_image_url("https://avatarfiles.alphacoders.com/153/153804.jpg")
-                        .cover_image_url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?fm=jpg&fit=crop&w=1920&q=80&fit=max")
-                        .password(passwordEncoder.encode("25)9vteIYzPYLivd"))
+                        .avatarImageUrl("https://avatarfiles.alphacoders.com/153/153804.jpg")
+                        .coverImageUrl("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?fm=jpg&fit=crop&w=1920&q=80&fit=max")
+                        .password(passwordEncoder.encode(generateRandomPassword(random)))
                         .is_verified(true)
                         .role(Roles.MEMBER)
                         .build());
@@ -138,6 +140,17 @@ public class MainSeeder {
 
             seedDatabaseWithPostContainingHashtag(Post.builder().author(usersSeed.get(i % 3)), postRepository, hashtagRepository, hashtagPostsRepository);
         }
+    }
+
+    private @NotNull String generateRandomPassword(Random random) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        StringBuilder password = new StringBuilder();
+
+        for (int i = 0; i < 10; i++) {
+            password.append(characters.charAt(random.nextInt(characters.length())));
+        }
+
+        return password.toString();
     }
 
     private void seedDatabaseWithPostContainingHashtag(Post.@NotNull PostBuilder admin,
@@ -199,12 +212,12 @@ public class MainSeeder {
 
         User admin = User.builder()
                 .username(adminUsername)
-                .display_name(adminDisplayName)
-                .full_name(adminFullName)
-                .birth_date(birthDate.format(formatter))
+                .displayName(adminDisplayName)
+                .fullName(adminFullName)
+                .birthDate(birthDate.format(formatter))
                 .email(adminEmail)
-                .avatar_image_url(adminAvatarUrl)
-                .cover_image_url(adminCoverUrl)
+                .avatarImageUrl(adminAvatarUrl)
+                .coverImageUrl(adminCoverUrl)
                 .password(passwordEncoder.encode(adminPassword))
                 .role(Roles.ADMIN)
                 .is_verified(true)
