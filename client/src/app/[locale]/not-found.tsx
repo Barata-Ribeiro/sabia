@@ -27,9 +27,7 @@ export default function NotFound() {
                         </p>
                         <LinkButton
                             href="/"
-                            className="my-4 inline-flex select-none rounded-full bg-accent-500 px-5 py-2.5 text-center align-middle font-heading
-                            font-medium text-body-900 antialiased transition-all hover:bg-accent-600 focus:outline-none
-                            focus:ring-4 focus:ring-primary-300 active:bg-accent-700 dark:focus:ring-primary-900"
+                            className="my-4 inline-flex select-none rounded-full bg-accent-500 px-5 py-2.5 text-center align-middle font-heading font-medium text-body-900 antialiased transition-all hover:bg-accent-600 focus:outline-none focus:ring-4 focus:ring-primary-300 active:bg-accent-700 dark:focus:ring-primary-900"
                         >
                             Back to Homepage
                         </LinkButton>

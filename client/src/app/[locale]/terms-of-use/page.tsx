@@ -18,10 +18,7 @@ export default function TermsOfUsePage() {
         <main role="main">
             <ReadingIndicator />
             <SecondaryHeader />
-            <section
-                className="mx-auto my-6 flex max-w-5xl flex-col gap-6 px-4
-            sm:px-0"
-            ></section>
+            <section className="mx-auto my-6 flex max-w-5xl flex-col gap-6 px-4 sm:px-0"></section>
             <ScrollToTopButton />
         </main>
     )
