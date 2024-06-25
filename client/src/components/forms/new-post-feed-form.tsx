@@ -46,12 +46,7 @@ export default function NewPostFeedForm() {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (
-                emojiButtonRef.current &&
-                emojiButtonRef.current.contains(event.target as Node)
-            ) {
-                return
-            }
+            if (emojiButtonRef.current?.contains(event.target as Node)) return
 
             if (
                 emojiPickerRef.current &&

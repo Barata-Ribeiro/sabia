@@ -11,7 +11,7 @@ interface LocaleSwitcherSelectProps {
 export default function LocaleSwitcherSelect({
     children,
     defaultValue
-}: LocaleSwitcherSelectProps) {
+}: Readonly<LocaleSwitcherSelectProps>) {
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
     const pathname = usePathname()

@@ -7,9 +7,9 @@ import Image from "next/image"
 
 export default async function ProfileAvatar({
     profile
-}: {
+}: Readonly<{
     profile: UserPublicProfileResponse
-}) {
+}>) {
     const t = await getTranslations("Profile.Avatar")
     const localeActive = await getLocale()
 

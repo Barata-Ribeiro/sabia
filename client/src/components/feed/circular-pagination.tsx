@@ -67,7 +67,7 @@ export default function CircularPagination({
                         ) {
                             return (
                                 <IconButton
-                                    key={index}
+                                    key={"page-" + index}
                                     className={twMerge(
                                         "h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200",
                                         page === index && "bg-background-300"
@@ -81,7 +81,7 @@ export default function CircularPagination({
                         } else if (index === page - 2 || index === page + 2) {
                             return (
                                 <IconButton
-                                    key={index}
+                                    key={"page-" + index}
                                     className="h-10 max-h-[40px] w-10 max-w-[40px] rounded-full text-xs font-bold uppercase text-body-900 hover:bg-background-100 active:bg-background-200"
                                     onClick={handlePageInput}
                                     aria-label={t("AriaLabelInput")}

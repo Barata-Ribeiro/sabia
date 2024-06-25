@@ -11,9 +11,9 @@ import { type MouseEvent, useEffect, useState } from "react"
 
 export default function ProfileFollowButton({
     profile
-}: {
+}: Readonly<{
     profile: UserPublicProfileResponse
-}) {
+}>) {
     const localeActive = useLocale()
     const isEnglishLang = localeActive === "en"
     const router = useRouter()
@@ -59,31 +59,26 @@ export default function ProfileFollowButton({
                 }
             }
         } catch {
-            setIsFollowing(isFollowing)
+            setIsFollowing(!isFollowing)
             alert(errorMessage)
         } finally {
             setIsLoading(false)
         }
     }
 
+    let verifyIfFollowing = isFollowing ? "Unfollow" : "Follow"
+    let verifyIfOwnProfile = isOwnProfile ? "Edit Profile" : verifyIfFollowing
+
     return (
         <Button
             onClick={isOwnProfile ? handleEditProfile : handleFollow}
-            aria-label={
-                isOwnProfile ? "Edit Profile" : isFollowing ? "Unfollow" : "Follow"
-            }
-            title={isOwnProfile ? "Edit Profile" : isFollowing ? "Unfollow" : "Follow"}
+            aria-label={verifyIfOwnProfile}
+            title={verifyIfOwnProfile}
             className="px-2 py-0 font-heading text-sm md:rounded-full md:px-4 md:py-2 md:text-base"
             disabled={isLoading}
             aria-disabled={isLoading}
         >
-            {isLoading
-                ? "Loading..."
-                : isOwnProfile
-                  ? "Edit Profile"
-                  : isFollowing
-                    ? "Unfollow"
-                    : "Follow"}
+            {isLoading ? "Loading..." : verifyIfOwnProfile}
         </Button>
     )
 }

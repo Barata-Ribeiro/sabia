@@ -5,9 +5,9 @@ import Image from "next/image"
 
 export default async function ProfileCoverImage({
     profile
-}: {
+}: Readonly<{
     profile: UserPublicProfileResponse
-}) {
+}>) {
     const t = await getTranslations("Profile.Cover")
     const localeActive = await getLocale()
 

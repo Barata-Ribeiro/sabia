@@ -15,7 +15,7 @@ import type { MouseEvent } from "react"
 import { HiCheckBadge } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
-export default function FeedPost({ post }: { post: PostResponse }) {
+export default function FeedPost({ post }: Readonly<{ post: PostResponse }>) {
     const localeActive = useLocale()
     const router = useRouter()
 

@@ -15,7 +15,7 @@ import {
     useRef
 } from "react"
 
-export default function ReplyPostModal({ postId }: { postId: string }) {
+export default function ReplyPostModal({ postId }: Readonly<{ postId: string }>) {
     const t = useTranslations("ReplyPostModal")
     const router = useRouter()
     const dialogRef = useRef<ElementRef<"dialog">>(null)

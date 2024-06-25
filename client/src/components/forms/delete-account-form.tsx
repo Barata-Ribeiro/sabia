@@ -38,14 +38,12 @@ export default function DeleteAccountForm() {
             <div className="flex flex-col gap-1">
                 <input
                     className="hidden"
-                    aria-hidden
                     type="hidden"
                     name="userId"
                     value={user?.id}
                 />
                 <input
                     className="hidden"
-                    aria-hidden
                     type="hidden"
                     name="username"
                     value={user?.username}
@@ -62,6 +60,8 @@ export default function DeleteAccountForm() {
                     <FaCircleExclamation size={14} />
                     <span className="max-w-[55ch]">
                         Type your username followed by the word &rdquo;
+                        {/*
+                         */}
                         <strong>-DELETE</strong>&ldquo; to confirm.
                     </span>
                 </p>

@@ -8,8 +8,8 @@ import { getLocale } from "next-intl/server"
 
 export default async function getQuerySearch(
     query: string,
-    page = 0,
-    fetchType: "user" | "post"
+    fetchType: "user" | "post",
+    page = 0
 ) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
@@ -35,7 +35,7 @@ export default async function getQuerySearch(
 
         if (!response.ok) throw new Error(responseData.message)
 
-        const data = responseData.data as unknown
+        const data = responseData.data
 
         return { ok: true, clientError: null, response: { ...responseData, data } }
     } catch (error) {

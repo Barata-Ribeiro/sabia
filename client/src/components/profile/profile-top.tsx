@@ -6,10 +6,10 @@ import { HiArrowUturnLeft, HiCheckBadge } from "react-icons/hi2"
 export default async function ProfileTop({
     profile,
     englishLang
-}: {
+}: Readonly<{
     profile: UserPublicProfileResponse
     englishLang: boolean
-}) {
+}>) {
     const t = await getTranslations("Profile.Top")
 
     return (

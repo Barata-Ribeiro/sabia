@@ -13,7 +13,7 @@ import { useFormState, useFormStatus } from "react-dom"
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false })
 
-export default function ReplyPostForm({ postId }: { postId: string }) {
+export default function ReplyPostForm({ postId }: Readonly<{ postId: string }>) {
     const t = useTranslations("ReplyPostForm")
     const router = useRouter()
 
@@ -49,7 +49,7 @@ export default function ReplyPostForm({ postId }: { postId: string }) {
         <form action={action}>
             <div className="relative w-[32rem]">
                 <div className="relative w-full min-w-[200px]">
-                    <input type="hidden" name="postId" value={postId} aria-hidden />
+                    <input type="hidden" name="postId" value={postId} />
                     <textarea
                         id="reply-post"
                         name="replyText"

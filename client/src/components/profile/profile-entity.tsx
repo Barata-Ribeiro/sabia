@@ -24,7 +24,7 @@ export default function ProfileEntity({
     resolvedListOfBlurredDataUrl,
     totalPages,
     page
-}: ProfileEntityProps) {
+}: Readonly<ProfileEntityProps>) {
     return (
         <div key={user.id} className="p-4">
             <div className="flex items-center justify-between">

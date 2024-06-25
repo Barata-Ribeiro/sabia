@@ -31,7 +31,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
     const query = searchParams.q as string
     const fetchType = query.startsWith("@") ? "user" : "post"
-    const searchState = await getQuerySearch(query, page, fetchType)
+    const searchState = await getQuerySearch(query, fetchType, page)
     const searchResponse =
         fetchType === "user"
             ? (searchState.response?.data as UserSearchResponse)

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 
 export default function ReadingIndicator() {
-    const barRef = useRef<HTMLDivElement>(null)
+    const barRef = useRef<HTMLProgressElement>(null)
 
     useEffect(() => {
         const progressBar = barRef.current
@@ -35,14 +35,13 @@ export default function ReadingIndicator() {
 
     return (
         <div className="fixed left-0 top-0 h-2 w-full bg-background-100">
-            <div
+            <progress
                 ref={barRef}
                 style={{ width: 0 }}
                 className="h-full bg-accent-500"
-                role="progressbar"
                 aria-valuemin={0}
                 aria-valuemax={100}
-            ></div>
+            ></progress>
         </div>
     )
 }

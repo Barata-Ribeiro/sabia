@@ -17,7 +17,7 @@ interface FeedProps {
     isPublic: boolean
 }
 
-export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
+export default function Feed({ feedResponse, userId, isPublic }: Readonly<FeedProps>) {
     const t = useTranslations("Feed.Public")
 
     const [feed, setFeed] = useState(feedResponse)
@@ -45,8 +45,8 @@ export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
             const feedResponse = feedState.response?.data as FeedResponse
             setFeed(feedResponse)
 
-            if (feedResponse && feedResponse.feed != null) {
-                const newPosts = feedResponse.feed as PostResponse[]
+            if (feedResponse?.feed != null) {
+                const newPosts = feedResponse.feed
                 setFeedPosts((prevPosts) => {
                     const postsMap = new Map(prevPosts.map((post) => [post.id, post]))
                     newPosts.forEach((post) => {
@@ -75,7 +75,6 @@ export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
         <>
             <ul
                 className="flex snap-y flex-col divide-y"
-                role="list"
                 aria-label={t("AriaLabelList")}
             >
                 {feedPosts.map((post) =>

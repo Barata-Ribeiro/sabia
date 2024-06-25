@@ -5,7 +5,7 @@ import Button from "@/components/shared/button"
 import { useUser } from "@/context/user-context-provider"
 import { useRouter } from "@/navigation"
 import { NULL_AVATAR } from "@/utils/constants"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import {
     type ElementRef,
@@ -17,7 +17,6 @@ import {
 
 export default function NewPostModal() {
     const t = useTranslations("NewPostModal")
-    const localActive = useLocale()
     const router = useRouter()
     const dialogRef = useRef<ElementRef<"dialog">>(null)
     const { user } = useUser()

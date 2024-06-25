@@ -8,6 +8,7 @@ import {
     type SetStateAction,
     useContext,
     useEffect,
+    useMemo,
     useState
 } from "react"
 
@@ -31,16 +32,24 @@ export const useUser = () => {
     return context
 }
 
-export function UserContextProvider({ children, user }: UserContextProviderProps) {
-    const [currentUser, setUser] = useState<UserContextResponse | null>(user)
+export function UserContextProvider({
+    children,
+    user
+}: Readonly<UserContextProviderProps>) {
+    const [currentUser, setCurrentUser] = useState<UserContextResponse | null>(user)
+    const userContextMemo = useMemo(
+        () => ({
+            user: currentUser,
+            setUser: setCurrentUser
+        }),
+        [currentUser]
+    )
 
     useEffect(() => {
-        setUser(user)
+        setCurrentUser(user)
     }, [currentUser, user])
 
     return (
-        <UserContext.Provider value={{ user: currentUser, setUser: setUser }}>
-            {children}
-        </UserContext.Provider>
+        <UserContext.Provider value={userContextMemo}>{children}</UserContext.Provider>
     )
 }

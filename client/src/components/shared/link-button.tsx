@@ -9,7 +9,7 @@ export default function LinkButton({
     children,
     className,
     ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement>) {
+}: Readonly<AnchorHTMLAttributes<HTMLAnchorElement>>) {
     const localeActive = useLocale()
 
     const sortedClasses = tw`min-h-fit flex-1 select-none focus:outline-none`
