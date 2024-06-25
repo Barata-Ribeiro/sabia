@@ -30,9 +30,9 @@ export default function PaginatedFeed({
                 ))}
             </ul>
 
-            {feedResponse.total_pages > 1 && (
+            {feedResponse.totalPages > 1 && (
                 <CircularPagination
-                    totalPages={feedResponse.total_pages}
+                    totalPages={feedResponse.totalPages}
                     page={page}
                     searchParams={searchParams}
                 />

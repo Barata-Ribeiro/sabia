@@ -35,7 +35,7 @@ export default async function postUserFollow(userId: string, followId: string) {
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: responseData
         }
     } catch (error) {

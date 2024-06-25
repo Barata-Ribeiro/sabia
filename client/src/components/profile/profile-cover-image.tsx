@@ -12,8 +12,8 @@ export default async function ProfileCoverImage({
     const localeActive = await getLocale()
 
     let coverBlur: string | undefined
-    if (profile.cover_image_url) {
-        coverBlur = await getBase64(profile.cover_image_url, localeActive)
+    if (profile.coverImageUrl) {
+        coverBlur = await getBase64(profile.coverImageUrl, localeActive)
     }
 
     return (
@@ -21,11 +21,11 @@ export default async function ProfileCoverImage({
             id="profile-image"
             className="relative h-48 w-full bg-gradient-to-br from-background-100 to-background-200 dark:from-background-900 dark:to-background-800"
         >
-            {profile.cover_image_url && (
+            {profile.coverImageUrl && (
                 <Image
                     className="pointer-events-none absolute object-cover object-center italic"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    src={profile.cover_image_url}
+                    src={profile.coverImageUrl}
                     placeholder="blur"
                     blurDataURL={coverBlur}
                     alt={t("AltCover")}

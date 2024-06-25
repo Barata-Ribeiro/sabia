@@ -57,7 +57,7 @@ export default async function login(state: State, formData: FormData) {
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: { ...responseData, loginResponse }
         }
     } catch (error) {

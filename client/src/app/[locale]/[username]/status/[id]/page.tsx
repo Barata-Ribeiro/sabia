@@ -19,8 +19,8 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
     return {
         title:
-            post.author.display_name + " on Sabiá: " + post.text.slice(0, 600) + "...",
-        description: "Post by " + post.author.display_name + " on Sabiá. - " + post.text
+            post.author.displayName + " on Sabiá: " + post.text.slice(0, 600) + "...",
+        description: "Post by " + post.author.displayName + " on Sabiá. - " + post.text
     }
 }
 
@@ -44,7 +44,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 </div>
             </div>
             <div className="w-full px-4">
-                {post.repost_off !== null ? (
+                {post.repostOff !== null ? (
                     <Repost post={post} locale={localeActive} />
                 ) : (
                     <Post post={post} locale={localeActive} />

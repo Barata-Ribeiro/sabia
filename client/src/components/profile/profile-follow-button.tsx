@@ -31,10 +31,10 @@ export default function ProfileFollowButton({
     useEffect(() => {
         if (user && !isOwnProfile) {
             setIsLoading(true)
-            setIsFollowing(profile.is_following)
+            setIsFollowing(profile.isFollowing)
             setIsLoading(false)
         }
-    }, [isOwnProfile, user, profile.is_following])
+    }, [isOwnProfile, user, profile.isFollowing])
 
     function handleEditProfile(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
@@ -55,7 +55,7 @@ export default function ProfileFollowButton({
 
                 if (!response.ok) {
                     setIsFollowing(!isFollowing)
-                    alert(response.client_error ?? errorMessage)
+                    alert(response.clientError ?? errorMessage)
                 }
             }
         } catch {

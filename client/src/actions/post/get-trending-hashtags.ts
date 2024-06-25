@@ -31,7 +31,7 @@ export default async function getTrendingHashtags() {
 
         const data = responseData.data as TrendingHashtagsResponse
 
-        return { ok: true, client_error: null, response: { ...responseData, data } }
+        return { ok: true, clientError: null, response: { ...responseData, data } }
     } catch (error) {
         return ResponseError(error, locale)
     }

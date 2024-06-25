@@ -21,14 +21,11 @@ export default async function SettingsPage() {
     const user = context.response?.data as UserContextResponse
 
     let coverBlur: string | undefined
-    if (user.cover_image_url) {
-        coverBlur = await getBase64(user.cover_image_url, localeActive)
+    if (user.coverImageUrl) {
+        coverBlur = await getBase64(user.coverImageUrl, localeActive)
     }
 
-    const avatarBlur = await getBase64(
-        user.avatar_image_url ?? NULL_AVATAR,
-        localeActive
-    )
+    const avatarBlur = await getBase64(user.avatarImageUrl ?? NULL_AVATAR, localeActive)
 
     return (
         <section

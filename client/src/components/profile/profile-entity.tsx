@@ -35,10 +35,10 @@ export default function ProfileEntity({
                     rel="noopener noreferrer"
                 >
                     <Image
-                        src={user.avatar_image_url ?? NULL_AVATAR}
+                        src={user.avatarImageUrl ?? NULL_AVATAR}
                         alt={user.username}
                         className="h-12 w-12 rounded-full object-cover"
-                        placeholder={user.avatar_image_url ? "blur" : "empty"}
+                        placeholder={user.avatarImageUrl ? "blur" : "empty"}
                         blurDataURL={
                             resolvedListOfBlurredDataUrl.find(
                                 (data) => data?.userId === user.id
@@ -51,11 +51,11 @@ export default function ProfileEntity({
                         <h3
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                user.is_verified && "flex items-center gap-1"
+                                user.isVerified && "flex items-center gap-1"
                             )}
                         >
-                            {user.display_name}{" "}
-                            {user.is_verified && (
+                            {user.displayName}{" "}
+                            {user.isVerified && (
                                 <span
                                     className="text-accent-600"
                                     title="Verified"

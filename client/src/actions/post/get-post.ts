@@ -36,7 +36,7 @@ export default async function getPost({ id, locale }: GetPostParams) {
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: { ...responseData, data }
         }
     } catch (error) {

@@ -23,17 +23,15 @@ export default async function ProfileTop({
             </LinkButton>
             <div>
                 <h2 className="flex cursor-default items-center gap-2 font-heading text-xl font-semibold">
-                    {profile.display_name}{" "}
-                    {profile.is_verified && (
+                    {profile.displayName}{" "}
+                    {profile.isVerified && (
                         <span className="text-accent-600" title="Verified">
                             <HiCheckBadge size={24} />
                         </span>
                     )}
                 </h2>
                 <span className="text-base">
-                    {profile.posts_count.toLocaleString(
-                        englishLang ? "en-US" : "pt-BR"
-                    )}{" "}
+                    {profile.postsCount.toLocaleString(englishLang ? "en-US" : "pt-BR")}{" "}
                     {t("Title")}
                 </span>
             </div>

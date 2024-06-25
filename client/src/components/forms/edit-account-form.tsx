@@ -61,7 +61,7 @@ export default function EditAccountForm({
                         className="px-3 py-2.5"
                     />
                     <p className="text-body-600">
-                        Your display name is <strong>{user.display_name}</strong>.
+                        Your display name is <strong>{user.displayName}</strong>.
                     </p>
                 </div>
                 <div>
@@ -95,7 +95,7 @@ export default function EditAccountForm({
                         />
                     </div>
                     <p className="text-body-600">
-                        Your full name is <strong>{user.full_name}</strong>.
+                        Your full name is <strong>{user.fullName}</strong>.
                     </p>
                 </div>
                 <div>
@@ -106,7 +106,7 @@ export default function EditAccountForm({
                         className="px-3 py-2.5"
                     />
                     <p className="text-body-600">
-                        Your birth date is <strong>{user.birth_date}</strong>.
+                        Your birth date is <strong>{user.birthDate}</strong>.
                     </p>
                 </div>
                 <div>
@@ -130,7 +130,7 @@ export default function EditAccountForm({
                 <div className="flex flex-col gap-2 md:flex-row">
                     <span className="relative aspect-square">
                         <Image
-                            src={user.avatar_image_url ?? NULL_AVATAR}
+                            src={user.avatarImageUrl ?? NULL_AVATAR}
                             className="rounded object-cover"
                             placeholder="blur"
                             blurDataURL={avatarBlur}
@@ -160,10 +160,10 @@ export default function EditAccountForm({
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 md:flex-row">
-                    {user.cover_image_url && (
+                    {user.coverImageUrl && (
                         <span className="relative aspect-square">
                             <Image
-                                src={user.cover_image_url}
+                                src={user.coverImageUrl}
                                 className="rounded object-cover"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 placeholder="blur"

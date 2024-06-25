@@ -22,7 +22,7 @@ export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
 
     const [feed, setFeed] = useState(feedResponse)
     const [feedPosts, setFeedPosts] = useState<PostResponse[]>(feed.feed)
-    const [page, setPage] = useState(feed.current_page)
+    const [page, setPage] = useState(feed.currentPage)
     const [loading, setLoading] = useState(false)
     const [infinite, setInfinite] = useState(feedPosts.length >= 20)
     const { ref, inView } = useInView({ threshold: 1 })
@@ -79,7 +79,7 @@ export default function Feed({ feedResponse, userId, isPublic }: FeedProps) {
                 aria-label={t("AriaLabelList")}
             >
                 {feedPosts.map((post) =>
-                    !post.repost_off ? (
+                    !post.repostOff ? (
                         <FeedPost
                             key={post.author.username + "-" + post.id}
                             post={post}

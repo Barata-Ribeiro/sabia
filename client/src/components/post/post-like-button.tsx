@@ -35,7 +35,7 @@ export default function PostLikeButton({
             const likeState = await postTogglePostLike(post.id)
             const likeResponse = likeState.response?.message as string
 
-            if (!likeState.ok) alert(likeState.client_error)
+            if (!likeState.ok) alert(likeState.clientError)
 
             if (likeResponse.includes("liked") || likeResponse.includes("curtido")) {
                 setIsLiked(true)
@@ -55,9 +55,9 @@ export default function PostLikeButton({
 
     useEffect(() => {
         setCheckingIsLiked(true)
-        setIsLiked(post.is_liked)
+        setIsLiked(post.isLiked)
         setCheckingIsLiked(false)
-    }, [isLiked, post.is_liked])
+    }, [isLiked, post.isLiked])
 
     return (
         <div
@@ -75,7 +75,7 @@ export default function PostLikeButton({
             >
                 <HiHeart size={24} />
             </button>
-            {displayNumber && <p aria-label="Like Count">{post.like_count}</p>}
+            {displayNumber && <p aria-label="Like Count">{post.likeCount}</p>}
         </div>
     )
 }

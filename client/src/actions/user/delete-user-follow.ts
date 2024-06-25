@@ -34,7 +34,7 @@ export default async function deleteUserFollow(userId: string, followId: string)
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: responseData
         }
     } catch (error) {

@@ -53,7 +53,7 @@ export default function ReplyPostModal({ postId }: { postId: string }) {
                 </header>
                 <article className="flex gap-4">
                     <Image
-                        src={user?.avatar_image_url ?? NULL_AVATAR}
+                        src={user?.avatarImageUrl ?? NULL_AVATAR}
                         alt={`${t("ReplyPostAvatarAlt")}${user?.username}`}
                         width={50}
                         height={50}

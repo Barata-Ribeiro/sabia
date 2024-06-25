@@ -42,10 +42,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     if (searchResponse && fetchType === "user") {
         listOfBlurredDataUrl = (searchResponse as UserSearchResponse).users.map(
             async (user) => {
-                if (!user.avatar_image_url) return null
+                if (!user.avatarImageUrl) return null
                 return {
                     userId: user.id,
-                    blurredDataUrl: await getBase64(user.avatar_image_url, localeActive)
+                    blurredDataUrl: await getBase64(user.avatarImageUrl, localeActive)
                 }
             }
         )
@@ -82,7 +82,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                             user={user}
                             resolvedListOfBlurredDataUrl={resolvedListOfBlurredDataUrl}
                             totalPages={
-                                (searchResponse as UserSearchResponse).total_pages
+                                (searchResponse as UserSearchResponse).totalPages
                             }
                             page={page}
                         />

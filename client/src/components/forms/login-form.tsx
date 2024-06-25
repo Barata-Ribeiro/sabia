@@ -18,7 +18,7 @@ export default function LoginForm() {
     const { pending } = useFormStatus()
     const [state, action] = useFormState(login, {
         ok: false,
-        client_error: null,
+        clientError: null,
         response: null
     })
 

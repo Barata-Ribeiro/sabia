@@ -8,13 +8,13 @@ export default function ResponseError(error: unknown, locale: string): State {
 
     const state: State = {
         ok: false,
-        client_error: null,
+        clientError: null,
         response: null
     }
 
     return {
         ...state,
-        client_error:
+        clientError:
             error instanceof Error
                 ? error.message
                 : locale === "en"

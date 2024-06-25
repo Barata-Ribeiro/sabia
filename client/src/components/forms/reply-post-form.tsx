@@ -31,7 +31,7 @@ export default function ReplyPostForm({ postId }: { postId: string }) {
     const { pending } = useFormStatus()
     const [state, action] = useFormState(postNewReply, {
         ok: false,
-        client_error: null,
+        clientError: null,
         response: null
     })
 

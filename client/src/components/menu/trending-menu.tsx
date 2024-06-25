@@ -67,9 +67,9 @@ export default function TrendingMenu() {
                 <h2 className="px-4 pt-2 font-heading text-2xl font-bold text-body-900">
                     Trending
                 </h2>
-                {hashtags && hashtags.trending_hashtags.length > 0 ? (
+                {hashtags && hashtags.trendingHashtags.length > 0 ? (
                     <ul className="flex flex-col">
-                        {hashtags?.trending_hashtags.map((entity, index) => (
+                        {hashtags?.trendingHashtags.map((entity, index) => (
                             <li
                                 key={entity.hashtag + "_" + index}
                                 id={entity.hashtag + "_" + index}
@@ -82,7 +82,7 @@ export default function TrendingMenu() {
                                         #{entity.hashtag}
                                     </p>
                                     <span className="text-sm">
-                                        {entity.total_posts} posts
+                                        {entity.totalPosts} posts
                                     </span>
                                 </LinkButton>
                             </li>
@@ -105,7 +105,7 @@ export default function TrendingMenu() {
                                     className="flex items-center gap-2 px-4 py-2 text-body-700 hover:bg-background-100 hover:text-body-900"
                                 >
                                     <Image
-                                        src={entity.avatar_image_url ?? NULL_AVATAR}
+                                        src={entity.avatarImageUrl ?? NULL_AVATAR}
                                         alt={entity.username}
                                         className="aspect-square h-10 w-10 rounded-full object-cover"
                                         width={128}
@@ -116,12 +116,12 @@ export default function TrendingMenu() {
                                         <p
                                             className={twMerge(
                                                 "font-heading font-bold text-body-900",
-                                                entity.is_verified &&
+                                                entity.isVerified &&
                                                     "flex items-center gap-1"
                                             )}
                                         >
-                                            {entity.display_name}{" "}
-                                            {entity.is_verified && (
+                                            {entity.displayName}{" "}
+                                            {entity.isVerified && (
                                                 <span
                                                     className="text-accent-600"
                                                     title="Verified"

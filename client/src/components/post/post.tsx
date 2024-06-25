@@ -24,7 +24,7 @@ export default function Post(props: { post: PostResponse; locale: string }) {
             >
                 <header className="mb-4 flex w-max items-center gap-2">
                     <Image
-                        src={props.post.author.avatar_image_url ?? NULL_AVATAR}
+                        src={props.post.author.avatarImageUrl ?? NULL_AVATAR}
                         alt={props.post.author.username}
                         className="aspect-square h-10 w-10 rounded-full object-cover"
                         width={128}
@@ -35,12 +35,12 @@ export default function Post(props: { post: PostResponse; locale: string }) {
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                props.post.author.is_verified &&
+                                props.post.author.isVerified &&
                                     "flex items-center gap-1"
                             )}
                         >
-                            {props.post.author.display_name}{" "}
-                            {props.post.author.is_verified && (
+                            {props.post.author.displayName}{" "}
+                            {props.post.author.isVerified && (
                                 <span className="text-accent-600" title="Verified">
                                     <HiCheckBadge size={22} />
                                 </span>
@@ -68,12 +68,12 @@ export default function Post(props: { post: PostResponse; locale: string }) {
                         }
                         className="text-body-500 hover:underline"
                     >
-                        <time dateTime={props.post.created_at}>
-                            {dateTimeFormat(props.post.created_at, props.locale)}
+                        <time dateTime={props.post.createdAt}>
+                            {dateTimeFormat(props.post.createdAt, props.locale)}
                         </time>
                     </LinkButton>
                     <p className="text-body-500">
-                        · <strong>{props.post.views_count}</strong> Views
+                        · <strong>{props.post.viewsCount}</strong> Views
                     </p>
                 </div>
                 <div className="my-2 flex items-center justify-between border-y py-2">

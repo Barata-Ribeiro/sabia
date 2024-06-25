@@ -54,7 +54,7 @@ export default function NewPostModal() {
                 </header>
                 <article className="flex gap-4">
                     <Image
-                        src={user?.avatar_image_url ?? NULL_AVATAR}
+                        src={user?.avatarImageUrl ?? NULL_AVATAR}
                         alt={`${t("NewPostAvatarAlt")}${user?.username}`}
                         width={50}
                         height={50}

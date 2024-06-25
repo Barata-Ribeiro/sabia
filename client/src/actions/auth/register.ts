@@ -102,7 +102,7 @@ export default async function register(state: State, formData: FormData) {
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: responseData
         }
     } catch (error) {

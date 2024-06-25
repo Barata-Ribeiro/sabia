@@ -44,8 +44,8 @@ export default function FeedRepost({ post }: { post: PostResponse }) {
             </LinkButton>
             <div className="flex w-full flex-col items-start gap-2 md:flex-row md:gap-5">
                 <Image
-                    src={post.repost_off?.author.avatar_image_url ?? NULL_AVATAR}
-                    alt={post.repost_off!.author.username}
+                    src={post.repostOff?.author.avatarImageUrl ?? NULL_AVATAR}
+                    alt={post.repostOff!.author.username}
                     className="aspect-square h-10 w-10 rounded-full object-cover"
                     width={128}
                     height={128}
@@ -56,12 +56,12 @@ export default function FeedRepost({ post }: { post: PostResponse }) {
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                post.repost_off?.author.is_verified &&
+                                post.repostOff?.author.isVerified &&
                                     "flex items-center gap-1"
                             )}
                         >
-                            {post.repost_off?.author.display_name}{" "}
-                            {post.repost_off?.author.is_verified && (
+                            {post.repostOff?.author.displayName}{" "}
+                            {post.repostOff?.author.isVerified && (
                                 <span
                                     className="text-accent-600"
                                     title="Verified"
@@ -73,21 +73,21 @@ export default function FeedRepost({ post }: { post: PostResponse }) {
                         </p>
                         <div className="flex gap-1">
                             <p className="font-body text-body-500">
-                                @{post.repost_off?.author.username}
+                                @{post.repostOff?.author.username}
                             </p>
                             <span className="text-body-300">·</span>
                             <LinkButton
                                 href={
                                     "/" +
-                                    post.repost_off?.author.username +
+                                    post.repostOff?.author.username +
                                     "/status/" +
                                     post.id
                                 }
                                 className="text-body-500 hover:underline"
                             >
-                                <time dateTime={post.repost_off?.created_at}>
+                                <time dateTime={post.repostOff?.createdAt}>
                                     {dateToHowLongAgo(
-                                        post.repost_off!.created_at,
+                                        post.repostOff!.createdAt,
                                         localeActive
                                     )}
                                 </time>
@@ -96,24 +96,21 @@ export default function FeedRepost({ post }: { post: PostResponse }) {
                     </header>
 
                     <p className="text-pretty text-body-900">
-                        {post.repost_off!.hashtags.length > 0
+                        {post.repostOff!.hashtags.length > 0
                             ? formatTextWithHashtags(
-                                  post.repost_off!.text,
-                                  post.repost_off!.hashtags
+                                  post.repostOff!.text,
+                                  post.repostOff!.hashtags
                               )
-                            : post.repost_off!.text}
+                            : post.repostOff!.text}
                     </p>
 
                     <footer className="mt-2 flex items-center justify-between">
-                        <PostReplyButton
-                            post={post.repost_off!}
-                            displayNumber={false}
-                        />
+                        <PostReplyButton post={post.repostOff!} displayNumber={false} />
                         <PostRepostButton
-                            post={post.repost_off!}
+                            post={post.repostOff!}
                             displayNumber={false}
                         />
-                        <PostLikeButton post={post.repost_off!} displayNumber={false} />
+                        <PostLikeButton post={post.repostOff!} displayNumber={false} />
                     </footer>
                 </article>
             </div>

@@ -34,7 +34,7 @@ export default async function postTogglePostLike(postId: string) {
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: responseData
         }
     } catch (error) {

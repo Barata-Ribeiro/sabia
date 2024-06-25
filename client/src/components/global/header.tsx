@@ -147,8 +147,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                             <Image
                                                 className="h-8 w-8 rounded-full object-cover"
                                                 src={
-                                                    user?.avatar_image_url ??
-                                                    NULL_AVATAR
+                                                    user?.avatarImageUrl ?? NULL_AVATAR
                                                 }
                                                 alt={`${t("NavUserImageAlt")} ${user?.username}`}
                                                 title={`${t("NavUserImageAlt")} ${user?.username}`}

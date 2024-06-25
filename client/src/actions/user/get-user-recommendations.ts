@@ -33,7 +33,7 @@ export default async function getUserRecommendations() {
             recommendations: UserPublicProfileResponse[]
         }
 
-        return { ok: true, client_error: null, response: { ...responseData, data } }
+        return { ok: true, clientError: null, response: { ...responseData, data } }
     } catch (error) {
         return ResponseError(error, locale)
     }

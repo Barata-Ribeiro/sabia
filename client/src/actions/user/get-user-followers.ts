@@ -31,7 +31,7 @@ export default async function getUserFollowers(username: string, page = 0) {
 
         const data = responseData.data as FollowersResponse
 
-        return { ok: true, client_error: null, response: { ...responseData, data } }
+        return { ok: true, clientError: null, response: { ...responseData, data } }
     } catch (error) {
         return ResponseError(error, locale)
     }

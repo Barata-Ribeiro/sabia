@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 
     if (!params.username || !profileState.ok) {
         return {
-            title: profileState.client_error + " | Sabiá" ?? "404 | Sabiá",
+            title: profileState.clientError + " | Sabiá" ?? "404 | Sabiá",
             description:
                 "Sorry, we can't find that page. You'll find lots to explore on the home page."
         }
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 
     return {
         title: `@${profile.username} | Sabiá`,
-        description: `${profile.display_name} (@${profile.username})${profile.biography ? ` – ${profile.biography}` : ""}`
+        description: `${profile.displayName} (@${profile.username})${profile.biography ? ` – ${profile.biography}` : ""}`
     }
 }
 
@@ -46,7 +46,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     const isEnglishLang = localeActive === "en"
     const profile = profileState.response?.data as UserPublicProfileResponse
 
-    if (!profile || profileState.client_error) return notFound()
+    if (!profile || profileState.clientError) return notFound()
 
     const feedState = await getUserPublicFeed({ userId: profile.id })
     const feedResponse = feedState.response?.data as FeedResponse
@@ -75,8 +75,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                     <div className="ml-3 mt-3 w-full justify-center space-y-1">
                         <div>
                             <h2 className="flex cursor-default items-center gap-1 text-xl font-semibold leading-6">
-                                {profile.display_name}{" "}
-                                {profile.is_verified && (
+                                {profile.displayName}{" "}
+                                {profile.isVerified && (
                                     <span
                                         className="text-accent-600"
                                         aria-label={t("VerifiedBadge")}
@@ -116,7 +116,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                                     <HiCalendarDays size={24} />{" "}
                                     <span className="ml-1 leading-5">
                                         {t("JoinedDate")}
-                                        {dateFormat(profile.created_at, localeActive)}
+                                        {dateFormat(profile.createdAt, localeActive)}
                                     </span>
                                 </span>
                             </div>
@@ -125,7 +125,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                         <div className="flex w-max items-start justify-start divide-x divide-solid pt-3">
                             <div className="pr-3 text-center">
                                 <span className="font-bold text-secondary-600">
-                                    {profile.following_count}
+                                    {profile.followingsCount}
                                 </span>
                                 <span className="text-body-900">{t("Followings")}</span>
                             </div>
@@ -134,7 +134,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                                 className="px-3 text-center"
                             >
                                 <span className="font-bold text-secondary-600">
-                                    {profile.followers_count}
+                                    {profile.followersCount}
                                 </span>
                                 <span className="text-body-900 hover:text-body-700">
                                     {t("Followers")}

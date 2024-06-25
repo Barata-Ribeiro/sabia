@@ -37,7 +37,7 @@ export default function FeedPost({ post }: { post: PostResponse }) {
         >
             <div className="flex w-full flex-col items-start gap-2 md:flex-row md:gap-5">
                 <Image
-                    src={post.author.avatar_image_url ?? NULL_AVATAR}
+                    src={post.author.avatarImageUrl ?? NULL_AVATAR}
                     alt={post.author.username}
                     className="aspect-square h-10 w-10 rounded-full object-cover"
                     width={128}
@@ -49,11 +49,11 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                post.author.is_verified && "flex items-center gap-1"
+                                post.author.isVerified && "flex items-center gap-1"
                             )}
                         >
-                            {post.author.display_name}{" "}
-                            {post.author.is_verified && (
+                            {post.author.displayName}{" "}
+                            {post.author.isVerified && (
                                 <span
                                     className="text-accent-600"
                                     title="Verified"
@@ -72,8 +72,8 @@ export default function FeedPost({ post }: { post: PostResponse }) {
                                 href={"/" + post.author.username + "/status/" + post.id}
                                 className="text-body-500 hover:underline"
                             >
-                                <time dateTime={post.created_at}>
-                                    {dateToHowLongAgo(post.created_at, localeActive)}
+                                <time dateTime={post.createdAt}>
+                                    {dateToHowLongAgo(post.createdAt, localeActive)}
                                 </time>
                             </LinkButton>
                         </div>

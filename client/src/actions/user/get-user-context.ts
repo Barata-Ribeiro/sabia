@@ -33,7 +33,7 @@ export default async function getUserContext() {
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: { ...responseData, data }
         }
     } catch (error) {

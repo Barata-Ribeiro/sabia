@@ -5,15 +5,15 @@ export interface PostResponse {
     author: AuthorResponse
     text: string
     hashtags: string[]
-    views_count: number
-    like_count: number
-    is_liked: boolean
-    repost_off?: PostResponse
-    repost_count: number
-    reply_count: number
-    in_reply_to?: PostResponse
-    created_at: string
-    updated_at: string
+    viewsCount: number
+    likeCount: number
+    isLiked: boolean
+    repostOff?: PostResponse
+    repostCount: number
+    replyCount: number
+    inReplyTo?: PostResponse
+    createdAt: string
+    updatedAt: string
 }
 
 export interface PostSearchParams {
@@ -30,25 +30,25 @@ export interface PostHashtagParams {
 
 export interface PostsHashtagResponse {
     posts: PostResponse[]
-    total_pages: number
-    total_items: number
-    current_page: number
+    totalPages: number
+    totalItems: number
+    currentPage: number
 }
 
 export interface PostSearchResponse {
     posts: PostResponse[]
-    total_pages: number
-    total_items: number
-    current_page: number
+    totalPages: number
+    totalItems: number
+    currentPage: number
 }
 
 export interface TrendingHashtagsResponse {
-    trending_hashtags: TrendingHashtag[]
-    total_items: number
+    trendingHashtags: TrendingHashtag[]
+    totalItems: number
 }
 
 export interface TrendingHashtag {
-    total_posts: number
-    created_at: string
+    totalPosts: number
+    createdAt: string
     hashtag: string
 }

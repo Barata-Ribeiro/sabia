@@ -8,5 +8,5 @@ export interface AuthLoginResponse {
 export interface AuthRegisterResponse {
     id: string
     username: string
-    display_name: string
+    displayName: string
 }

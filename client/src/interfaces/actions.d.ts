@@ -7,6 +7,6 @@ export interface ApiResponse {
 
 export interface State {
     ok: boolean
-    client_error: string | null
+    clientError: string | null
     response: ApiResponse | null
 }

@@ -41,10 +41,10 @@ export default async function FollowersPage({
     const followersResponse = followersState.response?.data as FollowersResponse
 
     const listOfBlurredDataUrl = followersResponse?.followers.map(async (follower) => {
-        if (!follower.avatar_image_url) return null
+        if (!follower.avatarImageUrl) return null
         return {
             userId: follower.id,
-            blurredDataUrl: await getBase64(follower.avatar_image_url, localeActive)
+            blurredDataUrl: await getBase64(follower.avatarImageUrl, localeActive)
         }
     })
 
@@ -62,10 +62,10 @@ export default async function FollowersPage({
                         <HiArrowUturnLeft size={24} />
                     </LinkButton>
                     <h2 className="flex cursor-default items-center gap-2 font-heading text-xl font-semibold">
-                        {followersResponse.total_items.toLocaleString(
+                        {followersResponse.totalItems.toLocaleString(
                             englishLang ? "en-US" : "pt-BR"
                         )}{" "}
-                        {followersResponse.total_items === 1 ? "Follower" : "Followers"}
+                        {followersResponse.totalItems === 1 ? "Follower" : "Followers"}
                     </h2>
                 </div>
             </header>
@@ -76,7 +76,7 @@ export default async function FollowersPage({
                         key={follower.id}
                         user={follower}
                         resolvedListOfBlurredDataUrl={resolvedListOfBlurredDataUrl}
-                        totalPages={followersResponse.total_pages}
+                        totalPages={followersResponse.totalPages}
                         page={page}
                     />
                 ))}

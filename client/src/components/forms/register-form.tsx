@@ -17,7 +17,7 @@ export default function RegisterForm() {
     const { pending } = useFormStatus()
     const [state, action] = useFormState(register, {
         ok: false,
-        client_error: null,
+        clientError: null,
         response: null
     })
 

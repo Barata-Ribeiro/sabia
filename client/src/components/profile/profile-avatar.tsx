@@ -13,7 +13,7 @@ export default async function ProfileAvatar({
     const t = await getTranslations("Profile.Avatar")
     const localeActive = await getLocale()
 
-    const avatarBlur = await getBase64(profile.avatar_image_url, localeActive)
+    const avatarBlur = await getBase64(profile.avatarImageUrl, localeActive)
 
     return (
         <div style={{ marginTop: "-6rem" }}>
@@ -24,16 +24,16 @@ export default async function ProfileAvatar({
                 <Image
                     className="pointer-events-none absolute rounded-full border-4 border-background-600 bg-background-600 object-cover object-center italic"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    src={profile.avatar_image_url ?? NULL_AVATAR}
-                    placeholder={profile.avatar_image_url ? "blur" : "empty"}
+                    src={profile.avatarImageUrl ?? NULL_AVATAR}
+                    placeholder={profile.avatarImageUrl ? "blur" : "empty"}
                     blurDataURL={avatarBlur}
                     alt={t("AltAvatar")}
                     priority
                     fill
                 />
-                {profile.avatar_image_url && (
+                {profile.avatarImageUrl && (
                     <LinkButton
-                        href={profile.avatar_image_url}
+                        href={profile.avatarImageUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={t("AriaLabelLink")}

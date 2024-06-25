@@ -64,7 +64,7 @@ export default async function deleteUserAccount(state: State, formData: FormData
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: responseData
         }
     } catch (error) {

@@ -41,7 +41,7 @@ export default function AsideMenu() {
                     </div>
                     {t("ButtonProfile")}
                 </LinkButton>
-                {!user?.is_verified && (
+                {!user?.isVerified && (
                     <LinkButton
                         href={"/" + user?.username + "/verify"}
                         className="flex w-full items-center rounded-lg p-3 text-start leading-tight outline-none transition-all hover:bg-background-200 hover:bg-opacity-80 hover:text-body-900 focus:bg-background-100 focus:bg-opacity-80 focus:text-body-800 active:bg-background-50 active:bg-opacity-80 active:text-body-700"

@@ -21,7 +21,7 @@ export default function DeleteAccountForm() {
     const [state, action] = useFormState(deleteUserAccount, {
         // EDIT ACTION!!!
         ok: false,
-        client_error: null,
+        clientError: null,
         response: null
     })
 
@@ -85,7 +85,7 @@ export default function DeleteAccountForm() {
                     {pending ? "Deleting..." : "Delete"}
                 </Button>
             </div>
-            {state.client_error && <p>{state.client_error}</p>}
+            {state.clientError && <p>{state.clientError}</p>}
         </form>
     )
 }

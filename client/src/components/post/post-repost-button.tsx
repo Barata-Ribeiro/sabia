@@ -20,8 +20,7 @@ export default function PostRepostButton({
     const [loading, setLoading] = useState(false)
     const router = useRouter()
 
-    const buttonBaseStyles = tw`cursor-pointer text-background-900 hover:text-background-800 active:text-background-700 disabled:cursor-default
-                                       disabled:text-background-300 disabled:opacity-50 disabled:shadow-none disabled:hover:text-background-900 disabled:active:text-background-900`
+    const buttonBaseStyles = tw`cursor-pointer text-background-900 hover:text-background-800 active:text-background-700 disabled:cursor-default disabled:text-background-300 disabled:opacity-50 disabled:shadow-none disabled:hover:text-background-900 disabled:active:text-background-900`
 
     const setRepostedStyleLoading = loading ? tw`animate-pulse text-background-300` : ""
 
@@ -38,7 +37,7 @@ export default function PostRepostButton({
             const repostState = await postNewRepost(post.id)
             const repostResponse = repostState.response?.data as PostResponse
 
-            if (!repostState.ok) alert(repostState.client_error)
+            if (!repostState.ok) alert(repostState.clientError)
             else
                 router.push(
                     "/" +
@@ -69,7 +68,7 @@ export default function PostRepostButton({
             >
                 <HiMiniArrowPath size={24} />
             </button>
-            {displayNumber && <p aria-label="Repost Count">{post.repost_count}</p>}
+            {displayNumber && <p aria-label="Repost Count">{post.repostCount}</p>}
         </div>
     )
 }

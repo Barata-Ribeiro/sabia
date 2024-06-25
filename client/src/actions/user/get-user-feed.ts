@@ -40,7 +40,7 @@ export default async function getUserFeed(
 
         return {
             ok: true,
-            client_error: null,
+            clientError: null,
             response: { ...responseData, data }
         }
     } catch (error) {

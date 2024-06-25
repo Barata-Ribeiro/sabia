@@ -25,7 +25,7 @@ export default function PostReplyButton({
             >
                 <HiOutlineChatBubbleOvalLeft size={24} aria-hidden="true" />
             </LinkButton>
-            {displayNumber && <p aria-label="Reply Count">{post.reply_count}</p>}
+            {displayNumber && <p aria-label="Reply Count">{post.replyCount}</p>}
         </div>
     )
 }
