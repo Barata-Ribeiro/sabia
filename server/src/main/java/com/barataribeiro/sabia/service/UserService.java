@@ -230,17 +230,17 @@ public class UserService {
 
         Map<String, Object> validatedInputData = validateInputData(body, user, isEnglishLang);
 
-        user.setUsername(validatedInputData.get("username").toString());
-        user.setDisplayName(validatedInputData.get("displayName").toString());
-        user.setFullName(validatedInputData.get("fullName").toString());
+        user.setUsername(validatedInputData.get(AppConstants.USERNAME).toString());
+        user.setDisplayName(validatedInputData.get(AppConstants.DISPLAY_NAME).toString());
+        user.setFullName(validatedInputData.get(AppConstants.FULL_NAME).toString());
         user.setBirthDate(body.birth_date());
         user.setGender(body.gender());
-        user.setEmail(validatedInputData.get("email").toString());
+        user.setEmail(validatedInputData.get(AppConstants.EMAIL).toString());
         user.setPassword(passwordEncoder.encode(body.new_password()));
-        user.setAvatarImageUrl(validatedInputData.get("avatarImageUrl").toString());
-        user.setCoverImageUrl(validatedInputData.get("coverImageUrl").toString());
-        user.setBiography(validatedInputData.get("biography").toString());
-        user.setWebsite(validatedInputData.get("website").toString());
+        user.setAvatarImageUrl(validatedInputData.get(AppConstants.AVATAR_IMAGE_URL).toString());
+        user.setCoverImageUrl(validatedInputData.get(AppConstants.COVER_IMAGE_URL).toString());
+        user.setBiography(validatedInputData.get(AppConstants.BIOGRAPHY).toString());
+        user.setWebsite(validatedInputData.get(AppConstants.WEBSITE).toString());
         user.setLocation(body.location());
 
         User savedUser = userRepository.save(user);
@@ -385,110 +385,115 @@ public class UserService {
         return response;
     }
 
-    private @NotNull Map<String, Object> validateInputData(@NotNull ProfileRequestDTO body, User user, boolean isEnglishLang) {
-        if (body.password() != null && !body.password().isEmpty()) {
-            if (!passwordEncoder.matches(body.password(), user.getPassword())) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The provided password is incorrect."
-                                       : "A senha fornecida está incorreta.");
-            }
+    private @NotNull @Unmodifiable Map<String, Object> validateInputData(@NotNull ProfileRequestDTO body, User user, boolean isEnglishLang) {
+        validatePassword(body, user, isEnglishLang);
+        Map<String, Object> sanitizedBody = sanitizeBody(body);
+        validateSanitizedBody(sanitizedBody, isEnglishLang);
+        validateNewPassword(body, user, isEnglishLang);
+        return sanitizedBody;
+    }
 
-            if (body.new_password() != null && !body.new_password().isEmpty() && validation.isPasswordValid(body.new_password())) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The new password must contain at least one uppercase " +
-                                               "letter, " +
-                                               "one lowercase letter, one digit, " +
-                                               "one special character, " +
-                                               "and be at least 8 characters long."
-                                       : "A nova senha deve conter pelo menos uma letra maiúscula, " +
-                                               "uma letra minúscula, um dígito, " +
-                                               "um caractere especial, " +
-                                               "e ter pelo menos 8 caracteres.");
-            }
-
-
-            Map<String, Object> sanitizedBody = sanitizeBody(body);
-
-            if (Boolean.TRUE.equals(userRepository.existsByUsername(sanitizedBody.get("username").toString()))) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The provided username is already in use."
-                                       : "O nome de usuário fornecido já está em uso.");
-            }
-
-            if (Boolean.TRUE.equals(userRepository.existsByEmail(sanitizedBody.get("email").toString()))) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The provided email is already in use." : "O e-mail fornecido já está em uso.");
-            }
-
-            if (validation.isEmailValid(sanitizedBody.get("email").toString())) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The provided email is invalid."
-                                       : "O e-mail fornecido é inválido.");
-            }
-
-            if (sanitizedBody.get("username").toString().length() < 3 || sanitizedBody.get("username").toString().length() > 20) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The username must be between 3 and 20 characters."
-                                       : "O nome de usuário deve ter entre 3 e 20 caracteres.");
-            }
-
-            if (sanitizedBody.get("displayName").toString().length() < 3 || sanitizedBody.get("displayName").toString().length() > 20) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The display name must be between 3 and 20 characters."
-                                       : "O nome de exibição deve ter entre 3 e 20 caracteres.");
-            }
-
-            if (sanitizedBody.get("fullName").toString().length() < 3 || sanitizedBody.get("fullName").toString().length() > 50) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The full name must be between 3 and 50 characters."
-                                       : "O nome completo deve ter entre 3 e 50 caracteres.");
-            }
-
-            if (sanitizedBody.get("biography").toString().length() > 160) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The biography must be less than 160 characters."
-                                       : "A biografia deve ter menos de 160 caracteres.");
-            }
-
-            if (!sanitizedBody.get("avatarImageUrl").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The avatar image URL must start with 'https://'."
-                                       : "A URL da imagem do avatar deve começar com 'https://'.");
-            }
-
-            if (!sanitizedBody.get("coverImageUrl").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The avatar image URL must start with 'https://'."
-                                       : "A URL da imagem de capa deve começar com 'https://'.");
-            }
-
-            if (!sanitizedBody.get("website").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
-                throw new InvalidInput(isEnglishLang
-                                       ? "The avatar image URL must start with 'https://'."
-                                       : "A URL do site deve começar com 'https://'.");
-            }
-
-            if (body.new_password() != null && !body.new_password().isEmpty()) {
-                if (passwordEncoder.matches(body.new_password(), user.getPassword())) {
-                    throw new InvalidInput(isEnglishLang
-                                           ? "The new password must be different from the current password."
-                                           : "A nova senha deve ser diferente da senha atual.");
-                }
-
-                if (body.new_password().length() < 8 || body.new_password().length() > 100) {
-                    throw new InvalidInput(isEnglishLang
-                                           ? "The new password must be between 8 and 100 characters."
-                                           : "A nova senha deve ter entre 8 e 100 caracteres.");
-                }
-            }
-
-            return sanitizedBody;
-        } else {
+    private void validatePassword(@NotNull ProfileRequestDTO body, User user, boolean isEnglishLang) {
+        if (body.password() == null || body.password().isEmpty()) {
             throw new InvalidInput(isEnglishLang
                                    ? "You must provide your current password to update your account."
                                    : "Você deve fornecer sua senha atual para atualizar sua conta.");
         }
+
+        if (!passwordEncoder.matches(body.password(), user.getPassword())) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The provided password is incorrect."
+                                   : "A senha fornecida está incorreta.");
+        }
     }
+
+    private void validateSanitizedBody(@NotNull Map<String, Object> sanitizedBody, boolean isEnglishLang) {
+        validateUsername(sanitizedBody.get(AppConstants.USERNAME).toString(), isEnglishLang);
+        validateEmail(sanitizedBody.get(AppConstants.EMAIL).toString(), isEnglishLang);
+        validateDisplayName(sanitizedBody.get(AppConstants.DISPLAY_NAME).toString(), isEnglishLang);
+        validateFullName(sanitizedBody.get(AppConstants.FULL_NAME).toString(), isEnglishLang);
+        validateBiography(sanitizedBody.get(AppConstants.BIOGRAPHY).toString(), isEnglishLang);
+        validateHttpsUrl(sanitizedBody.get(AppConstants.AVATAR_IMAGE_URL).toString(), isEnglishLang);
+        validateHttpsUrl(sanitizedBody.get(AppConstants.COVER_IMAGE_URL).toString(), isEnglishLang);
+        validateHttpsUrl(sanitizedBody.get(AppConstants.WEBSITE).toString(), isEnglishLang);
+    }
+
+    private void validateUsername(@NotNull String username, boolean isEnglishLang) {
+        if (username.length() < 3 || username.length() > 20) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The username must be between 3 and 20 characters."
+                                   : "O nome de usuário deve ter entre 3 e 20 caracteres.");
+        }
+
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(username))) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The provided username is already in use."
+                                   : "O nome de usuário fornecido já está em uso.");
+        }
+    }
+
+    private void validateEmail(String email, boolean isEnglishLang) {
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(email))) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The provided email is already in use."
+                                   : "O e-mail fornecido já está em uso.");
+        }
+
+        if (validation.isEmailValid(email)) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The provided email is invalid."
+                                   : "O e-mail fornecido é inválido.");
+        }
+    }
+
+    private void validateDisplayName(@NotNull String displayName, boolean isEnglishLang) {
+        if (displayName.length() < 3 || displayName.length() > 20) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The display name must be between 3 and 20 characters."
+                                   : "O nome de exibição deve ter entre 3 e 20 caracteres.");
+        }
+    }
+
+    private void validateFullName(@NotNull String fullName, boolean isEnglishLang) {
+        if (fullName.length() < 3 || fullName.length() > 50) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The full name must be between 3 and 50 characters."
+                                   : "O nome completo deve ter entre 3 e 50 caracteres.");
+        }
+    }
+
+    private void validateBiography(@NotNull String biography, boolean isEnglishLang) {
+        if (biography.length() > 160) {
+            throw new InvalidInput(isEnglishLang
+                                   ? "The biography must be less than 160 characters."
+                                   : "A biografia deve ter menos de 160 caracteres.");
+        }
+    }
+
+    private void validateHttpsUrl(@NotNull String url, boolean isEnglishLang) {
+        if (!url.startsWith(AppConstants.PROTOCOL_HTTPS)) {
+            throw new InvalidInput(isEnglishLang
+                                   ? AppConstants.WITH_HTTPS_ENG
+                                   : AppConstants.WITH_HTTPS_BR);
+        }
+    }
+
+    private void validateNewPassword(@NotNull ProfileRequestDTO body, User user, boolean isEnglishLang) {
+        if (body.new_password() != null && !body.new_password().isEmpty()) {
+            if (!validation.isPasswordValid(body.new_password())) {
+                throw new InvalidInput(isEnglishLang
+                                       ? "The new password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long."
+                                       : "A nova senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um dígito, um caractere especial, e ter pelo menos 8 caracteres.");
+            }
+
+            if (passwordEncoder.matches(body.new_password(), user.getPassword())) {
+                throw new InvalidInput(isEnglishLang
+                                       ? "The new password must be different from the current password."
+                                       : "A nova senha deve ser diferente da senha atual.");
+            }
+        }
+    }
+
 
     private static @NotNull Map<String, Integer> getUserScores(@NotNull List<User> users) {
         Map<String, Integer> userScores = new HashMap<>();
@@ -524,12 +529,12 @@ public class UserService {
         var sanitizedBiography = StringEscapeUtils.escapeHtml4(body.biography().strip());
         var sanitizedWebsite = StringEscapeUtils.escapeHtml4(body.website().strip());
 
-        return Map.of("username", sanitizedUsername,
-                      "displayName", sanitizedDisplayName,
-                      "fullName", sanitizedFullName,
-                      "email", sanitizedEmail,
-                      "biography", sanitizedBiography,
-                      "website", sanitizedWebsite);
+        return Map.of(AppConstants.USERNAME, sanitizedUsername,
+                      AppConstants.DISPLAY_NAME, sanitizedDisplayName,
+                      AppConstants.FULL_NAME, sanitizedFullName,
+                      AppConstants.EMAIL, sanitizedEmail,
+                      AppConstants.BIOGRAPHY, sanitizedBiography,
+                      AppConstants.WEBSITE, sanitizedWebsite);
     }
 }
 
