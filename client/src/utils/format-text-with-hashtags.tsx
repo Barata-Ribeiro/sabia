@@ -2,7 +2,7 @@ import LinkButton from "@/components/shared/link-button"
 import { Fragment } from "react"
 
 export default function formatTextWithHashtags(text: string, hashtags: string[]) {
-    const hashtagRegex = /(#[a-zA-Z0-9]+\b)(?!;)/gi
+    const hashtagRegex = /(#\w+\b)(?!;)/gi
 
     const parts = text.split(" ")
 

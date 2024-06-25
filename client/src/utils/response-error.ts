@@ -12,13 +12,10 @@ export default function ResponseError(error: unknown, locale: string): State {
         response: null
     }
 
+    const defaultMessage = locale === "en" ? DEFAULT_MESSAGE_EN : DEFAULT_MESSAGE_BR
+
     return {
         ...state,
-        clientError:
-            error instanceof Error
-                ? error.message
-                : locale === "en"
-                  ? DEFAULT_MESSAGE_EN
-                  : DEFAULT_MESSAGE_BR
+        clientError: error instanceof Error ? error.message : defaultMessage
     }
 }

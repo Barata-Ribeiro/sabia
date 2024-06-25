@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function middleware(req: NextRequest) {
     const authToken = req.cookies.get("auth_token")?.value
-    const localePref = req.cookies.get("NEXT_LOCALE")?.value || "en"
+    const localePref = req.cookies.get("NEXT_LOCALE")?.value ?? "en"
     const [, locale, ...segments] = req.nextUrl.pathname.split("/")
     let isAuthenticated = false
     const isRedirectionUrl = req.nextUrl.pathname === `/${localePref}`
