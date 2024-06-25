@@ -118,9 +118,9 @@ public class AuthService {
 
         User newUser = User.builder()
                 .username(sanitizedUsername)
-                .display_name(sanitizedDisplayName)
-                .full_name(sanitizedFullName)
-                .birth_date(birthDate)
+                .displayName(sanitizedDisplayName)
+                .fullName(sanitizedFullName)
+                .birthDate(birthDate)
                 .email(sanitizedEmail)
                 .password(passwordEncoder.encode(sanitizedPassword))
                 .build();
@@ -128,7 +128,7 @@ public class AuthService {
         userRepository.save(newUser);
 
         return new RegisterResponseDTO(newUser.getUsername(),
-                                       newUser.getDisplay_name(),
+                                       newUser.getDisplayName(),
                                        newUser.getEmail());
     }
 }

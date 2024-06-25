@@ -43,12 +43,12 @@ public class Post {
 
     @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long views_count = 0L;
+    private Long viewsCount = 0L;
 
 
     @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long like_count = 0L;
+    private Long likeCount = 0L;
 
     @Builder.Default
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
@@ -58,66 +58,66 @@ public class Post {
 
 
     @Builder.Default
-    @OneToMany(mappedBy = "repost_off")
+    @OneToMany(mappedBy = "repostOff")
     @JsonIgnore
     @ToString.Exclude
     private Set<Post> reposts = new HashSet<>();
 
     @ManyToOne
-    private Post repost_off;
+    private Post repostOff;
 
     @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long repost_count = 0L;
+    private Long repostCount = 0L;
 
 
     @Builder.Default
-    @OneToMany(mappedBy = "in_reply_to")
+    @OneToMany(mappedBy = "inReplyTo")
     @JsonIgnore
     @ToString.Exclude
     private Set<Post> replies = new HashSet<>();
 
     @Builder.Default
     @Column(columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long reply_count = 0L;
+    private Long replyCount = 0L;
 
     @ManyToOne
-    private Post in_reply_to;
+    private Post inReplyTo;
 
 
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(nullable = false)
     @UpdateTimestamp
     private Instant updatedAt;
 
     public void incrementViewCount() {
-        ++views_count;
+        ++viewsCount;
     }
 
     public void incrementLikeCount() {
-        ++like_count;
+        ++likeCount;
     }
 
     public void decrementLikeCount() {
-        like_count = like_count > 0 ? --like_count : 0;
+        likeCount = likeCount > 0 ? --likeCount : 0;
     }
 
     public void incrementRepostCount() {
-        ++repost_count;
+        ++repostCount;
     }
 
     public void decrementRepostCount() {
-        repost_count = repost_count > 0 ? --repost_count : 0;
+        repostCount = repostCount > 0 ? --repostCount : 0;
     }
 
     public void incrementReplyCount() {
-        ++reply_count;
+        ++replyCount;
     }
 
     public void decrementReplyCount() {
-        reply_count = reply_count > 0 ? --reply_count : 0;
+        replyCount = replyCount > 0 ? --replyCount : 0;
     }
 }

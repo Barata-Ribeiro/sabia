@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
-    Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -105,7 +105,7 @@ public class UserService {
 
         String privateProfileMessage = isEnglishLang ? "This user's profile is private." : "O perfil deste usuário é privado.";
 
-        if (Boolean.TRUE.equals(user.getIs_private())) {
+        if (Boolean.TRUE.equals(user.getIsPrivate())) {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
@@ -204,7 +204,7 @@ public class UserService {
                                        ? "This user's profile is private."
                                        : "O perfil deste usuário é privado.";
 
-        if (Boolean.TRUE.equals(user.getIs_private())) {
+        if (Boolean.TRUE.equals(user.getIsPrivate())) {
             throw new ForbiddenRequest(privateProfileMessage);
         }
 
@@ -231,14 +231,14 @@ public class UserService {
         Map<String, Object> validatedInputData = validateInputData(body, user, isEnglishLang);
 
         user.setUsername(validatedInputData.get("username").toString());
-        user.setDisplay_name(validatedInputData.get("display_name").toString());
-        user.setFull_name(validatedInputData.get("full_name").toString());
-        user.setBirth_date(body.birth_date());
+        user.setDisplayName(validatedInputData.get("displayName").toString());
+        user.setFullName(validatedInputData.get("fullName").toString());
+        user.setBirthDate(body.birth_date());
         user.setGender(body.gender());
         user.setEmail(validatedInputData.get("email").toString());
         user.setPassword(passwordEncoder.encode(body.new_password()));
-        user.setAvatar_image_url(validatedInputData.get("avatar_image_url").toString());
-        user.setCover_image_url(validatedInputData.get("cover_image_url").toString());
+        user.setAvatarImageUrl(validatedInputData.get("avatarImageUrl").toString());
+        user.setCoverImageUrl(validatedInputData.get("coverImageUrl").toString());
         user.setBiography(validatedInputData.get("biography").toString());
         user.setWebsite(validatedInputData.get("website").toString());
         user.setLocation(body.location());
@@ -313,7 +313,7 @@ public class UserService {
             throw new BadRequest(alreadyFollowingMessage);
         }
 
-        if (Boolean.TRUE.equals(followedUser.getIs_private())) {
+        if (Boolean.TRUE.equals(followedUser.getIsPrivate())) {
             throw new ForbiddenRequest(notAllowedMessage);
         }
 
@@ -432,13 +432,13 @@ public class UserService {
                                        : "O nome de usuário deve ter entre 3 e 20 caracteres.");
             }
 
-            if (sanitizedBody.get("display_name").toString().length() < 3 || sanitizedBody.get("display_name").toString().length() > 20) {
+            if (sanitizedBody.get("displayName").toString().length() < 3 || sanitizedBody.get("displayName").toString().length() > 20) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The display name must be between 3 and 20 characters."
                                        : "O nome de exibição deve ter entre 3 e 20 caracteres.");
             }
 
-            if (sanitizedBody.get("full_name").toString().length() < 3 || sanitizedBody.get("full_name").toString().length() > 50) {
+            if (sanitizedBody.get("fullName").toString().length() < 3 || sanitizedBody.get("fullName").toString().length() > 50) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The full name must be between 3 and 50 characters."
                                        : "O nome completo deve ter entre 3 e 50 caracteres.");
@@ -450,13 +450,13 @@ public class UserService {
                                        : "A biografia deve ter menos de 160 caracteres.");
             }
 
-            if (!sanitizedBody.get("avatar_image_url").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
+            if (!sanitizedBody.get("avatarImageUrl").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The avatar image URL must start with 'https://'."
                                        : "A URL da imagem do avatar deve começar com 'https://'.");
             }
 
-            if (!sanitizedBody.get("cover_image_url").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
+            if (!sanitizedBody.get("coverImageUrl").toString().startsWith(AppConstants.PROTOCOL_HTTPS)) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The avatar image URL must start with 'https://'."
                                        : "A URL da imagem de capa deve começar com 'https://'.");
@@ -494,19 +494,19 @@ public class UserService {
         Map<String, Integer> userScores = new HashMap<>();
 
         for (User user : users) {
-            if (Boolean.TRUE.equals(user.getIs_private())) {
+            if (Boolean.TRUE.equals(user.getIsPrivate())) {
                 userScores.put(user.getId(), 0);
                 continue;
             }
 
-            long score = user.getFollower_count() * 2;
+            long score = user.getFollowerCount() * 2;
             for (Post post : user.getPosts()) {
                 score += 1;
                 score += post.getLikes().size();
-                score += post.getViews_count() * 3;
+                score += post.getViewsCount() * 3;
             }
 
-            if (Boolean.TRUE.equals(user.getIs_verified())) {
+            if (Boolean.TRUE.equals(user.getIsVerified())) {
                 score += 1000;
             }
 
@@ -525,8 +525,8 @@ public class UserService {
         var sanitizedWebsite = StringEscapeUtils.escapeHtml4(body.website().strip());
 
         return Map.of("username", sanitizedUsername,
-                      "display_name", sanitizedDisplayName,
-                      "full_name", sanitizedFullName,
+                      "displayName", sanitizedDisplayName,
+                      "fullName", sanitizedFullName,
                       "email", sanitizedEmail,
                       "biography", sanitizedBiography,
                       "website", sanitizedWebsite);

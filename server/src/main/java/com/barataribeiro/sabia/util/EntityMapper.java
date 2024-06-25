@@ -26,9 +26,9 @@ public class EntityMapper {
         AuthorResponseDTO authorDTO = new AuthorResponseDTO(
                 author.getId(),
                 author.getUsername(),
-                author.getDisplay_name(),
-                author.getAvatar_image_url(),
-                author.getIs_verified(),
+                author.getDisplayName(),
+                author.getAvatarImageUrl(),
+                author.getIsVerified(),
                 author.getRole()
         );
 
@@ -49,13 +49,13 @@ public class EntityMapper {
                 authorDTO,
                 post.getText(),
                 hashtags,
-                post.getViews_count(),
-                post.getLike_count(),
+                post.getViewsCount(),
+                post.getLikeCount(),
                 isLiked,
-                post.getRepost_off() != null ? getPostResponseDTO(post.getRepost_off(), requestingUser) : null,
-                post.getRepost_count(),
-                post.getReply_count(),
-                post.getIn_reply_to() != null ? getPostResponseDTO(post.getIn_reply_to(), requestingUser) : null,
+                post.getRepostOff() != null ? getPostResponseDTO(post.getRepostOff(), requestingUser) : null,
+                post.getRepostCount(),
+                post.getReplyCount(),
+                post.getInReplyTo() != null ? getPostResponseDTO(post.getInReplyTo(), requestingUser) : null,
                 post.getCreatedAt().toString(),
                 post.getUpdatedAt().toString()
         );
@@ -66,20 +66,20 @@ public class EntityMapper {
 
         return new PublicProfileResponseDTO(user.getId(),
                                             user.getUsername(),
-                                            user.getDisplay_name(),
+                                            user.getDisplayName(),
                                             user.getRole().toString(),
-                                            user.getAvatar_image_url(),
-                                            user.getCover_image_url(),
+                                            user.getAvatarImageUrl(),
+                                            user.getCoverImageUrl(),
                                             user.getBiography(),
                                             user.getWebsite(),
                                             user.getLocation(),
-                                            user.getIs_verified(),
-                                            user.getIs_private(),
+                                            user.getIsVerified(),
+                                            user.getIsPrivate(),
                                             isFollowing,
-                                            Math.toIntExact(user.getFollower_count()),
-                                            Math.toIntExact(user.getFollowing_count()),
+                                            Math.toIntExact(user.getFollowerCount()),
+                                            Math.toIntExact(user.getFollowingCount()),
                                             user.getPosts().size(),
-                                            user.getLiked_posts().size(),
+                                            user.getLikedPosts().size(),
                                             user.getCreatedAt().toString(),
                                             user.getUpdatedAt().toString());
     }

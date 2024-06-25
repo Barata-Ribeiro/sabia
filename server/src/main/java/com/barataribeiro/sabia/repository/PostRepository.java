@@ -16,29 +16,29 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, String> {
 
     @Override
-    @EntityGraph(attributePaths = {"author", "repost_off.hashtags", "in_reply_to.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
     @NonNull
     Optional<Post> findById(@NonNull @Param("postId") String postId);
 
-    @EntityGraph(attributePaths = {"author", "repost_off.hashtags", "in_reply_to.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
     Page<Post> findDistinctAllByAuthorIdOrderByCreatedAtDesc(@Param("authorId") String authorId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "repost_off.hashtags", "in_reply_to.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
-    @Query("SELECT p FROM Post p WHERE p.in_reply_to.id = :postId" +
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @Query("SELECT p FROM Post p WHERE p.inReplyTo.id = :postId" +
             " ORDER BY p.createdAt DESC")
     Page<Post> findRepliesByPostId(@Param("postId") String postId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "repost_off.hashtags", "in_reply_to.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
     @Query("SELECT p FROM Post p JOIN p.postHashtags hp " +
             "WHERE hp.hashtags.tag = :tag")
     Page<Post> findAllByHashtag(@Param("tag") String tag, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "repost_off.hashtags", "in_reply_to.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
     @Query("SELECT p FROM Post p WHERE " +
             "LOWER(p.text) LIKE LOWER(CONCAT('%', :text, '%'))")
     Page<Post> findAllByTextContaining(@Param("text") String text, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "repost_off.hashtags", "in_reply_to.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
     Page<Post> findDistinctByAuthorInOrderByCreatedAtDesc(List<User> authors, Pageable pageable);
 
 

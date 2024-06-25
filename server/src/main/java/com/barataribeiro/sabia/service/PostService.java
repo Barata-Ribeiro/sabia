@@ -228,7 +228,7 @@ public class PostService {
         Post repost = Post.builder()
                 .author(user)
                 .text(post.getText())
-                .repost_off(post)
+                .repostOff(post)
                 .build();
 
         Post savedRepost = postRepository.save(repost);
@@ -258,7 +258,7 @@ public class PostService {
         Post reply = Post.builder()
                 .author(user)
                 .text(text)
-                .in_reply_to(post)
+                .inReplyTo(post)
                 .build();
 
         Post savedReply = postRepository.save(reply);

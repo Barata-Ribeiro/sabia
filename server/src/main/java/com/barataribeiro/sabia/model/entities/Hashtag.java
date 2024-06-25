@@ -39,15 +39,15 @@ public class Hashtag {
     @ToString.Exclude
     private List<HashtagPosts> hashtagPosts = new ArrayList<>();
 
-    @Column(name = "created_at")
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(nullable = false)
     @UpdateTimestamp
     private Instant updatedAt;
 
     public Long getPostsCount() {
-        return (long) this.hashtagPosts.size();
+        return (long) hashtagPosts.size();
     }
 }

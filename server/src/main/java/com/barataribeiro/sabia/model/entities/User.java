@@ -36,13 +36,13 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    private String display_name;
+    private String displayName;
 
     @Column(nullable = false)
-    private String full_name;
+    private String fullName;
 
     @Column(nullable = false)
-    private String birth_date;
+    private String birthDate;
 
     private String gender;
 
@@ -56,19 +56,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.MEMBER;
 
-    private String avatar_image_url;
-    private String cover_image_url;
+    private String avatarImageUrl;
+    private String coverImageUrl;
     private String biography;
     private String website;
     private String location;
 
     @Builder.Default
     @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean is_verified = false;
+    private Boolean isVerified = false;
 
     @Builder.Default
     @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean is_private = false;
+    private Boolean isPrivate = false;
 
     @Builder.Default
     @OneToMany(mappedBy = "followed", fetch = FetchType.LAZY)
@@ -77,8 +77,8 @@ public class User {
     private Set<Follow> followers = new HashSet<>();
 
     @Builder.Default
-    @Column(name = "follower_count", columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long follower_count = 0L;
+    @Column(name = "followerCount", columnDefinition = "BIGINT default '0'", nullable = false)
+    private Long followerCount = 0L;
 
     @Builder.Default
     @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY)
@@ -87,8 +87,8 @@ public class User {
     private Set<Follow> followings = new HashSet<>();
 
     @Builder.Default
-    @Column(name = "following_count", columnDefinition = "BIGINT default '0'", nullable = false)
-    private Long following_count = 0L;
+    @Column(name = "followingCount", columnDefinition = "BIGINT default '0'", nullable = false)
+    private Long followingCount = 0L;
 
     @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -100,29 +100,29 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
-    private Set<Like> liked_posts = new HashSet<>();
+    private Set<Like> likedPosts = new HashSet<>();
 
-    @Column(name = "created_at")
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(nullable = false)
     @UpdateTimestamp
     private Instant updatedAt;
 
     public void incrementFollowerCount() {
-        ++follower_count;
+        ++followerCount;
     }
 
     public void decrementFollowerCount() {
-        follower_count = follower_count > 0 ? --follower_count : 0;
+        followerCount = followerCount > 0 ? --followerCount : 0;
     }
 
     public void incrementFollowingCount() {
-        ++following_count;
+        ++followingCount;
     }
 
     public void decrementFollowingCount() {
-        following_count = following_count > 0 ? --following_count : 0;
+        followingCount = followingCount > 0 ? --followingCount : 0;
     }
 }

@@ -33,11 +33,11 @@ public class Like {
     @JoinColumn(name = "post_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Post post;
 
-    @Column(name = "created_at")
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(nullable = false)
     @UpdateTimestamp
     private Instant updatedAt;
 }

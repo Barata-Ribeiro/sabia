@@ -117,7 +117,7 @@ public class MainSeeder {
                         .avatarImageUrl("https://avatarfiles.alphacoders.com/153/153804.jpg")
                         .coverImageUrl("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?fm=jpg&fit=crop&w=1920&q=80&fit=max")
                         .password(passwordEncoder.encode(generateRandomPassword(random)))
-                        .is_verified(true)
+                        .isVerified(true)
                         .role(Roles.MEMBER)
                         .build());
 
@@ -220,7 +220,7 @@ public class MainSeeder {
                 .coverImageUrl(adminCoverUrl)
                 .password(passwordEncoder.encode(adminPassword))
                 .role(Roles.ADMIN)
-                .is_verified(true)
+                .isVerified(true)
                 .build();
 
         userRepository.save(admin);

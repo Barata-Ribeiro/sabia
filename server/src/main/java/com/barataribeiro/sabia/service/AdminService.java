@@ -40,11 +40,11 @@ public class AdminService {
             throw new BadRequest(userIsAdminBadRequestMessage);
         }
 
-        user.setIs_verified(!user.getIs_verified());
+        user.setIsVerified(!user.getIsVerified());
 
         user = userRepository.save(user);
 
-        return user.getIs_verified();
+        return user.getIsVerified();
     }
 
     public Boolean toggleUserBan(String userId, String principalName, String language) {
