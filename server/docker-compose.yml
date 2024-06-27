@@ -1,0 +1,17 @@
+services:
+  postgres:
+    container_name: postgres_container
+    image:
+      postgres:16.3-alpine
+    environment:
+      POSTGRES_USER: sabia_testuser
+      POSTGRES_PASSWORD: sabia_123456
+      POSTGRES_DB: sabia_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres:
