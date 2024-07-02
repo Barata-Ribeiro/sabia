@@ -16,7 +16,7 @@ interface PostRepostButtonProps {
 export default function PostRepostButton({
     post,
     displayNumber = true
-}: PostRepostButtonProps) {
+}: Readonly<PostRepostButtonProps>) {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
 

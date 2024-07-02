@@ -14,7 +14,7 @@ export default function CircularPagination({
     totalPages,
     page,
     searchParams
-}: CircularPaginationProps) {
+}: Readonly<CircularPaginationProps>) {
     const t = useTranslations("Feed.CircularPagination")
     const router = useRouter()
     const pathname = usePathname()

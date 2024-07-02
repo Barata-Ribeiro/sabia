@@ -26,7 +26,7 @@ export async function generateMetadata({
 export default async function FollowersPage({
     params,
     searchParams
-}: FollowersPageProps) {
+}: Readonly<FollowersPageProps>) {
     if (!params.username) return notFound()
     if (!searchParams) return notFound()
 

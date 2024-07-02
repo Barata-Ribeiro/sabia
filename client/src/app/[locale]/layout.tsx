@@ -54,7 +54,7 @@ export default async function RootLayout({
 
     const context = await getUserContext()
     let user: UserContextResponse | null = null
-    if (context && context.ok) user = context.response?.data as UserContextResponse
+    if (context.ok) user = context.response?.data as UserContextResponse
 
     const body_styles = tw`flex h-full min-h-dvh flex-col`
 

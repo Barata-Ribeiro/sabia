@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: NewPostPageProps) {
     return { title: `New Post - ${params.username}` }
 }
 
-export default function NewPostPage({ params }: NewPostPageProps) {
+export default function NewPostPage({ params }: Readonly<NewPostPageProps>) {
     if (!params.username) return notFound()
 
     return (

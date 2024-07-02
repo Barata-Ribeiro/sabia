@@ -27,7 +27,10 @@ export async function generateMetadata({
     }
 }
 
-export default async function HashtagPage({ params, searchParams }: HashtagPageProps) {
+export default async function HashtagPage({
+    params,
+    searchParams
+}: Readonly<HashtagPageProps>) {
     if (!params.hashtag) return notFound()
 
     const t = await getTranslations("HashtagPage")

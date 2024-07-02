@@ -10,13 +10,9 @@ import Image from "next/image"
 import { HiCheckBadge } from "react-icons/hi2"
 import { twMerge } from "tailwind-merge"
 
-export default function Post(props: { post: PostResponse; locale: string }) {
+export default function Post(props: Readonly<{ post: PostResponse; locale: string }>) {
     return (
-        <article
-            id="post-article"
-            role="article"
-            className="flex w-full flex-col gap-1"
-        >
+        <article id="post-article" className="flex w-full flex-col gap-1">
             <LinkButton
                 href={"/" + props.post.author.username}
                 className="cursor-pointer"

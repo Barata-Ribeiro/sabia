@@ -10,7 +10,7 @@ interface UsernameLayoutProps {
 export default function UsernameLayout({
     children,
     replyModal = null
-}: UsernameLayoutProps) {
+}: Readonly<UsernameLayoutProps>) {
     return (
         <main role="main" className="flex h-full font-body">
             <AsideMenu />

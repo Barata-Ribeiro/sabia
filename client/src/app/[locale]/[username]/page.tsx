@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 
     if (!params.username || !profileState.ok) {
         return {
-            title: profileState.clientError + " | Sabiá" ?? "404 | Sabiá",
+            title: profileState.clientError + " | Sabiá",
             description:
                 "Sorry, we can't find that page. You'll find lots to explore on the home page."
         }
@@ -30,11 +30,11 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 
     return {
         title: `@${profile.username} | Sabiá`,
-        description: `${profile.displayName} (@${profile.username})${profile.biography ? ` – ${profile.biography}` : ""}`
+        description: `${profile.displayName} (@${profile.username})${profile.biography ? " – " + profile.biography : ""}`
     }
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps) {
+export default async function ProfilePage({ params }: Readonly<ProfilePageProps>) {
     if (!params.username) return notFound()
 
     const [t, localeActive, profileState] = await Promise.all([

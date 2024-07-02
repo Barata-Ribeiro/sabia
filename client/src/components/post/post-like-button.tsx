@@ -16,7 +16,7 @@ interface PostLikeButtonProps {
 export default function PostLikeButton({
     post,
     displayNumber = true
-}: PostLikeButtonProps) {
+}: Readonly<PostLikeButtonProps>) {
     const [isLiked, setIsLiked] = useState(false)
     const [loading, setLoading] = useState(false)
     const [checkingIsLiked, setCheckingIsLiked] = useState(true)

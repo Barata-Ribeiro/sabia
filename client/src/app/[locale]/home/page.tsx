@@ -21,7 +21,11 @@ export async function generateMetadata({
     }
 }
 
-export default async function HomePage({ params }: { params: { locale: string } }) {
+export default async function HomePage({
+    params
+}: Readonly<{
+    params: { locale: string }
+}>) {
     const t = await getTranslations({ locale: params.locale, namespace: "HomePage" })
 
     const context = await getUserContext()

@@ -15,14 +15,13 @@ export default function PaginatedFeed({
     feedResponse,
     page,
     searchParams
-}: PaginatedFeedProps) {
+}: Readonly<PaginatedFeedProps>) {
     const t = useTranslations("Feed.Paginated")
 
     return (
         <>
             <ul
                 className="flex snap-y flex-col divide-y"
-                role="list"
                 aria-label={t("AriaLabelList")}
             >
                 {feedResponse.posts.map((post) => (

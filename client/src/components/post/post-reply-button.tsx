@@ -12,7 +12,7 @@ interface PostReplyButtonProps {
 export default function PostReplyButton({
     post,
     displayNumber = true
-}: PostReplyButtonProps) {
+}: Readonly<PostReplyButtonProps>) {
     return (
         <div
             id="post-reply"

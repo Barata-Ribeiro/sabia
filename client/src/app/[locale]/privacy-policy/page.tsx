@@ -2,6 +2,7 @@ import SecondaryHeader from "@/components/global/secondary-header"
 import LinkButton from "@/components/shared/link-button"
 import ReadingIndicator from "@/components/shared/reading-indicator"
 import ScrollToTopButton from "@/components/shared/scroll-to-top-button"
+import { Link } from "@/navigation"
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 
@@ -16,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PrivacyPolicyPage({
     params
-}: {
+}: Readonly<{
     params: { locale: string }
-}) {
+}>) {
     const t = await getTranslations({
         locale: params.locale,
         namespace: "PrivacyPolicy"
@@ -37,7 +38,6 @@ export default async function PrivacyPolicyPage({
                     id="screen-reader-navigation"
                     className="sr-only"
                     aria-label="SCREEN READER NAVIGATION"
-                    role="privacy policy navigation"
                 >
                     <li>
                         <LinkButton href="#privacy-start">
@@ -165,13 +165,13 @@ export default async function PrivacyPolicyPage({
                                     {t("Section-1.list.item-11.term")}
                                 </strong>
                                 {t("Section-1.list.item-11.definition")}
-                                <a
+                                <Link
                                     href="#"
                                     rel="external nofollow noopener"
                                     target="_blank"
                                 >
                                     TO BE ADDED...
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <strong className="font-bold">
@@ -485,13 +485,13 @@ export default async function PrivacyPolicyPage({
                         <ol className="ml-4 flex list-inside list-decimal flex-col gap-2">
                             <li>
                                 {t("Section-6.list.item-1.term")}
-                                <a
+                                <Link
                                     href="#"
                                     rel="external nofollow noopener"
                                     target="_blank"
                                 >
                                     {t("Section-6.list.item-1.link")}
-                                </a>
+                                </Link>
                             </li>
                         </ol>
                     </article>

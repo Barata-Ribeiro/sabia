@@ -20,7 +20,7 @@ type resolvedListOfBlurredDataUrl = ({
     blurredDataUrl: string | undefined
 } | null)[]
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
+export default async function SearchPage({ searchParams }: Readonly<SearchPageProps>) {
     if (!searchParams.q) return notFound()
 
     const localeActive = await getLocale()

@@ -10,9 +10,11 @@ import { twMerge } from "tailwind-merge"
 import PostLikeButton from "./post-like-button"
 import PostRepostButton from "./post-repost-button"
 
-export default function Repost(props: { post: PostResponse; locale: string }) {
+export default function Repost(
+    props: Readonly<{ post: PostResponse; locale: string }>
+) {
     return (
-        <article id="post-article" role="article" className="flex flex-col gap-1">
+        <article id="post-article" className="flex flex-col gap-1">
             <LinkButton
                 href={"/" + props.post.author.username}
                 className="flex cursor-pointer items-center gap-1 text-accent-600 hover:underline"

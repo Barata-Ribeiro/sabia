@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     }
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({ params }: Readonly<PostPageProps>) {
     const localeActive = await getLocale()
 
     const postState = await getPost({ id: params.id, locale: localeActive })
