@@ -1,12 +1,19 @@
 // @ts-check
-import withPlaiceholder from "@plaiceholder/next";
-import createNextIntlPlugin from 'next-intl/plugin';
+import withPlaiceholder from "@plaiceholder/next"
+import createNextIntlPlugin from "next-intl/plugin"
 
 
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
+    trailingSlash: false,
+    skipTrailingSlashRedirect: true,
+    experimental: {
+        optimizePackageImports: [
+            "tailwindcss", "react-icons/hi2", "react-icons/fa", "react-icons/fa6"
+        ]
+    },
     images: {
         remotePatterns: [
             {
@@ -21,9 +28,9 @@ const nextConfig = {
             }
         ]
     }
-};
+}
 
-const withNextIntl = createNextIntlPlugin();
-const withPlugins = (config) => withNextIntl(withPlaiceholder(config));
+const withNextIntl = createNextIntlPlugin()
+const withPlugins = (config) => withNextIntl(withPlaiceholder(config))
 
-export default withPlugins(nextConfig);
+export default withPlugins(nextConfig)

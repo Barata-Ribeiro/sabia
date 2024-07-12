@@ -1,8 +1,10 @@
 {
     "trailingComma": "none",
-    "printWidth": 88,
     "tabWidth": 4,
+    "printWidth": 120,
+    "useTabs": false,
     "semi": false,
+    "jsxSingleQuote": false,
     "bracketSpacing": true,
     "proseWrap": "always",
     "quoteProps": "as-needed",
