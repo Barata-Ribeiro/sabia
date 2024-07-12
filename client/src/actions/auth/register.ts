@@ -4,11 +4,7 @@ import login from "@/actions/auth/login"
 import { ApiResponse, State } from "@/interfaces/actions"
 import { AUTH_REGISTER } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
-import {
-    emailValidation,
-    passwordValidation,
-    usernameValidation
-} from "@/utils/validate-input"
+import { emailValidation, passwordValidation, usernameValidation } from "@/utils/validate-input"
 import { getLocale } from "next-intl/server"
 
 function formatBirthDate(newDateFromData: Date) {
@@ -37,11 +33,7 @@ export default async function register(state: State, formData: FormData) {
 
     try {
         if (mappedFormData.includes(null)) {
-            throw new Error(
-                isEnglish
-                    ? "All fields are required."
-                    : "Todos os campos são obrigatórios."
-            )
+            throw new Error(isEnglish ? "All fields are required." : "Todos os campos são obrigatórios.")
         }
 
         if (!usernameValidation(mappedFormData.at(0) as string)) {
@@ -53,9 +45,7 @@ export default async function register(state: State, formData: FormData) {
         }
 
         if (!emailValidation(mappedFormData.at(5) as string)) {
-            throw new Error(
-                isEnglish ? "Invalid email address." : "Endereço de e-mail inválido."
-            )
+            throw new Error(isEnglish ? "Invalid email address." : "Endereço de e-mail inválido.")
         }
 
         if (!passwordValidation(mappedFormData.at(6) as string)) {
@@ -67,9 +57,7 @@ export default async function register(state: State, formData: FormData) {
         }
 
         if (mappedFormData.at(6) !== mappedFormData.at(7)) {
-            throw new Error(
-                isEnglish ? "Passwords do not match." : "As senhas não coincidem."
-            )
+            throw new Error(isEnglish ? "Passwords do not match." : "As senhas não coincidem.")
         }
 
         const fullName = `${String(mappedFormData.at(2)).trim()} ${String(mappedFormData.at(3)).trim()}`

@@ -18,8 +18,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     const post = postState.response?.data as PostResponse
 
     return {
-        title:
-            post.author.displayName + " on Sabiá: " + post.text.slice(0, 600) + "...",
+        title: post.author.displayName + " on Sabiá: " + post.text.slice(0, 600) + "...",
         description: "Post by " + post.author.displayName + " on Sabiá. - " + post.text
     }
 }

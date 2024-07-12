@@ -13,16 +13,13 @@ import { twMerge } from "tailwind-merge"
 
 export default function TrendingMenu() {
     const [hashtags, setHashtags] = useState<TrendingHashtagsResponse | null>(null)
-    const [recommendations, setRecommendations] = useState<
-        UserPublicProfileResponse[] | null
-    >(null)
+    const [recommendations, setRecommendations] = useState<UserPublicProfileResponse[] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         Promise.all([getTrendingHashtags(), getUserRecommendations()])
             .then(([hashtagsState, recommendationsState]) => {
-                const hashtagResponse = hashtagsState.response
-                    ?.data as TrendingHashtagsResponse
+                const hashtagResponse = hashtagsState.response?.data as TrendingHashtagsResponse
                 setHashtags(hashtagResponse)
 
                 const recommendationResponse = recommendationsState.response?.data as {
@@ -64,26 +61,17 @@ export default function TrendingMenu() {
             className="hidden h-full w-full max-w-[20rem] flex-col gap-4 bg-clip-border p-4 text-gray-700 md:flex"
         >
             <div className="w-full rounded-lg border bg-white">
-                <h2 className="px-4 pt-2 font-heading text-2xl font-bold text-body-900">
-                    Trending
-                </h2>
+                <h2 className="px-4 pt-2 font-heading text-2xl font-bold text-body-900">Trending</h2>
                 {hashtags && hashtags.trendingHashtags.length > 0 ? (
                     <ul className="flex flex-col">
                         {hashtags?.trendingHashtags.map((entity, index) => (
-                            <li
-                                key={entity.hashtag + "_" + index}
-                                id={entity.hashtag + "_" + index}
-                            >
+                            <li key={entity.hashtag + "_" + index} id={entity.hashtag + "_" + index}>
                                 <LinkButton
                                     href={"/hashtag/" + entity.hashtag + "?page=0"}
                                     className="flex flex-col px-4 py-2 text-body-700 hover:bg-background-100 hover:text-body-900"
                                 >
-                                    <p className="font-bold hover:underline">
-                                        #{entity.hashtag}
-                                    </p>
-                                    <span className="text-sm">
-                                        {entity.totalPosts} posts
-                                    </span>
+                                    <p className="font-bold hover:underline">#{entity.hashtag}</p>
+                                    <span className="text-sm">{entity.totalPosts} posts</span>
                                 </LinkButton>
                             </li>
                         ))}
@@ -93,9 +81,7 @@ export default function TrendingMenu() {
                 )}
             </div>
             <div className="w-full rounded-lg border bg-white">
-                <h2 className="px-4 pt-2 font-heading text-2xl font-bold text-body-900">
-                    Recommended
-                </h2>
+                <h2 className="px-4 pt-2 font-heading text-2xl font-bold text-body-900">Recommended</h2>
                 {recommendations && recommendations.length > 0 ? (
                     <ul className="flex flex-col">
                         {recommendations.map((entity, index) => (
@@ -116,23 +102,17 @@ export default function TrendingMenu() {
                                         <p
                                             className={twMerge(
                                                 "font-heading font-bold text-body-900",
-                                                entity.isVerified &&
-                                                    "flex items-center gap-1"
+                                                entity.isVerified && "flex items-center gap-1"
                                             )}
                                         >
                                             {entity.displayName}{" "}
                                             {entity.isVerified && (
-                                                <span
-                                                    className="text-accent-600"
-                                                    title="Verified"
-                                                >
+                                                <span className="text-accent-600" title="Verified">
                                                     <HiCheckBadge size={22} />
                                                 </span>
                                             )}
                                         </p>
-                                        <span className="text-sm">
-                                            @{entity.username}
-                                        </span>
+                                        <span className="text-sm">@{entity.username}</span>
                                     </div>
                                 </LinkButton>
                             </li>

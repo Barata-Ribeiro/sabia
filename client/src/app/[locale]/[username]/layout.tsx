@@ -7,10 +7,7 @@ interface UsernameLayoutProps {
     replyModal: ReactNode
 }
 
-export default function UsernameLayout({
-    children,
-    replyModal = null
-}: Readonly<UsernameLayoutProps>) {
+export default function UsernameLayout({ children, replyModal = null }: Readonly<UsernameLayoutProps>) {
     return (
         <main role="main" className="flex h-full font-body">
             <AsideMenu />

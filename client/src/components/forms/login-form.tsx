@@ -62,12 +62,7 @@ export default function LoginForm() {
                 </div>
             </div>
             <div className="mb-4 mt-1 flex gap-8">
-                <Button
-                    type="submit"
-                    className="py-2"
-                    disabled={pending}
-                    aria-disabled={pending}
-                >
+                <Button type="submit" className="py-2" disabled={pending} aria-disabled={pending}>
                     {pending ? t("LoginButtonLoading") : t("LoginButton")}
                 </Button>
 
@@ -79,10 +74,7 @@ export default function LoginForm() {
                         id="remember-me"
                     />
 
-                    <label
-                        htmlFor="remember-me"
-                        className="text-left text-body-600 dark:text-body-50 lg:text-body-950"
-                    >
+                    <label htmlFor="remember-me" className="text-left text-body-600 dark:text-body-50 lg:text-body-950">
                         {t("RememberMe")}
                     </label>
                 </div>

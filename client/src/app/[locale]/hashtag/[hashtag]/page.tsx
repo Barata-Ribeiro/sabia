@@ -15,10 +15,7 @@ interface HashtagPageProps {
     searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({
-    params,
-    searchParams
-}: HashtagPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: HashtagPageProps): Promise<Metadata> {
     const t = await getTranslations("HashtagPage")
 
     return {
@@ -27,10 +24,7 @@ export async function generateMetadata({
     }
 }
 
-export default async function HashtagPage({
-    params,
-    searchParams
-}: Readonly<HashtagPageProps>) {
+export default async function HashtagPage({ params, searchParams }: Readonly<HashtagPageProps>) {
     if (!params.hashtag) return notFound()
 
     const t = await getTranslations("HashtagPage")

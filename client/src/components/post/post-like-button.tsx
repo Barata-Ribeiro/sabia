@@ -13,10 +13,7 @@ interface PostLikeButtonProps {
     displayNumber?: boolean
 }
 
-export default function PostLikeButton({
-    post,
-    displayNumber = true
-}: Readonly<PostLikeButtonProps>) {
+export default function PostLikeButton({ post, displayNumber = true }: Readonly<PostLikeButtonProps>) {
     const [isLiked, setIsLiked] = useState(false)
     const [loading, setLoading] = useState(false)
     const [checkingIsLiked, setCheckingIsLiked] = useState(true)
@@ -24,9 +21,7 @@ export default function PostLikeButton({
     const { user } = useUser()
     const isOwnerPost = user?.id === post.author.id
 
-    async function handleLike(
-        event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-    ) {
+    async function handleLike(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
         event.stopPropagation()
         if (loading) return
 
@@ -49,8 +44,7 @@ export default function PostLikeButton({
 
     const buttonBaseStyles = tw`cursor-pointer text-background-900 hover:text-background-800 active:text-background-700 disabled:cursor-default disabled:text-background-300 disabled:opacity-50 disabled:shadow-none disabled:hover:text-background-900 disabled:active:text-background-900`
     const setLikedStyle = isLiked ? "text-red-500" : "text-background-900"
-    const setLikedStyleLoading =
-        loading || checkingIsLiked ? tw`animate-pulse text-background-300` : ""
+    const setLikedStyleLoading = loading || checkingIsLiked ? tw`animate-pulse text-background-300` : ""
     const buttonStyles = twMerge(buttonBaseStyles, setLikedStyle, setLikedStyleLoading)
 
     useEffect(() => {
@@ -60,12 +54,7 @@ export default function PostLikeButton({
     }, [isLiked, post.isLiked])
 
     return (
-        <div
-            id="post-like"
-            className="flex w-max cursor-default items-center gap-2"
-            title="Like"
-            aria-label="Like"
-        >
+        <div id="post-like" className="flex w-max cursor-default items-center gap-2" title="Like" aria-label="Like">
             <button
                 type="button"
                 className={buttonStyles}

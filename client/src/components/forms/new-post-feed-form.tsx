@@ -48,17 +48,13 @@ export default function NewPostFeedForm() {
         function handleClickOutside(event: MouseEvent) {
             if (emojiButtonRef.current?.contains(event.target as Node)) return
 
-            if (
-                emojiPickerRef.current &&
-                !emojiPickerRef.current.contains(event.target as Node)
-            ) {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
                 setEmojiPickerOpen(false)
             }
         }
 
         document.addEventListener("mousedown", handleClickOutside as any)
-        return () =>
-            document.removeEventListener("mousedown", handleClickOutside as any)
+        return () => document.removeEventListener("mousedown", handleClickOutside as any)
     }, [emojiPickerRef, emojiButtonRef])
 
     const { pending } = useFormStatus()
@@ -99,19 +95,14 @@ export default function NewPostFeedForm() {
                             <HiMiniFaceSmile size={24} />
                         </button>
                         <span
-                            className={twMerge(
-                                "absolute inset-1/2",
-                                !emojiPickerOpen && "hidden"
-                            )}
+                            className={twMerge("absolute inset-1/2", !emojiPickerOpen && "hidden")}
                             ref={emojiPickerRef}
                             aria-hidden={!emojiPickerOpen}
                             aria-live="polite"
                             aria-label={t("EmojiPickerLabel")}
                         >
                             <EmojiPicker
-                                onEmojiClick={(emojiData, event) =>
-                                    handleEmojiClick(emojiData, event)
-                                }
+                                onEmojiClick={(emojiData, event) => handleEmojiClick(emojiData, event)}
                                 width={300}
                                 theme={Theme.AUTO}
                                 emojiStyle={EmojiStyle.NATIVE}

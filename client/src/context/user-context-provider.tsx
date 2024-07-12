@@ -26,16 +26,12 @@ const UserContext = createContext<UserContextType | null>(null)
 
 export const useUser = () => {
     const context = useContext(UserContext)
-    if (!context)
-        throw new Error("useContext must be used within a UserContextProvider.")
+    if (!context) throw new Error("useContext must be used within a UserContextProvider.")
 
     return context
 }
 
-export function UserContextProvider({
-    children,
-    user
-}: Readonly<UserContextProviderProps>) {
+export function UserContextProvider({ children, user }: Readonly<UserContextProviderProps>) {
     const [currentUser, setCurrentUser] = useState<UserContextResponse | null>(user)
     const userContextMemo = useMemo(
         () => ({
@@ -49,7 +45,5 @@ export function UserContextProvider({
         setCurrentUser(user)
     }, [currentUser, user])
 
-    return (
-        <UserContext.Provider value={userContextMemo}>{children}</UserContext.Provider>
-    )
+    return <UserContext.Provider value={userContextMemo}>{children}</UserContext.Provider>
 }

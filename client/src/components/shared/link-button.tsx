@@ -16,12 +16,7 @@ export default function LinkButton({
     const mergedClassName = twMerge(sortedClasses, className)
 
     return (
-        <Link
-            locale={localeActive}
-            href={props.href as Url}
-            className={mergedClassName}
-            {...props}
-        >
+        <Link locale={localeActive} href={props.href as Url} className={mergedClassName} {...props}>
             {children}
         </Link>
     )

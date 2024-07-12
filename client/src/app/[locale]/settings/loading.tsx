@@ -13,9 +13,7 @@ export default async function SettingsLoading() {
                 <h1 className="pt-6 font-heading text-2xl font-semibold text-body-900 dark:text-body-100">
                     Account Settings
                 </h1>
-                <p className="text-body-900 dark:text-body-100">
-                    Update your account settings.
-                </p>
+                <p className="text-body-900 dark:text-body-100">Update your account settings.</p>
             </header>
 
             <div>
@@ -83,9 +81,8 @@ export default async function SettingsLoading() {
                     Proceed with caution
                 </p>
                 <p className="mt-2 max-w-[55ch] text-pretty">
-                    Please ensure you have backed up all your account data before
-                    proceeding. Once you delete your account, all your data will be
-                    permanently erased, and there will be no way to recover it. This
+                    Please ensure you have backed up all your account data before proceeding. Once you delete your
+                    account, all your data will be permanently erased, and there will be no way to recover it. This
                     action is irreversible and final.
                 </p>
                 <LinkButton

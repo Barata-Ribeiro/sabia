@@ -13,14 +13,11 @@ export function dateTimeFormat(dateString: string, locale: string) {
     const date = new Date(dateString)
     const isEnglish = locale === "en"
 
-    const selectYearMonthAndDay = date.toLocaleDateString(
-        isEnglish ? "en-US" : "pt-BR",
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        }
-    )
+    const selectYearMonthAndDay = date.toLocaleDateString(isEnglish ? "en-US" : "pt-BR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    })
 
     const selectTime = date.toLocaleTimeString(isEnglish ? "en-US" : "pt-BR", {
         hour: "2-digit",
@@ -42,8 +39,7 @@ export function dateToHowLongAgo(dateString: string, locale: string) {
 
     if (diffSec < 60) return isEnglish ? "Just now" : "Agora"
     else if (diffMin < 60) return `${diffMin} min`
-    else if (diffHour < 24)
-        return `${diffHour} ${isEnglish ? "hour" : "hora"}${diffHour > 1 ? "s" : ""}`
+    else if (diffHour < 24) return `${diffHour} ${isEnglish ? "hour" : "hora"}${diffHour > 1 ? "s" : ""}`
     else
         return date.toLocaleDateString(isEnglish ? "en-US" : "pt-BR", {
             month: "short",

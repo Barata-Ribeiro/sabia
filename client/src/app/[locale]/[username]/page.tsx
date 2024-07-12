@@ -23,8 +23,7 @@ export async function generateMetadata({ params }: ProfilePageProps) {
     if (!params.username || !profileState.ok) {
         return {
             title: profileState.clientError + " | Sabiá",
-            description:
-                "Sorry, we can't find that page. You'll find lots to explore on the home page."
+            description: "Sorry, we can't find that page. You'll find lots to explore on the home page."
         }
     }
 
@@ -86,17 +85,11 @@ export default async function ProfilePage({ params }: Readonly<ProfilePageProps>
                                     </span>
                                 )}
                             </h2>
-                            <p className="font-medium leading-5 text-body-500">
-                                @{profile.username}
-                            </p>
+                            <p className="font-medium leading-5 text-body-500">@{profile.username}</p>
                         </div>
 
                         <div className="mt-3">
-                            {profile.biography && (
-                                <p className="mb-2 leading-tight text-white">
-                                    {profile.biography}
-                                </p>
-                            )}
+                            {profile.biography && <p className="mb-2 leading-tight text-white">{profile.biography}</p>}
                             <div className="flex items-center text-body-600">
                                 {profile.website && (
                                     <span className="mr-2 flex">
@@ -124,21 +117,15 @@ export default async function ProfilePage({ params }: Readonly<ProfilePageProps>
 
                         <div className="flex w-max items-start justify-start divide-x divide-solid pt-3">
                             <div className="pr-3 text-center">
-                                <span className="font-bold text-secondary-600">
-                                    {profile.followingsCount}
-                                </span>
+                                <span className="font-bold text-secondary-600">{profile.followingsCount}</span>
                                 <span className="text-body-900">{t("Followings")}</span>
                             </div>
                             <LinkButton
                                 href={"/" + profile.username + "/followers?page=0"}
                                 className="px-3 text-center"
                             >
-                                <span className="font-bold text-secondary-600">
-                                    {profile.followersCount}
-                                </span>
-                                <span className="text-body-900 hover:text-body-700">
-                                    {t("Followers")}
-                                </span>
+                                <span className="font-bold text-secondary-600">{profile.followersCount}</span>
+                                <span className="text-body-900 hover:text-body-700">{t("Followers")}</span>
                             </LinkButton>
                         </div>
                     </div>
@@ -147,11 +134,7 @@ export default async function ProfilePage({ params }: Readonly<ProfilePageProps>
             </section>
             <section id="public-feed-section">
                 {feedResponse ? (
-                    <Feed
-                        feedResponse={feedResponse}
-                        userId={profile.id}
-                        isPublic={true}
-                    />
+                    <Feed feedResponse={feedResponse} userId={profile.id} isPublic={true} />
                 ) : (
                     <p className="text-center">{t("PageEmptyPosts")}</p>
                 )}

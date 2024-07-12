@@ -8,14 +8,7 @@ import { NULL_AVATAR } from "@/utils/constants"
 import tw from "@/utils/tw"
 import Image from "next/image"
 import { FaCircleExclamation } from "react-icons/fa6"
-import {
-    HiAtSymbol,
-    HiEnvelope,
-    HiIdentification,
-    HiLink,
-    HiLockClosed,
-    HiPhoto
-} from "react-icons/hi2"
+import { HiAtSymbol, HiEnvelope, HiIdentification, HiLink, HiLockClosed, HiPhoto } from "react-icons/hi2"
 
 interface EditAccountFormProps {
     user: UserContextResponse
@@ -23,11 +16,7 @@ interface EditAccountFormProps {
     avatarBlur: string | undefined
 }
 
-export default function EditAccountForm({
-    user,
-    coverBlur,
-    avatarBlur
-}: Readonly<EditAccountFormProps>) {
+export default function EditAccountForm({ user, coverBlur, avatarBlur }: Readonly<EditAccountFormProps>) {
     const textAreaStyle = tw`peer h-full min-h-[6.25rem] w-full !resize-none rounded-[0.438rem] border border-background-200 border-t-transparent bg-white px-3 py-2.5 text-body-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-background-200 placeholder-shown:border-t-background-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-background-50`
 
     const labelTextAreaStyle = tw`before:content[' '] after:content[' '] pointer-events-none absolute -top-1.5 left-0 flex h-full w-full select-none text-[0.688rem] font-normal leading-tight text-body-400 transition-all before:pointer-events-none before:mr-1 before:mt-[0.406rem] before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-l before:border-t before:border-background-200 before:transition-all after:pointer-events-none after:ml-1 after:mt-[0.406rem] after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-r after:border-t after:border-background-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-body-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[0.688rem] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-l-2 peer-focus:before:border-t-2 peer-focus:before:!border-gray-900 peer-focus:after:border-r-2 peer-focus:after:border-t-2 peer-focus:after:!border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-body-500`
@@ -83,39 +72,21 @@ export default function EditAccountForm({
                 </legend>
                 <div>
                     <div className="grid items-center gap-2 md:grid-cols-2">
-                        <Input
-                            label="First name"
-                            name="firstName"
-                            className="px-3 py-2.5"
-                        />
-                        <Input
-                            label="Last name"
-                            name="lastName"
-                            className="px-3 py-2.5"
-                        />
+                        <Input label="First name" name="firstName" className="px-3 py-2.5" />
+                        <Input label="Last name" name="lastName" className="px-3 py-2.5" />
                     </div>
                     <p className="text-body-600">
                         Your full name is <strong>{user.fullName}</strong>.
                     </p>
                 </div>
                 <div>
-                    <Input
-                        label="Birth date"
-                        name="birthDate"
-                        type="date"
-                        className="px-3 py-2.5"
-                    />
+                    <Input label="Birth date" name="birthDate" type="date" className="px-3 py-2.5" />
                     <p className="text-body-600">
                         Your birth date is <strong>{user.birthDate}</strong>.
                     </p>
                 </div>
                 <div>
-                    <Input
-                        label="Gender"
-                        name="gender"
-                        icon={<HiIdentification size={22} />}
-                        className="px-3 py-2.5"
-                    />
+                    <Input label="Gender" name="gender" icon={<HiIdentification size={22} />} className="px-3 py-2.5" />
                     <p className="text-body-600">
                         {user.gender
                             ? `Your gender is <strong>${user.gender}</strong>.`
@@ -154,8 +125,7 @@ export default function EditAccountForm({
                             <span className="w-max">Only HTTPS URLs are allowed.</span>
                         </p>
                         <p className="mt-4 max-w-[40ch] text-sm text-body-500">
-                            Please, use a square image for the best results. Follow the
-                            rules for the best experience.
+                            Please, use a square image for the best results. Follow the rules for the best experience.
                         </p>
                     </div>
                 </div>
@@ -188,8 +158,8 @@ export default function EditAccountForm({
                             <span className="w-max">Only HTTPS URLs are allowed.</span>
                         </p>
                         <p className="mt-4 max-w-[40ch] text-sm text-body-500">
-                            Please, use a rectangle image for the best results. Follow
-                            the rules for the best experience.
+                            Please, use a rectangle image for the best results. Follow the rules for the best
+                            experience.
                         </p>
                     </div>
                 </div>
@@ -231,16 +201,8 @@ export default function EditAccountForm({
                     </div>
                     <div>
                         <div className="flex gap-2">
-                            <Input
-                                label="State"
-                                name="locState"
-                                className="px-3 py-2.5"
-                            />
-                            <Input
-                                label="Country"
-                                name="locCountry"
-                                className="px-3 py-2.5"
-                            />
+                            <Input label="State" name="locState" className="px-3 py-2.5" />
+                            <Input label="Country" name="locCountry" className="px-3 py-2.5" />
                         </div>
                         <p className="text-body-600">
                             {user.location
@@ -266,8 +228,8 @@ export default function EditAccountForm({
                     <p className="flex w-fit items-center gap-2 self-center text-sm text-primary-700 antialiased">
                         <FaCircleExclamation size={14} />
                         <span className="w-[55ch]">
-                            Use at least 8 characters, one uppercase, one lowercase, a
-                            special character, and one number.
+                            Use at least 8 characters, one uppercase, one lowercase, a special character, and one
+                            number.
                         </span>
                     </p>
                 </div>

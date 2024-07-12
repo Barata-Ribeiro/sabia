@@ -40,15 +40,13 @@ export default async function SearchPage({ searchParams }: Readonly<SearchPagePr
     let listOfBlurredDataUrl = []
     let resolvedListOfBlurredDataUrl: resolvedListOfBlurredDataUrl = []
     if (searchResponse && fetchType === "user") {
-        listOfBlurredDataUrl = (searchResponse as UserSearchResponse).users.map(
-            async (user) => {
-                if (!user.avatarImageUrl) return null
-                return {
-                    userId: user.id,
-                    blurredDataUrl: await getBase64(user.avatarImageUrl, localeActive)
-                }
+        listOfBlurredDataUrl = (searchResponse as UserSearchResponse).users.map(async (user) => {
+            if (!user.avatarImageUrl) return null
+            return {
+                userId: user.id,
+                blurredDataUrl: await getBase64(user.avatarImageUrl, localeActive)
             }
-        )
+        })
 
         resolvedListOfBlurredDataUrl = await Promise.all(listOfBlurredDataUrl)
     }
@@ -56,10 +54,7 @@ export default async function SearchPage({ searchParams }: Readonly<SearchPagePr
     return (
         <main role="main" className="flex h-full">
             <AsideMenu />
-            <section
-                id="search-section"
-                className="w-full flex-1 overflow-y-scroll border-x md:max-w-[38rem]"
-            >
+            <section id="search-section" className="w-full flex-1 overflow-y-scroll border-x md:max-w-[38rem]">
                 <div className="sticky top-0 flex w-full border-b bg-background-50 p-4">
                     <div className="flex items-center gap-6 text-2xl">
                         <LinkButton
@@ -81,9 +76,7 @@ export default async function SearchPage({ searchParams }: Readonly<SearchPagePr
                             key={user.id + "-" + index}
                             user={user}
                             resolvedListOfBlurredDataUrl={resolvedListOfBlurredDataUrl}
-                            totalPages={
-                                (searchResponse as UserSearchResponse).totalPages
-                            }
+                            totalPages={(searchResponse as UserSearchResponse).totalPages}
                             page={page}
                         />
                     ))

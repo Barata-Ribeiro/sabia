@@ -4,8 +4,7 @@ export function passwordValidation(password: string) {
 }
 
 export function emailValidation(email: string) {
-    const emailRegex =
-        /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+    const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
     return emailRegex.test(email)
 }
 

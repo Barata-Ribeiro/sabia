@@ -21,9 +21,7 @@ export default async function login(state: State, formData: FormData) {
 
     try {
         const errorMessage =
-            locale === "en"
-                ? "Username and password are required."
-                : "Usuário e senha são obrigatórios."
+            locale === "en" ? "Username and password are required." : "Usuário e senha são obrigatórios."
 
         if (!username || !password) throw new Error(errorMessage)
 

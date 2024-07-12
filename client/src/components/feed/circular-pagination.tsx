@@ -10,11 +10,7 @@ interface CircularPaginationProps {
     searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-export default function CircularPagination({
-    totalPages,
-    page,
-    searchParams
-}: Readonly<CircularPaginationProps>) {
+export default function CircularPagination({ totalPages, page, searchParams }: Readonly<CircularPaginationProps>) {
     const t = useTranslations("Feed.CircularPagination")
     const router = useRouter()
     const pathname = usePathname()
@@ -59,12 +55,7 @@ export default function CircularPagination({
             <div className="flex flex-wrap items-center gap-2">
                 {totalPages > 1 &&
                     [...Array(totalPages)].map((_, index) => {
-                        if (
-                            totalPages <= 4 ||
-                            index === 0 ||
-                            index === totalPages - 1 ||
-                            Math.abs(page - index) <= 1
-                        ) {
+                        if (totalPages <= 4 || index === 0 || index === totalPages - 1 || Math.abs(page - index) <= 1) {
                             return (
                                 <IconButton
                                     key={"page-" + index}

@@ -39,7 +39,11 @@ export default function Feed({ feedResponse, userId, isPublic }: Readonly<FeedPr
             const newPage = page + 1
             setPage(newPage)
             const feedState = await fetchFeed(
-                { perPage: 5, page: newPage, userId },
+                {
+                    perPage: 5,
+                    page: newPage,
+                    userId
+                },
                 { cache: "no-store" }
             )
             const feedResponse = feedState.response?.data as FeedResponse
@@ -73,30 +77,17 @@ export default function Feed({ feedResponse, userId, isPublic }: Readonly<FeedPr
 
     return (
         <>
-            <ul
-                className="flex snap-y flex-col divide-y"
-                aria-label={t("AriaLabelList")}
-            >
+            <ul className="flex snap-y flex-col divide-y" aria-label={t("AriaLabelList")}>
                 {feedPosts.map((post) =>
                     !post.repostOff ? (
-                        <FeedPost
-                            key={post.author.username + "-" + post.id}
-                            post={post}
-                        />
+                        <FeedPost key={post.author.username + "-" + post.id} post={post} />
                     ) : (
-                        <FeedRepost
-                            key={post.author.username + "-" + post.id}
-                            post={post}
-                        />
+                        <FeedRepost key={post.author.username + "-" + post.id} post={post} />
                     )
                 )}
             </ul>
             <div ref={ref} className="mx-auto mt-auto flex h-max w-max pt-4">
-                {infinite ? (
-                    loading && <Loading />
-                ) : (
-                    <p className="text-body-300">{t("EndOfFeed")}</p>
-                )}
+                {infinite ? loading && <Loading /> : <p className="text-body-300">{t("EndOfFeed")}</p>}
             </div>
         </>
     )

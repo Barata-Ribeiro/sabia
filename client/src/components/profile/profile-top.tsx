@@ -31,8 +31,7 @@ export default async function ProfileTop({
                     )}
                 </h2>
                 <span className="text-base">
-                    {profile.postsCount.toLocaleString(englishLang ? "en-US" : "pt-BR")}{" "}
-                    {t("Title")}
+                    {profile.postsCount.toLocaleString(englishLang ? "en-US" : "pt-BR")} {t("Title")}
                 </span>
             </div>
         </div>

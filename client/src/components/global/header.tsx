@@ -50,10 +50,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (
-                mobileMenuRef.current &&
-                !mobileMenuRef.current.contains(event.target as Node)
-            ) {
+            if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
                 setIsAvatarMenuOpen(false)
             }
         }
@@ -74,20 +71,12 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                     className="relative inline-flex items-center justify-center rounded-md p-2 text-body-400 hover:bg-background-700 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-background-50"
                                     aria-controls="mobile-menu"
                                     aria-expanded="false"
-                                    onClick={() =>
-                                        setIsMobileMenuOpen(!isMobileMenuOpen)
-                                    }
+                                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                                 >
                                     <span className="absolute -inset-0.5"></span>
-                                    <span className="sr-only">
-                                        {t("NavSRMainMenu")}
-                                    </span>
+                                    <span className="sr-only">{t("NavSRMainMenu")}</span>
 
-                                    {isMobileMenuOpen ? (
-                                        <HiXMark size={24} />
-                                    ) : (
-                                        <HiBars3BottomLeft size={24} />
-                                    )}
+                                    {isMobileMenuOpen ? <HiXMark size={24} /> : <HiBars3BottomLeft size={24} />}
                                 </button>
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -104,11 +93,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                 </div>
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
-                                        <LinkButton
-                                            href="/home"
-                                            className={menuLinksStyle}
-                                            aria-current="page"
-                                        >
+                                        <LinkButton href="/home" className={menuLinksStyle} aria-current="page">
                                             {t("NavMenuHome")}
                                         </LinkButton>
                                     </div>
@@ -121,9 +106,7 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                         className="relative rounded-full bg-accent-400 p-1 text-body-900 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-accent-800"
                                     >
                                         <span className="absolute -inset-1.5"></span>
-                                        <span className="sr-only">
-                                            {t("NavSRNewPost")}
-                                        </span>
+                                        <span className="sr-only">{t("NavSRNewPost")}</span>
                                         <TbPencilPlus size={24} />
                                     </LinkButton>
                                 )}
@@ -136,19 +119,13 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                             id="user-menu-button"
                                             aria-expanded="false"
                                             aria-haspopup="true"
-                                            onClick={() =>
-                                                setIsAvatarMenuOpen(!isAvatarMenuOpen)
-                                            }
+                                            onClick={() => setIsAvatarMenuOpen(!isAvatarMenuOpen)}
                                         >
                                             <span className="absolute -inset-1.5"></span>
-                                            <span className="sr-only">
-                                                {t("NavSRUseMenu")}
-                                            </span>
+                                            <span className="sr-only">{t("NavSRUseMenu")}</span>
                                             <Image
                                                 className="h-8 w-8 rounded-full object-cover"
-                                                src={
-                                                    user?.avatarImageUrl ?? NULL_AVATAR
-                                                }
+                                                src={user?.avatarImageUrl ?? NULL_AVATAR}
                                                 alt={`${t("NavUserImageAlt")} ${user?.username}`}
                                                 title={`${t("NavUserImageAlt")} ${user?.username}`}
                                                 width={256}
@@ -208,16 +185,9 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                         </div>
                     </div>
 
-                    <div
-                        className={`${isMobileMenuOpen ? "block" : "hidden"} sm:hidden`}
-                        id="mobile-menu"
-                    >
+                    <div className={`${isMobileMenuOpen ? "block" : "hidden"} sm:hidden`} id="mobile-menu">
                         <div className="space-y-1 px-2 pb-3 pt-2">
-                            <LinkButton
-                                href="/home"
-                                className={mobileMenuLinksStyle}
-                                aria-current="page"
-                            >
+                            <LinkButton href="/home" className={mobileMenuLinksStyle} aria-current="page">
                                 {t("NavMenuHome")}
                             </LinkButton>
                         </div>

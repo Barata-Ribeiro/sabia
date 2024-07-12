@@ -40,9 +40,7 @@ export default function ProfileEntity({
                         className="h-12 w-12 rounded-full object-cover"
                         placeholder={user.avatarImageUrl ? "blur" : "empty"}
                         blurDataURL={
-                            resolvedListOfBlurredDataUrl.find(
-                                (data) => data?.userId === user.id
-                            )?.blurredDataUrl
+                            resolvedListOfBlurredDataUrl.find((data) => data?.userId === user.id)?.blurredDataUrl
                         }
                         width={48}
                         height={48}
@@ -56,27 +54,19 @@ export default function ProfileEntity({
                         >
                             {user.displayName}{" "}
                             {user.isVerified && (
-                                <span
-                                    className="text-accent-600"
-                                    title="Verified"
-                                    aria-label="Verified"
-                                >
+                                <span className="text-accent-600" title="Verified" aria-label="Verified">
                                     <HiCheckBadge size={22} />
                                 </span>
                             )}
                         </h3>
-                        <p className="font-body text-sm text-body-500">
-                            @{user.username}
-                        </p>
+                        <p className="font-body text-sm text-body-500">@{user.username}</p>
                     </div>
                 </LinkButton>
                 <div className="w-fit">
                     <ProfileFollowButton profile={user} />
                 </div>
             </div>
-            {totalPages > 1 && (
-                <CircularPagination totalPages={totalPages} page={page} />
-            )}
+            {totalPages > 1 && <CircularPagination totalPages={totalPages} page={page} />}
         </div>
     )
 }

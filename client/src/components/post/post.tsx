@@ -13,11 +13,7 @@ import { twMerge } from "tailwind-merge"
 export default function Post(props: Readonly<{ post: PostResponse; locale: string }>) {
     return (
         <article id="post-article" className="flex w-full flex-col gap-1">
-            <LinkButton
-                href={"/" + props.post.author.username}
-                className="cursor-pointer"
-                aria-label="Author Profile"
-            >
+            <LinkButton href={"/" + props.post.author.username} className="cursor-pointer" aria-label="Author Profile">
                 <header className="mb-4 flex w-max items-center gap-2">
                     <Image
                         src={props.post.author.avatarImageUrl ?? NULL_AVATAR}
@@ -31,8 +27,7 @@ export default function Post(props: Readonly<{ post: PostResponse; locale: strin
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                props.post.author.isVerified &&
-                                    "flex items-center gap-1"
+                                props.post.author.isVerified && "flex items-center gap-1"
                             )}
                         >
                             {props.post.author.displayName}{" "}
@@ -42,9 +37,7 @@ export default function Post(props: Readonly<{ post: PostResponse; locale: strin
                                 </span>
                             )}
                         </p>
-                        <p className="font-body text-body-500">
-                            @{props.post.author.username}
-                        </p>
+                        <p className="font-body text-body-500">@{props.post.author.username}</p>
                     </div>
                 </header>
             </LinkButton>
@@ -56,12 +49,7 @@ export default function Post(props: Readonly<{ post: PostResponse; locale: strin
             <footer>
                 <div className="flex w-max items-center gap-1">
                     <LinkButton
-                        href={
-                            "/" +
-                            props.post.author.username +
-                            "/status/" +
-                            props.post.id
-                        }
+                        href={"/" + props.post.author.username + "/status/" + props.post.id}
                         className="text-body-500 hover:underline"
                     >
                         <time dateTime={props.post.createdAt}>

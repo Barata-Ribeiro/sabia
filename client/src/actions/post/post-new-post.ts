@@ -18,21 +18,14 @@ export default async function postNewPost(state: State, formData: FormData) {
     try {
         const auth_token = await verifyAuthentication(isEnglishLang)
 
-        if (!text)
-            throw new Error(
-                isEnglishLang ? "Text is required." : "Texto é obrigatório."
-            )
+        if (!text) throw new Error(isEnglishLang ? "Text is required." : "Texto é obrigatório.")
 
         if (text.trim().length === 0)
-            throw new Error(
-                isEnglishLang ? "Text cannot be empty." : "Texto não pode estar vazio."
-            )
+            throw new Error(isEnglishLang ? "Text cannot be empty." : "Texto não pode estar vazio.")
 
         if (text.trim().length > 280)
             throw new Error(
-                isEnglishLang
-                    ? "Text must have at most 280 characters."
-                    : "Texto deve ter no máximo 280 caracteres."
+                isEnglishLang ? "Text must have at most 280 characters." : "Texto deve ter no máximo 280 caracteres."
             )
 
         const response = await fetch(URL, {

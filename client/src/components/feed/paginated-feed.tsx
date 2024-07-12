@@ -11,30 +11,19 @@ interface PaginatedFeedProps {
     searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-export default function PaginatedFeed({
-    feedResponse,
-    page,
-    searchParams
-}: Readonly<PaginatedFeedProps>) {
+export default function PaginatedFeed({ feedResponse, page, searchParams }: Readonly<PaginatedFeedProps>) {
     const t = useTranslations("Feed.Paginated")
 
     return (
         <>
-            <ul
-                className="flex snap-y flex-col divide-y"
-                aria-label={t("AriaLabelList")}
-            >
+            <ul className="flex snap-y flex-col divide-y" aria-label={t("AriaLabelList")}>
                 {feedResponse.posts.map((post) => (
                     <FeedPost post={post} key={post.id} />
                 ))}
             </ul>
 
             {feedResponse.totalPages > 1 && (
-                <CircularPagination
-                    totalPages={feedResponse.totalPages}
-                    page={page}
-                    searchParams={searchParams}
-                />
+                <CircularPagination totalPages={feedResponse.totalPages} page={page} searchParams={searchParams} />
             )}
         </>
     )

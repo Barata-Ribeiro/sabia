@@ -7,11 +7,7 @@ import ResponseError from "@/utils/response-error"
 import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 
-export default async function getPostsByHashtag({
-    hashtag,
-    page = 0,
-    perPage = 10
-}: PostHashtagParams) {
+export default async function getPostsByHashtag({ hashtag, page = 0, perPage = 10 }: PostHashtagParams) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = POST_GET_ALL_BY_HASHTAG({ hashtag, page, perPage })

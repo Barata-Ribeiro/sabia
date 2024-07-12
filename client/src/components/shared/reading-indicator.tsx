@@ -10,10 +10,8 @@ export default function ReadingIndicator() {
 
         const calculateScrollDistance = () => {
             const scrollTop = window.scrollY || document.documentElement.scrollTop
-            const docHeight =
-                document.body.scrollHeight || document.documentElement.scrollHeight
-            const winHeight =
-                window.innerHeight || document.documentElement.clientHeight
+            const docHeight = document.body.scrollHeight || document.documentElement.scrollHeight
+            const winHeight = window.innerHeight || document.documentElement.clientHeight
             const scrollPercent = scrollTop / (docHeight - winHeight)
 
             return scrollPercent * 100

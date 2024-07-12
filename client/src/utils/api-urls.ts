@@ -1,9 +1,5 @@
 import { PostHashtagParams, PostSearchParams } from "@/interfaces/post"
-import {
-    FeedRequestParams,
-    UserFollowersParams,
-    UserSearchParams
-} from "@/interfaces/user"
+import { FeedRequestParams, UserFollowersParams, UserSearchParams } from "@/interfaces/user"
 
 const BACKEND_URL = process.env.BACKEND_ORIGIN ?? "http://localhost:8080"
 
@@ -20,8 +16,7 @@ export const USER_GET_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/me/${userId}/feed?perPage=${perPage}&page=${page}`
 }
-export const USER_GET_PUBLIC_PROFILE = (username: string) =>
-    `${BACKEND_URL}/api/v1/users/public/${username}`
+export const USER_GET_PUBLIC_PROFILE = (username: string) => `${BACKEND_URL}/api/v1/users/public/${username}`
 export const USER_GET_PUBLIC_FEED = (params: FeedRequestParams) => {
     const { perPage, page, userId } = params
     return `${BACKEND_URL}/api/v1/users/public/${userId}/feed?perPage=${perPage}&page=${page}`
@@ -34,21 +29,17 @@ export const FOLLOW_USER = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
 export const UNFOLLOW_USER = (userId: string, followId: string) =>
     `${BACKEND_URL}/api/v1/users/me/${userId}/follow/${followId}`
-export const USER_DELETE_ACCOUNT = (userId: string) =>
-    `${BACKEND_URL}/api/v1/users/me/${userId}`
+export const USER_DELETE_ACCOUNT = (userId: string) => `${BACKEND_URL}/api/v1/users/me/${userId}`
 export const USER_SEARCH = (params: UserSearchParams) => {
     const { perPage, page, query } = params
     return `${BACKEND_URL}/api/v1/users/public/search?q=${query}&page=${page}&perPage=${perPage}`
 }
-export const GET_USER_RECOMMENDATIONS = () =>
-    `${BACKEND_URL}/api/v1/users/public/recommendations`
+export const GET_USER_RECOMMENDATIONS = () => `${BACKEND_URL}/api/v1/users/public/recommendations`
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
-export const POST_REPLY = (postId: string) =>
-    `${BACKEND_URL}/api/v1/posts/me/${postId}/reply`
-export const POST_GET_BY_ID = (postId: string) =>
-    `${BACKEND_URL}/api/v1/posts/public/${postId}`
+export const POST_REPLY = (postId: string) => `${BACKEND_URL}/api/v1/posts/me/${postId}/reply`
+export const POST_GET_BY_ID = (postId: string) => `${BACKEND_URL}/api/v1/posts/public/${postId}`
 export const POST_GET_ALL_BY_HASHTAG = (params: PostHashtagParams) => {
     const { hashtag, page, perPage } = params
     return `${BACKEND_URL}/api/v1/posts/public/hashtag/${hashtag}?page=${page}&perPage=${perPage}`
@@ -57,8 +48,6 @@ export const POST_SEARCH = (params: PostSearchParams) => {
     const { perPage, page, query } = params
     return `${BACKEND_URL}/api/v1/posts/public/search?q=${query}&page=${page}&perPage=${perPage}`
 }
-export const POST_REPOST = (postId: string) =>
-    `${BACKEND_URL}/api/v1/posts/me/${postId}/repost`
-export const POST_TOGGLE_LIKE = (postId: string) =>
-    `${BACKEND_URL}/api/v1/posts/me/${postId}/toggle-like`
+export const POST_REPOST = (postId: string) => `${BACKEND_URL}/api/v1/posts/me/${postId}/repost`
+export const POST_TOGGLE_LIKE = (postId: string) => `${BACKEND_URL}/api/v1/posts/me/${postId}/toggle-like`
 export const GET_TRENDING_HASHTAGS = () => `${BACKEND_URL}/api/v1/posts/public/trending`

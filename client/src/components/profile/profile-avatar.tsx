@@ -17,10 +17,7 @@ export default async function ProfileAvatar({
 
     return (
         <div style={{ marginTop: "-6rem" }}>
-            <div
-                style={{ width: "9rem", height: "9rem" }}
-                className="relative antialiased"
-            >
+            <div style={{ width: "9rem", height: "9rem" }} className="relative antialiased">
                 <Image
                     className="pointer-events-none absolute rounded-full border-4 border-background-600 bg-background-600 object-cover object-center italic"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

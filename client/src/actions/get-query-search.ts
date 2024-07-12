@@ -6,11 +6,7 @@ import ResponseError from "@/utils/response-error"
 import verifyAuthentication from "@/utils/verify-authentication"
 import { getLocale } from "next-intl/server"
 
-export default async function getQuerySearch(
-    query: string,
-    fetchType: "user" | "post",
-    page = 0
-) {
+export default async function getQuerySearch(query: string, fetchType: "user" | "post", page = 0) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const USER_URL = USER_SEARCH({ query, page, perPage: 10 })

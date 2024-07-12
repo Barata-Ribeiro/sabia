@@ -9,20 +9,10 @@ interface PostReplyButtonProps {
     displayNumber?: boolean
 }
 
-export default function PostReplyButton({
-    post,
-    displayNumber = true
-}: Readonly<PostReplyButtonProps>) {
+export default function PostReplyButton({ post, displayNumber = true }: Readonly<PostReplyButtonProps>) {
     return (
-        <div
-            id="post-reply"
-            className="flex w-max items-center gap-2"
-            title="Reply"
-            aria-label="Reply Count"
-        >
-            <LinkButton
-                href={"/" + post.author.username + "/status/" + post.id + "/reply"}
-            >
+        <div id="post-reply" className="flex w-max items-center gap-2" title="Reply" aria-label="Reply Count">
+            <LinkButton href={"/" + post.author.username + "/status/" + post.id + "/reply"}>
                 <HiOutlineChatBubbleOvalLeft size={24} aria-hidden="true" />
             </LinkButton>
             {displayNumber && <p aria-label="Reply Count">{post.replyCount}</p>}

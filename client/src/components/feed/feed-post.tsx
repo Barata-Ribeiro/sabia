@@ -54,35 +54,25 @@ export default function FeedPost({ post }: Readonly<{ post: PostResponse }>) {
                         >
                             {post.author.displayName}{" "}
                             {post.author.isVerified && (
-                                <span
-                                    className="text-accent-600"
-                                    title="Verified"
-                                    aria-label="Verified"
-                                >
+                                <span className="text-accent-600" title="Verified" aria-label="Verified">
                                     <HiCheckBadge size={22} />
                                 </span>
                             )}
                         </p>
                         <div className="flex gap-1">
-                            <p className="font-body text-body-500">
-                                @{post.author.username}
-                            </p>
+                            <p className="font-body text-body-500">@{post.author.username}</p>
                             <span className="text-body-300">·</span>
                             <LinkButton
                                 href={"/" + post.author.username + "/status/" + post.id}
                                 className="text-body-500 hover:underline"
                             >
-                                <time dateTime={post.createdAt}>
-                                    {dateToHowLongAgo(post.createdAt, localeActive)}
-                                </time>
+                                <time dateTime={post.createdAt}>{dateToHowLongAgo(post.createdAt, localeActive)}</time>
                             </LinkButton>
                         </div>
                     </header>
 
                     <p className="text-pretty text-body-900">
-                        {post.hashtags.length > 0
-                            ? formatTextWithHashtags(post.text, post.hashtags)
-                            : post.text}
+                        {post.hashtags.length > 0 ? formatTextWithHashtags(post.text, post.hashtags) : post.text}
                     </p>
 
                     <footer className="mt-2 flex items-center justify-between">

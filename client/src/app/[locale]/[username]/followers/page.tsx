@@ -14,19 +14,14 @@ interface FollowersPageProps {
     searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({
-    params
-}: FollowersPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: FollowersPageProps): Promise<Metadata> {
     return {
         title: "Followers of @" + params.username + " | Sabiá",
         description: `Followers of @${params.username}`
     }
 }
 
-export default async function FollowersPage({
-    params,
-    searchParams
-}: Readonly<FollowersPageProps>) {
+export default async function FollowersPage({ params, searchParams }: Readonly<FollowersPageProps>) {
     if (!params.username) return notFound()
     if (!searchParams) return notFound()
 
@@ -62,9 +57,7 @@ export default async function FollowersPage({
                         <HiArrowUturnLeft size={24} />
                     </LinkButton>
                     <h2 className="flex cursor-default items-center gap-2 font-heading text-xl font-semibold">
-                        {followersResponse.totalItems.toLocaleString(
-                            englishLang ? "en-US" : "pt-BR"
-                        )}{" "}
+                        {followersResponse.totalItems.toLocaleString(englishLang ? "en-US" : "pt-BR")}{" "}
                         {followersResponse.totalItems === 1 ? "Follower" : "Followers"}
                     </h2>
                 </div>

@@ -7,13 +7,7 @@ import { useRouter } from "@/navigation"
 import { NULL_AVATAR } from "@/utils/constants"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import {
-    type ElementRef,
-    type MouseEvent as ReactMouseEvent,
-    useCallback,
-    useEffect,
-    useRef
-} from "react"
+import { type ElementRef, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef } from "react"
 
 export default function NewPostModal() {
     const t = useTranslations("NewPostModal")

@@ -36,18 +36,8 @@ export default function DeleteAccountForm() {
     return (
         <form action={action}>
             <div className="flex flex-col gap-1">
-                <input
-                    className="hidden"
-                    type="hidden"
-                    name="userId"
-                    value={user?.id}
-                />
-                <input
-                    className="hidden"
-                    type="hidden"
-                    name="username"
-                    value={user?.username}
-                />
+                <input className="hidden" type="hidden" name="userId" value={user?.id} />
+                <input className="hidden" type="hidden" name="username" value={user?.username} />
                 <Input
                     label="Username"
                     name="usernameDelete"

@@ -7,12 +7,7 @@ interface InputProps extends ComponentProps<"input"> {
     icon?: ReactNode
 }
 
-export default function Input({
-    label,
-    icon,
-    className,
-    ...props
-}: Readonly<InputProps>) {
+export default function Input({ label, icon, className, ...props }: Readonly<InputProps>) {
     const sortedClasses = tw`peer h-full w-full rounded-[0.438rem] border border-background-200 border-t-transparent bg-white font-sans text-sm font-normal text-body-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-background-200 placeholder-shown:border-t-background-200 focus:border-2 focus:border-background-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-background-50`
 
     const mergedClassName = twMerge(sortedClasses, className)

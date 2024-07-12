@@ -13,10 +13,7 @@ interface PostRepostButtonProps {
     displayNumber?: boolean
 }
 
-export default function PostRepostButton({
-    post,
-    displayNumber = true
-}: Readonly<PostRepostButtonProps>) {
+export default function PostRepostButton({ post, displayNumber = true }: Readonly<PostRepostButtonProps>) {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
 
@@ -26,9 +23,7 @@ export default function PostRepostButton({
 
     const buttonStyles = twMerge(buttonBaseStyles, setRepostedStyleLoading)
 
-    async function handleRepost(
-        event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-    ) {
+    async function handleRepost(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
         event.stopPropagation()
         if (loading) return
 
@@ -38,13 +33,7 @@ export default function PostRepostButton({
             const repostResponse = repostState.response?.data as PostResponse
 
             if (!repostState.ok) alert(repostState.clientError)
-            else
-                router.push(
-                    "/" +
-                        repostResponse.author.username +
-                        "/status/" +
-                        repostResponse.id
-                )
+            else router.push("/" + repostResponse.author.username + "/status/" + repostResponse.id)
         } catch (error) {
             console.error(error)
         } finally {
@@ -53,12 +42,7 @@ export default function PostRepostButton({
     }
 
     return (
-        <div
-            id="post-repost"
-            className="flex w-max items-center gap-2"
-            title="Repost"
-            aria-label="Repost"
-        >
+        <div id="post-repost" className="flex w-max items-center gap-2" title="Repost" aria-label="Repost">
             <button
                 type="button"
                 className={buttonStyles}

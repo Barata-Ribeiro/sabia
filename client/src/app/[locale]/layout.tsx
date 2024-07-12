@@ -32,9 +32,7 @@ interface LocaleLayoutProps {
     params: { locale: string }
 }
 
-export async function generateMetadata({
-    params
-}: LocaleLayoutProps): Promise<Metadata> {
+export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
     const t = await getTranslations({ locale: params.locale, namespace: "LayoutRoot" })
 
     return {
@@ -59,15 +57,9 @@ export default async function RootLayout({
     const body_styles = tw`flex h-full min-h-dvh flex-col`
 
     return (
-        <html
-            lang={locale}
-            suppressHydrationWarning={true}
-            className="h-full bg-background-50 dark:bg-background-950"
-        >
+        <html lang={locale} suppressHydrationWarning={true} className="h-full bg-background-50 dark:bg-background-950">
             <NextIntlClientProvider locale={locale} messages={messages}>
-                <body
-                    className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}
-                >
+                <body className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}>
                     <UserContextProvider user={user}>
                         {user && <Header user={user} />}
                         <div className="flex flex-1 flex-col md:container has-[#new-post,#public-feed-section,#hashtag-section]:overflow-auto">

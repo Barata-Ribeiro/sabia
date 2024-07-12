@@ -11,7 +11,10 @@ import PostLikeButton from "./post-like-button"
 import PostRepostButton from "./post-repost-button"
 
 export default function Repost(
-    props: Readonly<{ post: PostResponse; locale: string }>
+    props: Readonly<{
+        post: PostResponse
+        locale: string
+    }>
 ) {
     return (
         <article id="post-article" className="flex flex-col gap-1">
@@ -20,8 +23,7 @@ export default function Repost(
                 className="flex cursor-pointer items-center gap-1 text-accent-600 hover:underline"
                 aria-label="Author Profile"
             >
-                <HiMiniArrowPath size={14} /> {props.post.author.username} reposted
-                this.
+                <HiMiniArrowPath size={14} /> {props.post.author.username} reposted this.
             </LinkButton>
             <LinkButton
                 href={"/" + props.post.repostOff?.author.username}
@@ -41,8 +43,7 @@ export default function Repost(
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                props.post.repostOff?.author.isVerified &&
-                                    "flex items-center gap-1"
+                                props.post.repostOff?.author.isVerified && "flex items-center gap-1"
                             )}
                         >
                             {props.post.repostOff?.author.displayName}{" "}
@@ -52,38 +53,25 @@ export default function Repost(
                                 </span>
                             )}
                         </p>
-                        <p className="font-body text-body-500">
-                            @{props.post.repostOff?.author.username}
-                        </p>
+                        <p className="font-body text-body-500">@{props.post.repostOff?.author.username}</p>
                     </div>
                 </header>
             </LinkButton>
 
             <p className="text-pretty text-body-900">
                 {props.post.repostOff!.hashtags.length > 0
-                    ? formatTextWithHashtags(
-                          props.post.repostOff!.text,
-                          props.post.repostOff!.hashtags
-                      )
+                    ? formatTextWithHashtags(props.post.repostOff!.text, props.post.repostOff!.hashtags)
                     : props.post.repostOff?.text}
             </p>
 
             <footer>
                 <div className="flex w-max items-center gap-1">
                     <LinkButton
-                        href={
-                            "/" +
-                            props.post.repostOff?.author.username +
-                            "/status/" +
-                            props.post.repostOff?.id
-                        }
+                        href={"/" + props.post.repostOff?.author.username + "/status/" + props.post.repostOff?.id}
                         className="text-body-500 hover:underline"
                     >
                         <time dateTime={props.post.repostOff?.createdAt}>
-                            {dateTimeFormat(
-                                props.post.repostOff!.createdAt,
-                                props.locale
-                            )}
+                            {dateTimeFormat(props.post.repostOff!.createdAt, props.locale)}
                         </time>
                     </LinkButton>
                     <p className="text-body-500">

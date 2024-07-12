@@ -19,13 +19,11 @@ export default async function deleteUserAccount(state: State, formData: FormData
     try {
         const auth_token = await verifyAuthentication(isEnglishLang)
 
-        if (!userId)
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
+        if (!userId) throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
 
         const URL = USER_DELETE_ACCOUNT(userId)
 
-        if (!username || !usernameFromInput)
-            throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
+        if (!username || !usernameFromInput) throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
 
         if (username !== usernameFromInput.split("-DELETE")[0]) {
             throw new Error(

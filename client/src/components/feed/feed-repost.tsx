@@ -56,40 +56,25 @@ export default function FeedRepost({ post }: Readonly<{ post: PostResponse }>) {
                         <p
                             className={twMerge(
                                 "font-heading font-bold text-body-900",
-                                post.repostOff?.author.isVerified &&
-                                    "flex items-center gap-1"
+                                post.repostOff?.author.isVerified && "flex items-center gap-1"
                             )}
                         >
                             {post.repostOff?.author.displayName}{" "}
                             {post.repostOff?.author.isVerified && (
-                                <span
-                                    className="text-accent-600"
-                                    title="Verified"
-                                    aria-label="Verified"
-                                >
+                                <span className="text-accent-600" title="Verified" aria-label="Verified">
                                     <HiCheckBadge size={22} />
                                 </span>
                             )}
                         </p>
                         <div className="flex gap-1">
-                            <p className="font-body text-body-500">
-                                @{post.repostOff?.author.username}
-                            </p>
+                            <p className="font-body text-body-500">@{post.repostOff?.author.username}</p>
                             <span className="text-body-300">·</span>
                             <LinkButton
-                                href={
-                                    "/" +
-                                    post.repostOff?.author.username +
-                                    "/status/" +
-                                    post.id
-                                }
+                                href={"/" + post.repostOff?.author.username + "/status/" + post.id}
                                 className="text-body-500 hover:underline"
                             >
                                 <time dateTime={post.repostOff?.createdAt}>
-                                    {dateToHowLongAgo(
-                                        post.repostOff!.createdAt,
-                                        localeActive
-                                    )}
+                                    {dateToHowLongAgo(post.repostOff!.createdAt, localeActive)}
                                 </time>
                             </LinkButton>
                         </div>
@@ -97,19 +82,13 @@ export default function FeedRepost({ post }: Readonly<{ post: PostResponse }>) {
 
                     <p className="text-pretty text-body-900">
                         {post.repostOff!.hashtags.length > 0
-                            ? formatTextWithHashtags(
-                                  post.repostOff!.text,
-                                  post.repostOff!.hashtags
-                              )
+                            ? formatTextWithHashtags(post.repostOff!.text, post.repostOff!.hashtags)
                             : post.repostOff!.text}
                     </p>
 
                     <footer className="mt-2 flex items-center justify-between">
                         <PostReplyButton post={post.repostOff!} displayNumber={false} />
-                        <PostRepostButton
-                            post={post.repostOff!}
-                            displayNumber={false}
-                        />
+                        <PostRepostButton post={post.repostOff!} displayNumber={false} />
                         <PostLikeButton post={post.repostOff!} displayNumber={false} />
                     </footer>
                 </article>

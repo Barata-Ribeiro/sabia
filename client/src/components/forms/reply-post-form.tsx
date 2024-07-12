@@ -38,9 +38,7 @@ export default function ReplyPostForm({ postId }: Readonly<{ postId: string }>) 
     useEffect(() => {
         if (state.ok) {
             const postResponse = state.response?.data as PostResponse
-            router.push(
-                "/" + postResponse.author.username + "/status/" + postResponse.id
-            )
+            router.push("/" + postResponse.author.username + "/status/" + postResponse.id)
             router.refresh()
         }
     }, [state.ok, router, state.response?.data])
@@ -76,9 +74,7 @@ export default function ReplyPostForm({ postId }: Readonly<{ postId: string }>) 
                         disabled={pending}
                         aria-disabled={pending}
                     >
-                        {pending
-                            ? t("ReplyPostButtonLoading")
-                            : t("ReplyPostButtonSubmit")}
+                        {pending ? t("ReplyPostButtonLoading") : t("ReplyPostButtonSubmit")}
                     </Button>
                 </div>
             </div>

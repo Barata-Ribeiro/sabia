@@ -23,18 +23,11 @@ export async function middleware(req: NextRequest) {
         if (isAuthTokenValid) isAuthenticated = true
     }
 
-    if (
-        locale != null &&
-        (segments.includes("terms-of-service") || segments.includes("privacy-policy"))
-    ) {
+    if (locale != null && (segments.includes("terms-of-service") || segments.includes("privacy-policy"))) {
         return response
     }
 
-    if (
-        !isAuthenticated &&
-        !isRedirectionUrl &&
-        (!segments.includes("auth") || segments.length === 0)
-    ) {
+    if (!isAuthenticated && !isRedirectionUrl && (!segments.includes("auth") || segments.length === 0)) {
         const url = req.nextUrl.clone()
         url.pathname = `/${localePref}`
         return NextResponse.redirect(new URL(url, req.url))

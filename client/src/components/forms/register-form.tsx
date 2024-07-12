@@ -29,35 +29,11 @@ export default function RegisterForm() {
         <form className="space-y-6" action={action}>
             <h1 className="font-heading text-2xl leading-6">{t("Title")}</h1>
 
-            <Input
-                label={t("InputUsername")}
-                name="username"
-                className="px-3 py-2.5"
-                required
-                aria-required
-            />
-            <Input
-                label={t("InputDisplayName")}
-                name="displayName"
-                className="px-3 py-2.5"
-                required
-                aria-required
-            />
+            <Input label={t("InputUsername")} name="username" className="px-3 py-2.5" required aria-required />
+            <Input label={t("InputDisplayName")} name="displayName" className="px-3 py-2.5" required aria-required />
             <fieldset className="flex items-center gap-2">
-                <Input
-                    label={t("InputFirstName")}
-                    name="firstName"
-                    className="px-3 py-2.5"
-                    required
-                    aria-required
-                />
-                <Input
-                    label={t("InputLastName")}
-                    name="lastName"
-                    className="px-3 py-2.5"
-                    required
-                    aria-required
-                />
+                <Input label={t("InputFirstName")} name="firstName" className="px-3 py-2.5" required aria-required />
+                <Input label={t("InputLastName")} name="lastName" className="px-3 py-2.5" required aria-required />
             </fieldset>
             <Input
                 label={t("InputBirthDate")}
@@ -67,14 +43,7 @@ export default function RegisterForm() {
                 required
                 aria-required
             />
-            <Input
-                label={t("InputEmail")}
-                name="email"
-                type="email"
-                className="px-3 py-2.5"
-                required
-                aria-required
-            />
+            <Input label={t("InputEmail")} name="email" type="email" className="px-3 py-2.5" required aria-required />
             <fieldset className="flex flex-col gap-1">
                 <div className="flex items-start gap-2">
                     <Input
@@ -111,10 +80,7 @@ export default function RegisterForm() {
                     required
                     aria-required
                 />{" "}
-                <label
-                    htmlFor="terms-of-use"
-                    className="text-left text-body-600 dark:text-body-50 lg:text-body-950"
-                >
+                <label htmlFor="terms-of-use" className="text-left text-body-600 dark:text-body-50 lg:text-body-950">
                     {t("TermsMessage")}
                     <Link
                         locale={localActive}
@@ -126,12 +92,7 @@ export default function RegisterForm() {
                     .
                 </label>
             </div>
-            <Button
-                type="submit"
-                className="py-2"
-                disabled={pending}
-                aria-disabled={pending}
-            >
+            <Button type="submit" className="py-2" disabled={pending} aria-disabled={pending}>
                 {pending ? t("RegisterButtonLoading") : t("RegisterButton")}
             </Button>
         </form>

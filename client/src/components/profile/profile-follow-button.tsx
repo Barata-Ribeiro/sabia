@@ -24,9 +24,7 @@ export default function ProfileFollowButton({
     const [isFollowing, setIsFollowing] = useState(false)
     const [isLoading, setIsLoading] = useState(!isOwnProfile)
 
-    const errorMessage = isEnglishLang
-        ? "An unknown error occurred."
-        : "Um error desconhecido ocorreu."
+    const errorMessage = isEnglishLang ? "An unknown error occurred." : "Um error desconhecido ocorreu."
 
     useEffect(() => {
         if (user && !isOwnProfile) {
