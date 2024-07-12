@@ -11,12 +11,14 @@
         "PageRegisterLink": "Crie uma conta"
     },
     "RegisterPage": {
+        "PageTitle": "Crie sua conta",
+        "PageDescription": "Crie sua conta no Sabiá e compartilhe seus pensamentos e ideias com o mundo.",
         "PageLoginMessage": "Já possui conta? ",
         "PageLoginLink": "Entre agora",
         "IllutrationDescription": "Ilustração de um pássaro falando, do site unDraw"
     },
     "HomePage": {
-        "title": "Início | Sabiá",
+        "title": "Início",
         "description": "Bem vindo(a) ao seu feed no Sabiá! Compartilhe seus pensamentos e ideias com o mundo.",
         "PageTitle": "Seu Feed",
         "AriaLabelMain": "Conteúdo Principal",
@@ -31,6 +33,14 @@
         "Followings": " Seguindo",
         "Followers": " Seguidores",
         "PageEmptyPosts": "Você ainda não possui postagens. Que tal criar uma agora?"
+    },
+    "SettingsPage": {
+        "PageTitle": "Configurações",
+        "PageDescription": "Gerencie suas configurações de conta e perfil.",
+        "PageDeleteSectionTitle": "Deletar Conta",
+        "PageDeleteWarning": "Proceda com cautela!",
+        "PageDeleteParagraph": "Certifique-se de ter feito backup de todos os dados da sua conta antes de prosseguir. Depois de\n                        excluir sua conta, todos os seus dados serão apagados permanentemente e não haverá como\n                        recuperá-los. Esta ação é irreversível e final.",
+        "PageDeleteButton": "Continuar e Deletar Conta"
     },
     "HashtagPage": {
         "title": "Posts com a hashtag #",
@@ -97,6 +107,19 @@
         "TextAreaLabel": "Responder Postagem",
         "ReplyPostButtonLoading": "Respondendo...",
         "ReplyPostButtonSubmit": "Responder"
+    },
+    "DeleteAccountModal": {
+        "DeleteAccountTitle": "Delete sua conta",
+        "DeleteAccountDescription": "Exclua sua conta. Esta ação é irreversível.",
+        "DeleteAccountWarning": "Sua conta será excluída permanentemente!",
+        "DeleteAccountParagraph": "De acordo com nossos termos de serviço, quando você exclui sua conta, todos os seus dados serão\n                        permanentemente apagados e não haverá como recuperá-los. Esta ação é irreversível e final. O\n                        motivo para a exclusão completa dos dados é garantir a privacidade e a segurança de sua conta e\n                        de nossa plataforma. Se você tem certeza de que deseja excluir sua conta, para confirmar esta\n                        ação, você deve digitar seu nome de usuário abaixo seguido pela palavra"
+    },
+    "DeleteAccountForm": {
+        "InputUsername": "Usuário",
+        "InputConfirmation": "Para confirmar, digite seu nome de usuário seguido da palavra",
+        "DeleteAccountButtonCancel": "Cancelar",
+        "DeleteAccountButtonLoading": "Deletando...",
+        "DeleteAccountButtonSubmit": "Deletar Conta"
     },
     "AsideMenu": {
         "InputSearch": "Pesquisar",

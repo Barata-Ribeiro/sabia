@@ -11,12 +11,14 @@
         "PageRegisterLink": "Create an account"
     },
     "RegisterPage": {
+        "PageTitle": "Create your account",
+        "PageDescription": "Join Sabiá and share your thoughts and ideas with the world.",
         "PageLoginMessage": "Already have an account? ",
         "PageLoginLink": "Log in",
         "IllutrationDescription": "Illustration from unDraw of a bird speaking"
     },
     "HomePage": {
-        "title": "Home | Sabiá",
+        "title": "Home",
         "description": "Welcome to your home feed on Sabiá. Share your thoughts and ideas with the world.",
         "PageTitle": "Your Feed",
         "AriaLabelMain": "Main content",
@@ -31,6 +33,14 @@
         "Followings": " Following",
         "Followers": " Followers",
         "PageEmptyPosts": "No posts to display. How about creating one?"
+    },
+    "SettingsPage": {
+        "PageTitle": "Account Settings",
+        "PageDescription": "Update your account settings.",
+        "PageDeleteSectionTitle": "Delete Account",
+        "PageDeleteWarning": "Proceed with caution",
+        "PageDeleteParagraph": "Please ensure you have backed up all your account data before proceeding. Once you delete your\n                    account, all your data will be permanently erased, and there will be no way to recover it. This\n                    action is irreversible and final.",
+        "PageDeleteButton": "Continue with deletion"
     },
     "HashtagPage": {
         "title": "Posts with #",
@@ -92,6 +102,19 @@
         "ReplyPostSubtitle": "Reply to this post with your thoughts and ideas.",
         "ReplyPostAvatarAlt": "Avatar of ",
         "ReplyPostCloseButton": "Close"
+    },
+    "DeleteAccountModal": {
+        "DeleteAccountTitle": "Delete Account",
+        "DeleteAccountDescription": "Delete your account. This action is irreversible.",
+        "DeleteAccountWarning": "Your account will be deleted permanently!",
+        "DeleteAccountParagraph": "Per our terms of service, when you delete your account, all your data will be permanently\n                        erased, and there will be no way to recover it. This action is irreversible and final. The\n                        reason for complete data deletion is to ensure the privacy and security of your account and our\n                        platform. If you are sure you want to delete your account, to confirm this action you must type your username below followed by\n                        the word"
+    },
+    "DeleteAccountForm": {
+        "InputUsername": "Username",
+        "InputConfirmation": "To confirm, type your username followed by the word",
+        "DeleteAccountButtonCancel": "Cancel",
+        "DeleteAccountButtonLoading": "Deleting...",
+        "DeleteAccountButtonSubmit": "Delete Account"
     },
     "ReplyPostForm": {
         "TextAreaLabel": "Reply Post",

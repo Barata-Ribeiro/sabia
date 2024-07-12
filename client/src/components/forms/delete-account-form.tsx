@@ -5,11 +5,13 @@ import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
 import { useUser } from "@/context/user-context-provider"
 import { useRouter } from "@/navigation"
+import { useTranslations } from "next-intl"
 import { useCallback, useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 import { FaCircleExclamation } from "react-icons/fa6"
 
 export default function DeleteAccountForm() {
+    const t = useTranslations("DeleteAccountForm")
     const router = useRouter()
     const { user, setUser } = useUser()
 
@@ -19,7 +21,6 @@ export default function DeleteAccountForm() {
 
     const { pending } = useFormStatus()
     const [state, action] = useFormState(deleteUserAccount, {
-        // EDIT ACTION!!!
         ok: false,
         clientError: null,
         response: null
@@ -39,7 +40,7 @@ export default function DeleteAccountForm() {
                 <input className="hidden" type="hidden" name="userId" value={user?.id} />
                 <input className="hidden" type="hidden" name="username" value={user?.username} />
                 <Input
-                    label="Username"
+                    label={t("InputUsername")}
                     name="usernameDelete"
                     autoComplete="off"
                     className="px-3 py-2.5"
@@ -49,10 +50,8 @@ export default function DeleteAccountForm() {
                 <p className="flex w-fit items-center gap-2 self-center text-sm text-primary-700 antialiased">
                     <FaCircleExclamation size={14} />
                     <span className="max-w-[55ch]">
-                        Type your username followed by the word &rdquo;
-                        {/*
-                         */}
-                        <strong>-DELETE</strong>&ldquo; to confirm.
+                        {t("InputConfirmation")} &rdquo;{/* */}
+                        <strong>-DELETE</strong>&ldquo;
                     </span>
                 </p>
             </div>
@@ -64,7 +63,7 @@ export default function DeleteAccountForm() {
                     disabled={pending}
                     aria-disabled={pending}
                 >
-                    Cancel
+                    {t("DeleteAccountButtonCancel")}
                 </Button>
                 <Button
                     type="submit"
@@ -72,7 +71,7 @@ export default function DeleteAccountForm() {
                     disabled={pending}
                     aria-disabled={pending}
                 >
-                    {pending ? "Deleting..." : "Delete"}
+                    {pending ? t("DeleteAccountButtonLoading") : t("DeleteAccountButtonSubmit")}
                 </Button>
             </div>
             {state.clientError && <p>{state.clientError}</p>}
