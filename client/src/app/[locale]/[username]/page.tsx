@@ -22,13 +22,13 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 
     if (!params.username || !profileState.ok) {
         return {
-            title: profileState.clientError + " | Sabiá",
+            title: profileState.clientError,
             description: "Sorry, we can't find that page. You'll find lots to explore on the home page."
         }
     }
 
     return {
-        title: `@${profile.username} | Sabiá`,
+        title: `@${profile.username}`,
         description: `${profile.displayName} (@${profile.username})${profile.biography ? " – " + profile.biography : ""}`
     }
 }

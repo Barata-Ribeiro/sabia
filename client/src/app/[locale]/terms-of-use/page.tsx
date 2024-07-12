@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("TermsOfUse")
 
     return {
-        title: `${t("TermsTitle")} | Sabiá`,
+        title: t("TermsTitle"),
         description: t("TermsDescription")
     }
 }

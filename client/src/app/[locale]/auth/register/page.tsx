@@ -1,8 +1,18 @@
-// @flow
 import RegisterForm from "@/components/forms/register-form"
+import { Metadata } from "next"
 import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 import Image from "next/image"
 import Link from "next/link"
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("RegisterPage")
+
+    return {
+        title: t("PageTitle"),
+        description: t("PageDescription")
+    }
+}
 
 export default function RegisterPage() {
     const t = useTranslations("RegisterPage")

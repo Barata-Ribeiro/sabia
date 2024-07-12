@@ -4,7 +4,7 @@ import Image from "next/image"
 import NotFoundImage from "../../../public/assets/undraw_page_not_found_re_e9o6.svg"
 
 export const metadata: Metadata = {
-    title: "404 | Sabiá",
+    title: "404",
     description: "Sorry, we can't find that page. You'll find lots to explore on the home page."
 }
 

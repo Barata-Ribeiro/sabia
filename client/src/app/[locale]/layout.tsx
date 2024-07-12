@@ -36,7 +36,10 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
     const t = await getTranslations({ locale: params.locale, namespace: "LayoutRoot" })
 
     return {
-        title: t("title"),
+        title: {
+            default: t("title"),
+            template: "%s | " + t("title")
+        },
         description: t("description")
     }
 }

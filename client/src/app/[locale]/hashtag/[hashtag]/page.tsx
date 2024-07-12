@@ -19,7 +19,7 @@ export async function generateMetadata({ params, searchParams }: HashtagPageProp
     const t = await getTranslations("HashtagPage")
 
     return {
-        title: t("title") + params.hashtag + " | Sabiá",
+        title: t("title") + params.hashtag,
         description: t("description") + params.hashtag + " on page " + searchParams.page
     }
 }
