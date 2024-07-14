@@ -3,10 +3,10 @@
 import login from "@/actions/auth/login"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
+import { useForm } from "@/hooks/useForm"
 import { Link, useRouter } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect } from "react"
-import { useFormState, useFormStatus } from "react-dom"
 import { FaLock } from "react-icons/fa"
 import { FaCircleUser } from "react-icons/fa6"
 
@@ -15,19 +15,18 @@ export default function LoginForm() {
     const localActive = useLocale()
     const router = useRouter()
 
-    const { pending } = useFormStatus()
-    const [state, action] = useFormState(login, {
+    const { isPending, formState, formAction, onSubmit } = useForm(login, {
         ok: false,
         clientError: null,
         response: null
     })
 
     useEffect(() => {
-        if (state.ok) router.push("/home")
-    }, [state.ok, router])
+        if (formState.ok) router.push("/home")
+    }, [formState, router])
 
     return (
-        <form className="mt-6 space-y-6" action={action}>
+        <form className="mt-6 space-y-6" action={formAction} onSubmit={onSubmit}>
             <Input
                 label={t("InputUsername")}
                 icon={<FaCircleUser size={20} />}
@@ -62,8 +61,8 @@ export default function LoginForm() {
                 </div>
             </div>
             <div className="mb-4 mt-1 flex gap-8">
-                <Button type="submit" className="py-2" disabled={pending} aria-disabled={pending}>
-                    {pending ? t("LoginButtonLoading") : t("LoginButton")}
+                <Button type="submit" className="py-2" disabled={isPending} aria-disabled={isPending}>
+                    {isPending ? t("LoginButtonLoading") : t("LoginButton")}
                 </Button>
 
                 <div className="flex max-w-fit items-center gap-2">

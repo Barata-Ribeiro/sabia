@@ -3,10 +3,10 @@
 import register from "@/actions/auth/register"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
+import { useForm } from "@/hooks/useForm"
 import { Link, useRouter } from "@/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect } from "react"
-import { useFormState, useFormStatus } from "react-dom"
 import { FaCircleExclamation } from "react-icons/fa6"
 
 export default function RegisterForm() {
@@ -14,19 +14,18 @@ export default function RegisterForm() {
     const localActive = useLocale()
     const router = useRouter()
 
-    const { pending } = useFormStatus()
-    const [state, action] = useFormState(register, {
+    const { isPending, formState, formAction, onSubmit } = useForm(register, {
         ok: false,
         clientError: null,
         response: null
     })
 
     useEffect(() => {
-        if (state.ok) router.push("/home")
-    }, [state.ok, router])
+        if (formState.ok) router.push("/home")
+    }, [formState, router])
 
     return (
-        <form className="space-y-6" action={action}>
+        <form className="space-y-6" action={formAction} onSubmit={onSubmit}>
             <h1 className="font-heading text-2xl leading-6">{t("Title")}</h1>
 
             <Input label={t("InputUsername")} name="username" className="px-3 py-2.5" required aria-required />
@@ -92,8 +91,8 @@ export default function RegisterForm() {
                     .
                 </label>
             </div>
-            <Button type="submit" className="py-2" disabled={pending} aria-disabled={pending}>
-                {pending ? t("RegisterButtonLoading") : t("RegisterButton")}
+            <Button type="submit" className="py-2" disabled={isPending} aria-disabled={isPending}>
+                {isPending ? t("RegisterButtonLoading") : t("RegisterButton")}
             </Button>
         </form>
     )

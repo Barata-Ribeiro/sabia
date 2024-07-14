@@ -4,10 +4,10 @@ import deleteUserAccount from "@/actions/user/delete-user-account"
 import Button from "@/components/shared/button"
 import Input from "@/components/shared/input"
 import { useUser } from "@/context/user-context-provider"
+import { useForm } from "@/hooks/useForm"
 import { useRouter } from "@/navigation"
 import { useTranslations } from "next-intl"
 import { useCallback, useEffect } from "react"
-import { useFormState, useFormStatus } from "react-dom"
 import { FaCircleExclamation } from "react-icons/fa6"
 
 export default function DeleteAccountForm() {
@@ -19,23 +19,22 @@ export default function DeleteAccountForm() {
         router.back()
     }, [router])
 
-    const { pending } = useFormStatus()
-    const [state, action] = useFormState(deleteUserAccount, {
+    const { isPending, formState, formAction, onSubmit } = useForm(deleteUserAccount, {
         ok: false,
         clientError: null,
         response: null
     })
 
     useEffect(() => {
-        if (state.ok) {
+        if (formState.ok) {
             setUser(null)
             router.push("/")
             router.refresh()
         }
-    }, [state.ok, router, setUser])
+    }, [formState, router, setUser])
 
     return (
-        <form action={action}>
+        <form action={formAction} onSubmit={onSubmit}>
             <div className="flex flex-col gap-1">
                 <input className="hidden" type="hidden" name="userId" value={user?.id} />
                 <input className="hidden" type="hidden" name="username" value={user?.username} />
@@ -60,21 +59,21 @@ export default function DeleteAccountForm() {
                     type="button"
                     onClick={() => dismiss()}
                     className="bg-gray-500 py-2 text-white hover:bg-gray-600 active:bg-gray-700"
-                    disabled={pending}
-                    aria-disabled={pending}
+                    disabled={isPending}
+                    aria-disabled={isPending}
                 >
                     {t("DeleteAccountButtonCancel")}
                 </Button>
                 <Button
                     type="submit"
                     className="bg-red-500 py-2 text-white hover:bg-red-600 active:bg-red-700"
-                    disabled={pending}
-                    aria-disabled={pending}
+                    disabled={isPending}
+                    aria-disabled={isPending}
                 >
-                    {pending ? t("DeleteAccountButtonLoading") : t("DeleteAccountButtonSubmit")}
+                    {isPending ? t("DeleteAccountButtonLoading") : t("DeleteAccountButtonSubmit")}
                 </Button>
             </div>
-            {state.clientError && <p>{state.clientError}</p>}
+            {formState.clientError && <p>{formState.clientError}</p>}
         </form>
     )
 }
