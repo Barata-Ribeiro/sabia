@@ -155,15 +155,15 @@ public class PostService {
                 .map(hashtag -> {
                     Map<String, Object> hashtagMap = new HashMap<>();
                     hashtagMap.put("hashtag", hashtag.getTag());
-                    hashtagMap.put("total_posts", hashtag.getHashtagPosts().size());
-                    hashtagMap.put("created_at", hashtag.getCreatedAt().toString());
+                    hashtagMap.put("totalPosts", hashtag.getHashtagPosts().size());
+                    hashtagMap.put("createdAt", hashtag.getCreatedAt().toString());
 
                     return hashtagMap;
                 })
                 .toList();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("trending_hashtags", trendingHashtags);
+        response.put("trendingHashtags", trendingHashtags);
         response.put(AppConstants.TOTAL_ITEMS, hashtags.size());
 
         return response;
