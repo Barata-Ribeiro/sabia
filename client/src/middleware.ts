@@ -4,7 +4,11 @@ import createIntlMiddleware from "next-intl/middleware"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function middleware(req: NextRequest) {
+    console.log("Request URL:", req.nextUrl.pathname)
+
     const authToken = req.cookies.get("auth_token")?.value
+    console.log("Auth Token:", authToken)
+
     const localePref = req.cookies.get("NEXT_LOCALE")?.value ?? "en"
     const [, locale, ...segments] = req.nextUrl.pathname.split("/")
     let isAuthenticated = false
@@ -21,6 +25,7 @@ export async function middleware(req: NextRequest) {
     if (authToken) {
         const isAuthTokenValid = await verifyToken(authToken)
         if (isAuthTokenValid) isAuthenticated = true
+        console.log("Token valid:", isAuthTokenValid)
     }
 
     if (locale != null && (segments.includes("terms-of-service") || segments.includes("privacy-policy"))) {
@@ -30,12 +35,14 @@ export async function middleware(req: NextRequest) {
     if (!isAuthenticated && !isRedirectionUrl && (!segments.includes("auth") || segments.length === 0)) {
         const url = req.nextUrl.clone()
         url.pathname = `/${localePref}`
+        console.log("Redirecting to:", url.pathname)
         return NextResponse.redirect(new URL(url, req.url))
     }
 
     if (isAuthenticated && (segments.includes("auth") || segments.length === 0)) {
         const url = req.nextUrl.clone()
         url.pathname = `/${localePref}/home`
+        console.log("Redirecting to home:", url.pathname)
         return NextResponse.redirect(new URL(url, req.url))
     }
 

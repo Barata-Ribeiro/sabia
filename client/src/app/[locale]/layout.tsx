@@ -64,7 +64,7 @@ export default async function RootLayout({
     const body_styles = tw`flex h-full min-h-dvh flex-col`
 
     return (
-        <html lang={locale} suppressHydrationWarning={true} className="h-full bg-background-50 dark:bg-background-950">
+        <html lang={locale} className="h-full bg-background-50 dark:bg-background-950">
             <NextIntlClientProvider locale={locale} messages={messages}>
                 <body className={`${body_styles} ${open_sans.variable} ${avarage_sans.variable}`}>
                     <UserContextProvider user={user}>
