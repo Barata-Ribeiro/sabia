@@ -14,10 +14,9 @@ interface GetPostParams {
 export default async function getPost({ id, locale }: GetPostParams) {
     const isEnglishLang = locale === "en"
     const URL = POST_GET_BY_ID(id)
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

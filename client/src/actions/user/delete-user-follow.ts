@@ -12,9 +12,9 @@ export default async function deleteUserFollow(userId: string, followId: string)
     const isEnglishLang = locale === "en"
     const URL = UNFOLLOW_USER(userId, followId)
 
-    try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
+    try {
         const response = await fetch(URL, {
             method: "DELETE",
             headers: {

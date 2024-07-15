@@ -11,10 +11,9 @@ export default async function getUserFollowers(username: string, page = 0) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = USER_GET_FOLLOWERS({ username, perPage: 10, page })
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

@@ -15,9 +15,9 @@ export default async function postNewPost(state: State, formData: FormData) {
 
     const text = formData.get("newPost") as string | null
 
-    try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
+    try {
         if (!text) throw new Error(isEnglishLang ? "Text is required." : "Texto é obrigatório.")
 
         if (text.trim().length === 0)

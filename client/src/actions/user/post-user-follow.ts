@@ -11,10 +11,9 @@ export default async function postUserFollow(userId: string, followId: string) {
     const URL = FOLLOW_USER(userId, followId)
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "POST",
             headers: {

@@ -14,13 +14,12 @@ export default async function getUserPublicFeed(
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = USER_GET_PUBLIC_FEED({ perPage, page, userId })
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
         const options = optionsFront || {
             next: { revalidate: 10, tags: ["feed"] }
         }
-
-        const auth_token = await verifyAuthentication(isEnglishLang)
 
         const response = await fetch(URL, {
             method: "GET",

@@ -11,10 +11,9 @@ export default async function getUserPublicProfile(username: string) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = USER_GET_PUBLIC_PROFILE(username)
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

@@ -11,10 +11,9 @@ export default async function getTrendingHashtags() {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = GET_TRENDING_HASHTAGS()
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

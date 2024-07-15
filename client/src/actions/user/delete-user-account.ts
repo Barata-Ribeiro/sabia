@@ -16,9 +16,9 @@ export default async function deleteUserAccount(state: State, formData: FormData
     const username = formData.get("username") as string | null
     const usernameFromInput = formData.get("usernameDelete") as string | null
 
-    try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
+    try {
         if (!userId) throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
 
         const URL = USER_DELETE_ACCOUNT(userId)

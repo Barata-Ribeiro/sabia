@@ -11,10 +11,9 @@ export default async function getUserRecommendations() {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = GET_USER_RECOMMENDATIONS()
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

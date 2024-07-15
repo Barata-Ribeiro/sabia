@@ -11,10 +11,9 @@ export default async function getPostsByHashtag({ hashtag, page = 0, perPage = 1
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = POST_GET_ALL_BY_HASHTAG({ hashtag, page, perPage })
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

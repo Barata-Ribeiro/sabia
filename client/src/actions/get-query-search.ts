@@ -4,19 +4,15 @@ import { ApiResponse } from "@/interfaces/actions"
 import { POST_SEARCH, USER_SEARCH } from "@/utils/api-urls"
 import ResponseError from "@/utils/response-error"
 import verifyAuthentication from "@/utils/verify-authentication"
-import { getLocale } from "next-intl/server"
 
-export default async function getQuerySearch(query: string, fetchType: "user" | "post", page = 0) {
-    const locale = await getLocale()
+export default async function getQuerySearch(locale: string, query: string, fetchType: "user" | "post", page = 0) {
     const isEnglishLang = locale === "en"
     const USER_URL = USER_SEARCH({ query, page, perPage: 10 })
     const POST_URL = POST_SEARCH({ query, page, perPage: 10 })
-
     const URL = fetchType === "user" ? USER_URL : POST_URL
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "GET",
             headers: {

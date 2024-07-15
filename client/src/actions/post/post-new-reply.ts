@@ -15,8 +15,9 @@ export default async function postNewReply(state: State, formData: FormData) {
     const text = formData.get("replyText") as string | null
     const postId = formData.get("postId") as string
 
+    const auth_token = await verifyAuthentication(isEnglishLang)
+
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
         const URL = POST_REPLY(postId)
 
         if (!text) throw new Error(isEnglishLang ? "Text is required." : "Texto é obrigatório.")

@@ -12,10 +12,9 @@ export default async function postNewRepost(postId: string) {
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = POST_REPOST(postId)
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const response = await fetch(URL, {
             method: "POST",
             headers: {

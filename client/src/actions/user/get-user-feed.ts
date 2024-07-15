@@ -14,10 +14,9 @@ export default async function getUserFeed(
     const locale = await getLocale()
     const isEnglishLang = locale === "en"
     const URL = USER_GET_FEED({ perPage, page, userId })
+    const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        const auth_token = await verifyAuthentication(isEnglishLang)
-
         const options = optionsFront || {
             next: { revalidate: 10, tags: ["feed"] }
         }
