@@ -35,6 +35,7 @@ export const USER_SEARCH = (params: UserSearchParams) => {
     return `${BACKEND_URL}/api/v1/users/public/search?q=${query}&page=${page}&perPage=${perPage}`
 }
 export const GET_USER_RECOMMENDATIONS = () => `${BACKEND_URL}/api/v1/users/public/recommendations`
+export const PUT_UPDATE_USER_PROFILE = (userId: string) => `${BACKEND_URL}/api/v1/users/me/${userId}`
 
 // Post
 export const POST_NEW_POST = () => `${BACKEND_URL}/api/v1/posts/me/new-post`
