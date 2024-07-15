@@ -2,12 +2,18 @@ import getUnsplashRandomImage from "@/actions/get-unsplash-random-image"
 import LoginForm from "@/components/forms/login-form"
 import LoginImage from "@/components/login-image"
 import { UnsplashResponse } from "@/interfaces/unplash"
-import { getLocale, getTranslations } from "next-intl/server"
-import Link from "next/link"
+import { Link } from "@/navigation"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 
-export default async function LoginPage() {
+export default async function LoginPage({
+    params
+}: Readonly<{
+    params: { locale: string }
+}>) {
+    const localeActive = params.locale
+    unstable_setRequestLocale(localeActive)
+
     const t = await getTranslations("LoginPage")
-    const localActive = await getLocale()
 
     const photoResponse = await getUnsplashRandomImage("Thrush")
     const { photo } = photoResponse as { photo: UnsplashResponse }
@@ -32,7 +38,8 @@ export default async function LoginPage() {
                         <p>
                             {t("PageRegisterMessage")}
                             <Link
-                                href={localActive + "/auth/register"}
+                                locale={localeActive}
+                                href="/auth/register"
                                 className="font-semibold text-primary-600 transition-colors duration-300 hover:text-secondary-500"
                             >
                                 {t("PageRegisterLink")}

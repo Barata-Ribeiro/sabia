@@ -6,9 +6,10 @@ import AsideMenu from "@/components/menu/aside-menu"
 import TrendingMenu from "@/components/menu/trending-menu"
 import { FeedResponse, UserContextResponse } from "@/interfaces/user"
 import { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+    unstable_setRequestLocale(params.locale)
     const t = await getTranslations({ locale: params.locale, namespace: "HomePage" })
 
     return {
@@ -22,6 +23,7 @@ export default async function HomePage({
 }: Readonly<{
     params: { locale: string }
 }>) {
+    unstable_setRequestLocale(params.locale)
     const t = await getTranslations({ locale: params.locale, namespace: "HomePage" })
 
     const context = await getUserContext()

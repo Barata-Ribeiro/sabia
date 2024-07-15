@@ -4,17 +4,14 @@ import Repost from "@/components/post/repost"
 import LinkButton from "@/components/shared/link-button"
 import { PostResponse } from "@/interfaces/post"
 import { Metadata } from "next"
-import { getLocale } from "next-intl/server"
 import { HiArrowUturnLeft } from "react-icons/hi2"
 
 interface PostPageProps {
-    params: { username: string; id: string }
+    params: { locale: string; username: string; id: string }
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-    const localeActive = await getLocale()
-
-    const postState = await getPost({ id: params.id, locale: localeActive })
+    const postState = await getPost({ id: params.id, locale: params.locale })
     const post = postState.response?.data as PostResponse
 
     return {
@@ -24,8 +21,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 }
 
 export default async function PostPage({ params }: Readonly<PostPageProps>) {
-    const localeActive = await getLocale()
-
+    const localeActive = params.locale
     const postState = await getPost({ id: params.id, locale: localeActive })
     const post = postState.response?.data as PostResponse
 

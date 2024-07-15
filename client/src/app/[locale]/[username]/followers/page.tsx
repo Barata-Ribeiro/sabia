@@ -5,12 +5,12 @@ import { FollowersResponse } from "@/interfaces/user"
 import { redirect } from "@/navigation"
 import getBase64 from "@/utils/get-base64"
 import { Metadata } from "next"
-import { getLocale } from "next-intl/server"
+import { getLocale, unstable_setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { HiArrowUturnLeft } from "react-icons/hi2"
 
 interface FollowersPageProps {
-    params: { username: string }
+    params: { locale: string; username: string }
     searchParams?: { [key: string]: string | string[] | undefined }
 }
 
@@ -25,11 +25,13 @@ export default async function FollowersPage({ params, searchParams }: Readonly<F
     if (!params.username) return notFound()
     if (!searchParams) return notFound()
 
+    unstable_setRequestLocale(params.locale)
+
     let page = 0
     if (!searchParams.page) return redirect("/" + params.username + "/followers?page=0")
     else page = parseInt(searchParams.page as string)
 
-    const localeActive = await getLocale()
+    const localeActive = params.locale || (await getLocale())
     const englishLang = localeActive === "en"
 
     const followersState = await getUserFollowers(params.username, page)

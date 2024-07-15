@@ -5,11 +5,14 @@ import { UserContextResponse } from "@/interfaces/user"
 import { NULL_AVATAR } from "@/utils/constants"
 import getBase64 from "@/utils/get-base64"
 import { Metadata } from "next"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 import { HiExclamationCircle } from "react-icons/hi2"
 
-export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("SettingsPage")
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+    const t = await getTranslations({
+        locale: params.locale,
+        namespace: "SettingsPage"
+    })
 
     return {
         title: t("PageTitle"),
@@ -17,9 +20,19 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function SettingsPage() {
-    const t = await getTranslations("SettingsPage")
-    const localeActive = await getLocale()
+export default async function SettingsPage({
+    params
+}: Readonly<{
+    params: { locale: string }
+}>) {
+    const localeActive = params.locale
+    unstable_setRequestLocale(localeActive)
+
+    const t = await getTranslations({
+        locale: params.locale,
+        namespace: "SettingsPage"
+    })
+
     const context = await getUserContext()
     const user = context.response?.data as UserContextResponse
 

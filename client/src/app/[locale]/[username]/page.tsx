@@ -8,12 +8,12 @@ import ProfileTop from "@/components/profile/profile-top"
 import LinkButton from "@/components/shared/link-button"
 import { FeedResponse, UserPublicProfileResponse } from "@/interfaces/user"
 import { dateFormat } from "@/utils/date-format"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { HiCalendarDays, HiCheckBadge, HiLink } from "react-icons/hi2"
 
 interface ProfilePageProps {
-    params: { username: string }
+    params: { locale: string; username: string }
 }
 
 export async function generateMetadata({ params }: ProfilePageProps) {
@@ -36,11 +36,10 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 export default async function ProfilePage({ params }: Readonly<ProfilePageProps>) {
     if (!params.username) return notFound()
 
-    const [t, localeActive, profileState] = await Promise.all([
-        getTranslations("ProfilePage"),
-        getLocale(),
-        getUserPublicProfile(params.username)
-    ])
+    const localeActive = params.locale
+    unstable_setRequestLocale(localeActive)
+
+    const [t, profileState] = await Promise.all([getTranslations("ProfilePage"), getUserPublicProfile(params.username)])
 
     const isEnglishLang = localeActive === "en"
     const profile = profileState.response?.data as UserPublicProfileResponse

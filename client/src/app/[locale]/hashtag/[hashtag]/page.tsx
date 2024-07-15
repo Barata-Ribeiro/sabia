@@ -6,17 +6,20 @@ import LinkButton from "@/components/shared/link-button"
 import { PostsHashtagResponse } from "@/interfaces/post"
 import { redirect } from "@/navigation"
 import { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { HiArrowUturnLeft } from "react-icons/hi2"
 
 interface HashtagPageProps {
-    params: { hashtag: string }
+    params: { locale: string; hashtag: string }
     searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ params, searchParams }: HashtagPageProps): Promise<Metadata> {
-    const t = await getTranslations("HashtagPage")
+    const t = await getTranslations({
+        locale: params.locale,
+        namespace: "HashtagPage"
+    })
 
     return {
         title: t("title") + params.hashtag,
@@ -26,6 +29,7 @@ export async function generateMetadata({ params, searchParams }: HashtagPageProp
 
 export default async function HashtagPage({ params, searchParams }: Readonly<HashtagPageProps>) {
     if (!params.hashtag) return notFound()
+    unstable_setRequestLocale(params.locale)
 
     const t = await getTranslations("HashtagPage")
 

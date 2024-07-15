@@ -1,4 +1,5 @@
 import NewPostModal from "@/components/modal/new-post-modal"
+import { unstable_setRequestLocale } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 interface NewPostPageProps {
@@ -11,6 +12,7 @@ export async function generateMetadata({ params }: NewPostPageProps) {
 
 export default function NewPostPage({ params }: Readonly<NewPostPageProps>) {
     if (!params.username) return notFound()
+    unstable_setRequestLocale(params.locale)
 
     return (
         <div>

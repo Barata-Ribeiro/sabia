@@ -1,12 +1,15 @@
 import RegisterForm from "@/components/forms/register-form"
 import { Metadata } from "next"
 import { useTranslations } from "next-intl"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 import Image from "next/image"
 import Link from "next/link"
 
-export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("RegisterPage")
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+    const t = await getTranslations({
+        locale: params.locale,
+        namespace: "RegisterPage"
+    })
 
     return {
         title: t("PageTitle"),
@@ -14,7 +17,12 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default function RegisterPage() {
+export default function RegisterPage({
+    params
+}: Readonly<{
+    params: { locale: string }
+}>) {
+    unstable_setRequestLocale(params.locale)
     const t = useTranslations("RegisterPage")
 
     return (

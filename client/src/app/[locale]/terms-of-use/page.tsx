@@ -2,10 +2,13 @@ import SecondaryHeader from "@/components/global/secondary-header"
 import ReadingIndicator from "@/components/shared/reading-indicator"
 import ScrollToTopButton from "@/components/shared/scroll-to-top-button"
 import { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 
-export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("TermsOfUse")
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+    const t = await getTranslations({
+        locale: params.locale,
+        namespace: "TermsOfUse"
+    })
 
     return {
         title: t("TermsTitle"),
@@ -13,7 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default function TermsOfUsePage() {
+export default function TermsOfUsePage({
+    params
+}: Readonly<{
+    params: { locale: string }
+}>) {
+    unstable_setRequestLocale(params.locale)
     return (
         <main role="main">
             <ReadingIndicator />

@@ -5,13 +5,13 @@ import ProfileEntity from "@/components/profile/profile-entity"
 import LinkButton from "@/components/shared/link-button"
 import { PostSearchResponse } from "@/interfaces/post"
 import { UserSearchResponse } from "@/interfaces/user"
-import { redirect } from "@/navigation"
 import getBase64 from "@/utils/get-base64"
-import { getLocale } from "next-intl/server"
-import { notFound } from "next/navigation"
+import { unstable_setRequestLocale } from "next-intl/server"
+import { notFound, redirect } from "next/navigation"
 import { HiArrowUturnLeft } from "react-icons/hi2"
 
 interface SearchPageProps {
+    params: { locale: string }
     searchParams: { [key: string]: string | string[] | undefined }
 }
 
@@ -20,18 +20,17 @@ type resolvedListOfBlurredDataUrl = ({
     blurredDataUrl: string | undefined
 } | null)[]
 
-export default async function SearchPage({ searchParams }: Readonly<SearchPageProps>) {
+export default async function SearchPage({ params, searchParams }: Readonly<SearchPageProps>) {
+    unstable_setRequestLocale(params.locale)
     if (!searchParams.q) return notFound()
 
-    const localeActive = await getLocale()
-
     let page = 0
-    if (!searchParams.page) return redirect("/search?q=" + searchParams.q + "&page=0")
+    if (!searchParams.page) return redirect(params.locale + "/search?q=" + searchParams.q + "&page=0")
     else page = parseInt(searchParams.page as string)
 
     const query = searchParams.q as string
     const fetchType = query.startsWith("@") ? "user" : "post"
-    const searchState = await getQuerySearch(query, fetchType, page)
+    const searchState = await getQuerySearch(params.locale, query, fetchType, page)
     const searchResponse =
         fetchType === "user"
             ? (searchState.response?.data as UserSearchResponse)
@@ -44,7 +43,7 @@ export default async function SearchPage({ searchParams }: Readonly<SearchPagePr
             if (!user.avatarImageUrl) return null
             return {
                 userId: user.id,
-                blurredDataUrl: await getBase64(user.avatarImageUrl, localeActive)
+                blurredDataUrl: await getBase64(user.avatarImageUrl, params.locale)
             }
         })
 

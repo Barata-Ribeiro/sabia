@@ -4,10 +4,13 @@ import ReadingIndicator from "@/components/shared/reading-indicator"
 import ScrollToTopButton from "@/components/shared/scroll-to-top-button"
 import { Link } from "@/navigation"
 import { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 
-export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("PrivacyPolicy")
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+    const t = await getTranslations({
+        locale: params.locale,
+        namespace: "PrivacyPolicy"
+    })
 
     return {
         title: t("PolicyTitle"),
@@ -20,6 +23,7 @@ export default async function PrivacyPolicyPage({
 }: Readonly<{
     params: { locale: string }
 }>) {
+    unstable_setRequestLocale(params.locale)
     const t = await getTranslations({
         locale: params.locale,
         namespace: "PrivacyPolicy"
