@@ -5,7 +5,7 @@ import { getTranslations, unstable_setRequestLocale } from "next-intl/server"
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
     const t = await getTranslations({
         locale: params.locale,
-        namespace: "DeleteAccountTitle"
+        namespace: "DeleteAccountModal"
     })
     return {
         title: t("DeleteAccountTitle"),

@@ -419,5 +419,9 @@
             }
         },
         "GoBackScreenReader": "Voltar à navegação"
+    },
+    "TermsOfUse": {
+        "TermsTitle": "Termos de Uso",
+        "TermsDescription": "Estes são os termos de uso do nosso site. Como usuário do nosso site, você deve garantir que leu os termos de uso e concorda com eles."
     }
 }

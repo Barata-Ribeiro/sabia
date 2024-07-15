@@ -419,5 +419,9 @@
             }
         },
         "GoBackScreenReader": "Go back to navigation"
+    },
+    "TermsOfUse": {
+        "TermsTitle": "Terms of Use",
+        "TermsDescription": "These are the terms of use of our site. As a user of our site, you must ensure that you read the terms of use and understand the conditions of use of our platform."
     }
 }
