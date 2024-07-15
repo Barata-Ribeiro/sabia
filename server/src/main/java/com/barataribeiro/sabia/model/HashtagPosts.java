@@ -40,11 +40,11 @@ public class HashtagPosts {
             nullable = false)
     private Post posts;
 
-    @Column(name = "created_at")
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(nullable = false)
     @UpdateTimestamp
     private Instant updatedAt;
 }

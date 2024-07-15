@@ -233,10 +233,10 @@ public class UserService {
         user.setUsername(validatedInputData.get(AppConstants.USERNAME).toString());
         user.setDisplayName(validatedInputData.get(AppConstants.DISPLAY_NAME).toString());
         user.setFullName(validatedInputData.get(AppConstants.FULL_NAME).toString());
-        user.setBirthDate(body.birth_date());
+        user.setBirthDate(body.birthDate());
         user.setGender(body.gender());
         user.setEmail(validatedInputData.get(AppConstants.EMAIL).toString());
-        user.setPassword(passwordEncoder.encode(body.new_password()));
+        user.setPassword(passwordEncoder.encode(body.newPassword()));
         user.setAvatarImageUrl(validatedInputData.get(AppConstants.AVATAR_IMAGE_URL).toString());
         user.setCoverImageUrl(validatedInputData.get(AppConstants.COVER_IMAGE_URL).toString());
         user.setBiography(validatedInputData.get(AppConstants.BIOGRAPHY).toString());
@@ -479,14 +479,14 @@ public class UserService {
     }
 
     private void validateNewPassword(@NotNull ProfileRequestDTO body, User user, boolean isEnglishLang) {
-        if (body.new_password() != null && !body.new_password().isEmpty()) {
-            if (!validation.isPasswordValid(body.new_password())) {
+        if (body.newPassword() != null && !body.newPassword().isEmpty()) {
+            if (!validation.isPasswordValid(body.newPassword())) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The new password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long."
                                        : "A nova senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um dígito, um caractere especial, e ter pelo menos 8 caracteres.");
             }
 
-            if (passwordEncoder.matches(body.new_password(), user.getPassword())) {
+            if (passwordEncoder.matches(body.newPassword(), user.getPassword())) {
                 throw new InvalidInput(isEnglishLang
                                        ? "The new password must be different from the current password."
                                        : "A nova senha deve ser diferente da senha atual.");
@@ -524,7 +524,7 @@ public class UserService {
     private static @NotNull @Unmodifiable Map<String, Object> sanitizeBody(@NotNull ProfileRequestDTO body) {
         var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
         var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
-        var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());
+        var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.fullName().strip());
         var sanitizedEmail = StringEscapeUtils.escapeHtml4(body.email().strip());
         var sanitizedBiography = StringEscapeUtils.escapeHtml4(body.biography().strip());
         var sanitizedWebsite = StringEscapeUtils.escapeHtml4(body.website().strip());

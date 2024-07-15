@@ -71,11 +71,11 @@ public class AuthService {
     @Transactional
     public RegisterResponseDTO register(@NotNull RegisterRequestDTO body, String language) {
         var sanitizedUsername = StringEscapeUtils.escapeHtml4(body.username().toLowerCase().strip());
-        var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.display_name().strip());
-        var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.full_name().strip());
+        var sanitizedDisplayName = StringEscapeUtils.escapeHtml4(body.displayName().strip());
+        var sanitizedFullName = StringEscapeUtils.escapeHtml4(body.fullName().strip());
         var sanitizedEmail = StringEscapeUtils.escapeHtml4(body.email().strip());
         var sanitizedPassword = StringEscapeUtils.escapeHtml4(body.password().strip());
-        var birthDate = StringEscapeUtils.escapeHtml4(body.birth_date());
+        var birthDate = StringEscapeUtils.escapeHtml4(body.birthDate());
 
         String invalidEmailMessage = language == null || language.equals("en")
                                      ? "Invalid Email address."

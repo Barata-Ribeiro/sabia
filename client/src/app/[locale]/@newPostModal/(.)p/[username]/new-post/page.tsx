@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: NewPostPageProps) {
 }
 
 export default function NewPostPage({ params }: Readonly<NewPostPageProps>) {
-    if (!params.username) return notFound()
     unstable_setRequestLocale(params.locale)
+    if (!params.username) return notFound()
 
     return (
         <div>

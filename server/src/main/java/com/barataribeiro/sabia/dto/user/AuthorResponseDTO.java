@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 public record AuthorResponseDTO(String id,
                                 String username,
-                                String display_name,
-                                String avatar_image_url,
-                                Boolean is_verified,
+                                String displayName,
+                                String avatarImageUrl,
+                                Boolean isVerified,
                                 Roles role) implements Serializable {
 }
