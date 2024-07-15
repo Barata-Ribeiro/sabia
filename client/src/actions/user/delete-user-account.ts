@@ -19,26 +19,25 @@ export default async function deleteUserAccount(state: State, formData: FormData
     const auth_token = await verifyAuthentication(isEnglishLang)
 
     try {
-        if (!userId) throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
+        if (!userId) return ResponseError(new Error(isEnglishLang ? "Unauthorized." : "Não autorizado."), locale)
 
         const URL = USER_DELETE_ACCOUNT(userId)
 
-        if (!username || !usernameFromInput) throw new Error(isEnglishLang ? "Unauthorized." : "Não autorizado.")
+        if (!username || !usernameFromInput)
+            return ResponseError(new Error(isEnglishLang ? "Unauthorized." : "Não autorizado."), locale)
 
         if (username !== usernameFromInput.split("-DELETE")[0]) {
-            throw new Error(
-                isEnglishLang
-                    ? "The username you entered does not match the username of the account you are trying to delete."
-                    : "O nome de usuário que você digitou não corresponde ao nome de usuário da conta que você está tentando excluir."
-            )
+            const message = isEnglishLang
+                ? "The username you entered does not match the username of the account you are trying to delete."
+                : "O nome de usuário que você digitou não corresponde ao nome de usuário da conta que você está tentando excluir."
+            return ResponseError(new Error(message), locale)
         }
 
         if (!usernameFromInput.endsWith("-DELETE")) {
-            throw new Error(
-                isEnglishLang
-                    ? "To delete your account, type your username followed by the word '-DELETE'."
-                    : "Para excluir sua conta, digite seu nome de usuário seguido da palavra '-DELETE'."
-            )
+            const message = isEnglishLang
+                ? "To delete your account, type your username followed by the word '-DELETE'."
+                : "Para excluir sua conta, digite seu nome de usuário seguido da palavra '-DELETE'."
+            return ResponseError(new Error(message), locale)
         }
 
         const response = await fetch(URL, {
@@ -52,7 +51,7 @@ export default async function deleteUserAccount(state: State, formData: FormData
 
         const responseData = (await response.json()) as ApiResponse
 
-        if (!response.ok) throw new Error(responseData.message)
+        if (!response.ok) return ResponseError(new Error(responseData.message), locale)
 
         cookies().delete("auth_token")
 

@@ -33,31 +33,32 @@ export default async function register(state: State, formData: FormData) {
 
     try {
         if (mappedFormData.includes(null)) {
-            throw new Error(isEnglish ? "All fields are required." : "Todos os campos são obrigatórios.")
+            const message = isEnglish ? "All fields are required." : "Todos os campos são" + " obrigatórios."
+            return ResponseError(new Error(message), locale)
         }
 
         if (!usernameValidation(mappedFormData.at(0) as string)) {
-            throw new Error(
-                isEnglish
-                    ? "Username must be between 4 and 20 characters long and can only contain letters and numbers."
-                    : "O nome de usuário deve ter entre 4 e 20 caracteres e só pode conter letras e números."
-            )
+            const message = isEnglish
+                ? "Username must be between 4 and 20 characters long and can only contain letters and numbers."
+                : "O nome de usuário deve ter entre 4 e 20 caracteres e só pode conter letras e números."
+            return ResponseError(new Error(message), locale)
         }
 
         if (!emailValidation(mappedFormData.at(5) as string)) {
-            throw new Error(isEnglish ? "Invalid email address." : "Endereço de e-mail inválido.")
+            const message = isEnglish ? "Invalid email address." : "Endereço de e-mail inválido."
+            return ResponseError(new Error(message), locale)
         }
 
         if (!passwordValidation(mappedFormData.at(6) as string)) {
-            throw new Error(
-                isEnglish
-                    ? "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-                    : "A senha deve ter pelo menos 8 caracteres, conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
-            )
+            const message = isEnglish
+                ? "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+                : "A senha deve ter pelo menos 8 caracteres, conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+            return ResponseError(new Error(message), locale)
         }
 
         if (mappedFormData.at(6) !== mappedFormData.at(7)) {
-            throw new Error(isEnglish ? "Passwords do not match." : "As senhas não coincidem.")
+            const message = isEnglish ? "Passwords do not match." : "As senhas não coincidem."
+            return ResponseError(new Error(message), locale)
         }
 
         const fullName = `${String(mappedFormData.at(2)).trim()} ${String(mappedFormData.at(3)).trim()}`
@@ -83,7 +84,7 @@ export default async function register(state: State, formData: FormData) {
 
         const responseData = (await response.json()) as ApiResponse
 
-        if (!response.ok) throw new Error(responseData.message)
+        if (!response.ok) return ResponseError(new Error(responseData.message), locale)
 
         const loginResponseFormData = new FormData()
         loginResponseFormData.set("username", String(mappedFormData.at(0)).trim())

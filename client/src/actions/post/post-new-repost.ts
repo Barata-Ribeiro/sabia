@@ -27,7 +27,7 @@ export default async function postNewRepost(postId: string) {
 
         const responseData = (await response.json()) as ApiResponse
 
-        if (!response.ok) throw new Error(responseData.message)
+        if (!response.ok) return ResponseError(new Error(responseData.message), locale)
 
         const data = responseData.data as PostResponse
 

@@ -14,7 +14,8 @@ export default async function getUnsplashRandomImage(query: string) {
         const photo = (await photoResponse.json()) as UnsplashResponse
 
         if (!photoResponse.ok) {
-            throw new Error("Failed to fetch image " + photoResponse.statusText + " - " + photoResponse.status)
+            console.error("Failed to fetch image " + photoResponse.statusText + " - " + photoResponse.status)
+            return { photo: null }
         }
 
         return { photo }

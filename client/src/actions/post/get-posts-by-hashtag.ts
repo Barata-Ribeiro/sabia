@@ -26,7 +26,7 @@ export default async function getPostsByHashtag({ hashtag, page = 0, perPage = 1
 
         const responseData = (await response.json()) as ApiResponse
 
-        if (!response.ok) throw new Error(responseData.message)
+        if (!response.ok) return ResponseError(new Error(responseData.message), locale)
 
         const data = responseData.data as PostsHashtagResponse
 

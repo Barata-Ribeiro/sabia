@@ -20,10 +20,11 @@ export default async function login(state: State, formData: FormData) {
     const rememberMe = formData.get("rememberMe") === "on"
 
     try {
-        const errorMessage =
-            locale === "en" ? "Username and password are required." : "Usuário e senha são obrigatórios."
-
-        if (!username || !password) throw new Error(errorMessage)
+        if (!username || !password) {
+            const errorMessage =
+                locale === "en" ? "Username and password are required." : "Usuário e senha são obrigatórios."
+            return ResponseError(new Error(errorMessage), locale)
+        }
 
         const response = await fetch(URL, {
             method: "POST",
@@ -40,7 +41,7 @@ export default async function login(state: State, formData: FormData) {
 
         const responseData = (await response.json()) as ApiResponse
 
-        if (!response.ok) throw new Error(responseData.message)
+        if (!response.ok) return ResponseError(new Error(responseData.message), locale)
 
         const loginResponse = responseData.data as AuthLoginResponse
 
