@@ -41,5 +41,7 @@ public interface PostRepository extends JpaRepository<Post, String> {
     @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
     Page<Post> findDistinctByAuthorInOrderByCreatedAtDesc(List<User> authors, Pageable pageable);
 
-
+    @EntityGraph(attributePaths = {"author", "repostOff.hashtags", "inReplyTo.hashtags", "postHashtags", "likes", "reposts.hashtags", "replies.hashtags", "hashtags"})
+    @Query("select count(p) from Post p where p.author.id = :authorId")
+    long countByAuthorId(@Param("authorId") String authorId);
 }

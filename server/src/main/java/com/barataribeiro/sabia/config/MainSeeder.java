@@ -123,22 +123,28 @@ public class MainSeeder {
 
         List<User> usersSeed = userRepository.saveAll(List.of(user1, user2, jason));
 
-        for (int i = 1; i <= 200; i++) {
-            Post post1 = Post.builder()
-                    .author(usersSeed.get(i % 3))
-                    .text("Post " + i + " from User One")
-                    .build();
+        for (User user : usersSeed) {
+            if (postRepository.countByAuthorId(user.getId()) == 0) {
+                for (int i = 1; i <= 200; i++) {
+                    Post post1 = Post.builder()
+                            .author(usersSeed.get(i % 3))
+                            .text("Post " + i + " from User One")
+                            .build();
 
-            postRepository.save(post1);
+                    postRepository.save(post1);
 
-            Post post2 = Post.builder()
-                    .author(usersSeed.get(i % 3))
-                    .text("Post " + i + " from User Two, #enjoy #hashtag" + i)
-                    .build();
+                    Post post2 = Post.builder()
+                            .author(usersSeed.get(i % 3))
+                            .text("Post " + i + " from User Two, #enjoy #hashtag" + i)
+                            .build();
 
-            postRepository.save(post2);
+                    postRepository.save(post2);
 
-            seedDatabaseWithPostContainingHashtag(Post.builder().author(usersSeed.get(i % 3)), postRepository, hashtagRepository, hashtagPostsRepository);
+                    seedDatabaseWithPostContainingHashtag(Post.builder().author(usersSeed.get(i % 3)), postRepository, hashtagRepository, hashtagPostsRepository);
+                }
+            } else {
+                logger.atLevel(Level.INFO).log("User {} already has posts", user.getUsername());
+            }
         }
     }
 
