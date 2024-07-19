@@ -11,7 +11,7 @@ const nextConfig = {
     skipTrailingSlashRedirect: true,
     experimental: {
         optimizePackageImports: [
-            "tailwindcss", "react-icons/hi2", "react-icons/fa", "react-icons/fa6"
+            "tailwindcss", "@headlessui/react", "react-icons/hi2", "react-icons/fa", "react-icons/fa6"
         ]
     },
     images: {
