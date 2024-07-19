@@ -1,6 +1,6 @@
 export default function ProfileLoading() {
     return (
-        <div className="max-w-[37.5rem] flex-1 overflow-y-scroll border-x">
+        <div className="max-w-[37.5rem] flex-1 border-x">
             <div className="w-full">
                 <div className="mb-4 w-full px-4 pt-4">
                     <div className="h-16 rounded bg-gray-200"></div>
