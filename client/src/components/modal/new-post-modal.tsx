@@ -31,9 +31,9 @@ export default function NewPostModal() {
             onClick={handleOutsideClick}
             onClose={router.back}
             aria-labelledby="dialogTitle"
-            className="flex rounded-lg shadow-lg backdrop:bg-black/40 backdrop:backdrop-blur-sm"
+            className="flex rounded-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] backdrop-filter backdrop:bg-black/40 backdrop:backdrop-blur-sm"
         >
-            <div className="mx-auto flex size-fit flex-col items-start justify-between gap-8 rounded-lg border border-background-900 bg-white p-4 font-body">
+            <div className="mx-auto flex size-fit flex-col items-start justify-between gap-8 rounded-lg bg-white p-4 font-body">
                 <header className="font-heading">
                     <h4
                         id="dialogTitle"
@@ -45,7 +45,7 @@ export default function NewPostModal() {
                         {t("NewPostSubtitle")}
                     </p>
                 </header>
-                <article className="flex gap-4">
+                <article className="grid w-full gap-4 md:flex">
                     <Image
                         src={user?.avatarImageUrl ?? NULL_AVATAR}
                         alt={`${t("NewPostAvatarAlt")}${user?.username}`}

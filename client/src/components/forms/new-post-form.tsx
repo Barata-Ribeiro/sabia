@@ -39,8 +39,8 @@ export default function NewPostForm() {
 
     return (
         <form action={formAction} onSubmit={onSubmit}>
-            <div className="relative w-[32rem]">
-                <div className="relative w-full min-w-[200px]">
+            <div className="relative w-full md:w-[32rem]">
+                <div className="relative w-full">
                     <textarea
                         id="new-post"
                         name="newPost"
@@ -53,7 +53,7 @@ export default function NewPostForm() {
                     ></textarea>
                     <label className={textAreaLabelStyles}>{t("TextAreaLabel")}</label>
                 </div>
-                <div className="flex w-full justify-between py-1.5">
+                <div className="grid w-full gap-2 py-1.5 md:flex md:justify-between">
                     <EmojiPicker
                         lazyLoadEmojis={true}
                         emojiStyle={EmojiStyle.NATIVE}

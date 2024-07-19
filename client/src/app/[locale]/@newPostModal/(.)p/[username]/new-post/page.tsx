@@ -6,17 +6,9 @@ interface NewPostPageProps {
     params: { locale: string; username: string }
 }
 
-export async function generateMetadata({ params }: NewPostPageProps) {
-    return { title: `New Post - ${params.username}` }
-}
-
 export default function NewPostPage({ params }: Readonly<NewPostPageProps>) {
     unstable_setRequestLocale(params.locale)
     if (!params.username) return notFound()
 
-    return (
-        <div>
-            <NewPostModal />
-        </div>
-    )
+    return <NewPostModal />
 }

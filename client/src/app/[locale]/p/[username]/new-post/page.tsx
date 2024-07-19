@@ -9,5 +9,5 @@ export default async function NewPostPage({ params }: NewPostPageProps) {
     unstable_setRequestLocale(params.locale)
     if (!params.username) return notFound()
 
-    return redirect(params.locale + "/home")
+    return redirect("/" + params.locale + "/home")
 }
