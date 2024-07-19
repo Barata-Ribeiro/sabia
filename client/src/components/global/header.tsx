@@ -4,21 +4,35 @@ import logout from "@/actions/auth/logout"
 import LinkButton from "@/components/shared/link-button"
 import { useUser } from "@/context/user-context-provider"
 import { UserContextResponse } from "@/interfaces/user"
-import { usePathname, useRouter } from "@/navigation"
+import { usePathname } from "@/navigation"
 import { NULL_AVATAR } from "@/utils/constants"
+import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    MenuSeparator,
+    Transition
+} from "@headlessui/react"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { Fragment } from "react"
 import { HiBars3BottomLeft, HiXMark } from "react-icons/hi2"
 import { TbPencilPlus } from "react-icons/tb"
 import { twMerge } from "tailwind-merge"
+import sabiaLogo from "../../../public/assets/logo-bird.svg"
 
-export default function Header({ user }: { user: UserContextResponse | null }) {
+export default function Header({
+    user
+}: Readonly<{
+    user: UserContextResponse | null
+}>) {
     const t = useTranslations("Header")
     const pathname = usePathname()
-    const router = useRouter()
     const { setUser } = useUser()
-    const mobileMenuRef = useRef<HTMLDivElement | null>(null)
 
     const shouldNotRender =
         pathname === "/privacy-policy" ||
@@ -27,76 +41,57 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
         pathname === "/auth/register" ||
         pathname === "/"
 
-    const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
     const menuLinksStyle = twMerge(
-        `rounded-md px-3 py-2 text-sm font-medium`,
-        `${pathname === "/home" ? "bg-background-900 text-body-50" : "text-body-300 hover:bg-background-700 hover:text-body-50"}`
+        "inline-flex items-center border-b-4 border-accent-500 px-1 pt-2 text-sm font-medium ",
+        `${
+            pathname === "/home"
+                ? "bg-background-900 text-body-50"
+                : "text-body-300 hover:bg-background-700 hover:text-body-50 active:border-accent-500 active:bg-background-900 active:text-body-50"
+        }`
     )
 
-    const mobileMenuLinksStyle = twMerge(
-        `block rounded-md px-3 py-2 text-base font-medium hover:text-body-50`,
-        `${pathname === "/home" ? "bg-background-900 text-body-50" : "text-body-300 hover:bg-background-700"}`
+    const disclosureButtonStyle = twMerge(
+        "block border-l-4 border-accent-500 py-2 pl-3 pr-4 font-medium",
+        `${
+            pathname === "/home"
+                ? "bg-background-900 text-body-50"
+                : "text-body-300 hover:bg-background-700 hover:text-body-50 active:border-accent-500 active:bg-background-900 active:text-body-50"
+        }`
     )
 
     async function handleLogout() {
         await logout()
         setUser(null)
-        setIsAvatarMenuOpen(false)
-        router.push("/")
-        router.refresh()
+        window.location.href = "/"
     }
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
-                setIsAvatarMenuOpen(false)
-            }
-        }
-
-        document.addEventListener("click", handleClickOutside)
-        return () => document.removeEventListener("click", handleClickOutside)
-    }, [])
+    if (shouldNotRender) return null
 
     return (
-        !shouldNotRender && (
-            <header className="font-body text-body-600">
-                <nav className="bg-background-800">
-                    <div className="container mx-auto px-2 sm:px-6 lg:px-8">
-                        <div className="relative flex h-16 items-center justify-between">
+        <Disclosure as="nav" className="bg-background-800 shadow">
+            {({ open }) => (
+                <>
+                    <div className="container mx-auto px-2 font-body sm:px-6 lg:px-8">
+                        <div className="relative flex h-16 justify-between">
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                                <button
-                                    type="button"
-                                    className="relative inline-flex items-center justify-center rounded-md p-2 text-body-400 hover:bg-background-700 hover:text-body-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-background-50"
-                                    aria-controls="mobile-menu"
-                                    aria-expanded="false"
-                                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                >
-                                    <span className="absolute -inset-0.5"></span>
+                                {/* Mobile menu button */}
+                                <DisclosureButton className="inline-flex items-center justify-center rounded-md border border-background-700 p-2 text-body-600 hover:bg-background-100 hover:text-body-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-500">
                                     <span className="sr-only">{t("NavSRMainMenu")}</span>
-
-                                    {isMobileMenuOpen ? <HiXMark size={24} /> : <HiBars3BottomLeft size={24} />}
-                                </button>
+                                    {open ? (
+                                        <HiXMark className="block h-6 w-6" aria-hidden="true" />
+                                    ) : (
+                                        <HiBars3BottomLeft className="block h-6 w-6" aria-hidden="true" />
+                                    )}
+                                </DisclosureButton>
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center">
-                                    <Image
-                                        src="/assets/logo-bird.svg"
-                                        alt="Mini logo"
-                                        className="h-8 w-auto"
-                                        width={120}
-                                        height={85}
-                                        sizes="100vw"
-                                        priority
-                                    />
+                                    <Image src={sabiaLogo} alt="Mini logo" className="h-8 w-auto" priority />
                                 </div>
-                                <div className="hidden sm:ml-6 sm:block">
-                                    <div className="flex space-x-4">
-                                        <LinkButton href="/home" className={menuLinksStyle} aria-current="page">
-                                            {t("NavMenuHome")}
-                                        </LinkButton>
-                                    </div>
+                                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                                    <LinkButton href="/home" className={menuLinksStyle} aria-current="page">
+                                        {t("NavMenuHome")}
+                                    </LinkButton>
                                 </div>
                             </div>
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -111,20 +106,13 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                     </LinkButton>
                                 )}
 
-                                <div className="relative ml-3">
+                                {/* Profile dropdown */}
+                                <Menu as="div" className="relative ml-3">
                                     <div>
-                                        <button
-                                            type="button"
-                                            className="relative flex rounded-full bg-background-800 text-sm focus:outline-none focus:ring-2 focus:ring-background-50 focus:ring-offset-2 focus:ring-offset-background-800"
-                                            id="user-menu-button"
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            onClick={() => setIsAvatarMenuOpen(!isAvatarMenuOpen)}
-                                        >
-                                            <span className="absolute -inset-1.5"></span>
+                                        <MenuButton className="flex rounded-full bg-background-950 text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2">
                                             <span className="sr-only">{t("NavSRUseMenu")}</span>
                                             <Image
-                                                className="h-8 w-8 rounded-full object-cover"
+                                                className="h-8 w-8 rounded-full"
                                                 src={user?.avatarImageUrl ?? NULL_AVATAR}
                                                 alt={`${t("NavUserImageAlt")} ${user?.username}`}
                                                 title={`${t("NavUserImageAlt")} ${user?.username}`}
@@ -132,68 +120,56 @@ export default function Header({ user }: { user: UserContextResponse | null }) {
                                                 height={256}
                                                 quality={50}
                                             />
-                                        </button>
+                                        </MenuButton>
                                     </div>
-                                    {/*MOBILE MENU*/}
-                                    <div
-                                        ref={mobileMenuRef}
-                                        className={`${isAvatarMenuOpen ? "absolute" : "hidden"} right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition-all focus:outline-none`}
-                                        role="menu"
-                                        aria-orientation="vertical"
-                                        aria-labelledby="user-menu-button"
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="transform opacity-0 scale-95"
+                                        enterTo="transform opacity-100 scale-100"
+                                        leave="transition ease-in duration-75"
+                                        leaveFrom="transform opacity-100 scale-100"
+                                        leaveTo="transform opacity-0 scale-95"
                                     >
-                                        <div>
-                                            <p className="block select-none px-4 py-2 text-sm text-body-700">
-                                                {t("NavUserGreet")} @{user?.username}
-                                            </p>
-
-                                            <hr className="bg-background-100" />
-                                        </div>
-                                        <LinkButton
-                                            href={"/" + user?.username}
-                                            className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
-                                            role="menuitem"
-                                            tabIndex={-1}
-                                            onClick={() => setIsAvatarMenuOpen(false)}
-                                            id="user-menu-item-0"
-                                        >
-                                            {t("NavUserMenuProfile")}
-                                        </LinkButton>
-                                        <LinkButton
-                                            href="/settings"
-                                            className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
-                                            role="menuitem"
-                                            tabIndex={-1}
-                                            onClick={() => setIsAvatarMenuOpen(false)}
-                                            id="user-menu-item-1"
-                                        >
-                                            {t("NavUserMenuSettings")}
-                                        </LinkButton>
-                                        <LinkButton
-                                            href="/"
-                                            onClick={handleLogout}
-                                            className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
-                                            role="menuitem"
-                                            tabIndex={-1}
-                                            id="user-menu-item-2"
-                                        >
-                                            {t("NavUserMenuLogout")}
-                                        </LinkButton>
-                                    </div>
-                                </div>
+                                        <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <MenuItem>
+                                                <LinkButton
+                                                    href={"/" + user?.username}
+                                                    className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
+                                                >
+                                                    {t("NavUserMenuProfile")}
+                                                </LinkButton>
+                                            </MenuItem>
+                                            <LinkButton
+                                                href="/settings"
+                                                className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
+                                            >
+                                                {t("NavUserMenuSettings")}
+                                            </LinkButton>
+                                            <MenuSeparator className="my-1 h-px bg-background-100" />
+                                            <LinkButton
+                                                href="/"
+                                                onClick={handleLogout}
+                                                className="block px-4 py-2 text-sm text-body-700 hover:bg-gray-100"
+                                            >
+                                                {t("NavUserMenuLogout")}
+                                            </LinkButton>
+                                        </MenuItems>
+                                    </Transition>
+                                </Menu>
                             </div>
                         </div>
                     </div>
 
-                    <div className={`${isMobileMenuOpen ? "block" : "hidden"} sm:hidden`} id="mobile-menu">
-                        <div className="space-y-1 px-2 pb-3 pt-2">
-                            <LinkButton href="/home" className={mobileMenuLinksStyle} aria-current="page">
+                    <DisclosurePanel className="sm:hidden">
+                        <div className="space-y-1 pb-4 pt-2">
+                            <DisclosureButton as="a" href="/home" className={disclosureButtonStyle}>
                                 {t("NavMenuHome")}
-                            </LinkButton>
+                            </DisclosureButton>
                         </div>
-                    </div>
-                </nav>
-            </header>
-        )
+                    </DisclosurePanel>
+                </>
+            )}
+        </Disclosure>
     )
 }
