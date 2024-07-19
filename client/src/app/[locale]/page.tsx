@@ -10,10 +10,9 @@ export default async function LoginPage({
 }: Readonly<{
     params: { locale: string }
 }>) {
-    const localeActive = params.locale
-    unstable_setRequestLocale(localeActive)
+    unstable_setRequestLocale(params.locale)
 
-    const t = await getTranslations("LoginPage")
+    const t = await getTranslations({ locale: params.locale, namespace: "LoginPage" })
 
     const photoResponse = await getUnsplashRandomImage("Thrush")
     const { photo } = photoResponse as { photo: UnsplashResponse }
@@ -38,7 +37,7 @@ export default async function LoginPage({
                         <p>
                             {t("PageRegisterMessage")}
                             <Link
-                                locale={localeActive}
+                                locale={params.locale}
                                 href="/auth/register"
                                 className="font-semibold text-primary-600 transition-colors duration-300 hover:text-secondary-500"
                             >

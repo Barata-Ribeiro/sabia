@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
         if (isAuthTokenValid) isAuthenticated = true
     }
 
-    if (locale != null && (segments.includes("terms-of-service") || segments.includes("privacy-policy"))) {
+    if (locale != null && (segments.includes("terms-of-use") || segments.includes("privacy-policy"))) {
         return response
     }
 
