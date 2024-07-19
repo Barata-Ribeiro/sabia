@@ -108,6 +108,69 @@
         "ReplyPostButtonLoading": "Respondendo...",
         "ReplyPostButtonSubmit": "Responder"
     },
+    "EditAccountForm": {
+        "AccountInformation": {
+            "Title": "Informações da Conta",
+            "InputUsername": "Nome de Usuário",
+            "DescriptionUsername": "Seu nome de usuário é ",
+            "InputDisplayName": "Nome de Exibição",
+            "DescriptionDisplayName": "Seu nome de exibição é ",
+            "InputEmail": "Email",
+            "DescriptionEmail": "Seu endereço de email é "
+        },
+        "PersonalInformation": {
+            "Title": "Informações Pessoais",
+            "InputFirstName": "Primeiro Nome",
+            "InputLastName": "Último Nome",
+            "DescriptionFullName": "Seu nome completo é ",
+            "InputBirthDate": "Data de Nascimento",
+            "DescriptionBirthDate": "Sua data de nascimento é ",
+            "InputGender": "Gênero",
+            "DescriptionGender": "Seu gênero é ",
+            "NoGender": "Você ainda não definiu seu gênero."
+        },
+        "PublicInformation": {
+            "Title": "Informações Públicas",
+            "URLWarning": "Somente URLs HTTPS são permitidas.",
+            "Avatar": {
+                "Alt": "Seu avatar atual",
+                "Disclaimer": "Por favor, use uma imagem quadrada para melhores resultados. Siga as regras para a melhor experiência."
+            },
+            "Cover": {
+                "Alt": "Sua imagem de capa atual",
+                "Disclaimer": "Por favor, use uma imagem retangular para melhores resultados. Siga as regras para a melhor experiência."
+            },
+            "InputBio": "Biografia",
+            "DescriptionBio": "Sua biografia é ",
+            "NoBio": "Você ainda não definiu sua biografia.",
+            "InputWebsite": "Site",
+            "DescriptionWebsite": "Seu site é ",
+            "NoWebsite": "Você ainda não definiu seu site.",
+            "Location": {
+                "InputState": "Estado",
+                "InputCountry": "País",
+                "Description": "Sua localização é ",
+                "NoLocation": "Você ainda não definiu sua localização."
+            }
+        },
+        "SecurityInformation": {
+            "Title": "Informações de Segurança",
+            "InputNewPassword": "Nova Senha",
+            "InputConfirmPassword": "Confirmar Senha",
+            "PasswordRequirements": "Use pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um caractere especial e um número."
+        },
+        "ConfirmChanges": {
+            "Disclaimer": "Para editar sua conta, você precisa fornecer sua senha atual.",
+            "InputPassword": "Senha Atual",
+            "Terms": {
+                "Part-1": "Ainda concordo com os ",
+                "Link": "Termos de Uso",
+                "Part-2": " enquanto edito minha conta."
+            },
+            "ButtonLoading": "Processando...",
+            "ButtonSubmit": "Editar Conta"
+        }
+    },
     "DeleteAccountModal": {
         "DeleteAccountTitle": "Delete sua conta",
         "DeleteAccountDescription": "Exclua sua conta. Esta ação é irreversível.",

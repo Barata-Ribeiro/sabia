@@ -109,6 +109,69 @@
         "DeleteAccountWarning": "Your account will be deleted permanently!",
         "DeleteAccountParagraph": "Per our terms of service, when you delete your account, all your data will be permanently\n                        erased, and there will be no way to recover it. This action is irreversible and final. The\n                        reason for complete data deletion is to ensure the privacy and security of your account and our\n                        platform. If you are sure you want to delete your account, to confirm this action you must type your username below followed by\n                        the word"
     },
+    "EditAccountForm": {
+        "AccountInformation": {
+            "Title": "Account Information",
+            "InputUsername": "Username",
+            "DescriptionUsername": "Your username is ",
+            "InputDisplayName": "Display Name",
+            "DescriptionDisplayName": "Your display name is ",
+            "InputEmail": "Email",
+            "DescriptionEmail": "Your email address is "
+        },
+        "PersonalInformation": {
+            "Title": "Personal Information",
+            "InputFirstName": "First Name",
+            "InputLastName": "Last Name",
+            "DescriptionFullName": "Your full name is ",
+            "InputBirthDate": "Birth Date",
+            "DescriptionBirthDate": "Your birth date is ",
+            "InputGender": "Gender",
+            "DescriptionGender": "Your gender is ",
+            "NoGender": "You haven't set your gender yet."
+        },
+        "PublicInformation": {
+            "Title": "Public Information",
+            "URLWarning": "Only HTTPS URLs are allowed.",
+            "Avatar": {
+                "Alt": "Your current avatar",
+                "Disclaimer": "Please, use a square image for the best results. Follow the rules for the best experience."
+            },
+            "Cover": {
+                "Alt": "Your current cover image",
+                "Disclaimer": "Please, use a rectangle image for the best results. Follow the rules for the best\n                            experience."
+            },
+            "InputBio": "Biography",
+            "DescriptionBio": "Your biography is ",
+            "NoBio": "You haven't set your biography yet.",
+            "InputWebsite": "Website",
+            "DescriptionWebsite": "Your website is ",
+            "NoWebsite": "You haven't set your website yet.",
+            "Location": {
+                "InputState": "State",
+                "InputCountry": "Country",
+                "Description": "Your location is ",
+                "NoLocation": "You haven't set your location yet."
+            }
+        },
+        "SecurityInformation": {
+            "Title": "Security Information",
+            "InputNewPassword": "New Password",
+            "InputConfirmPassword": "Confirm Password",
+            "PasswordRequirements": "Use at least 8 characters, one uppercase, one lowercase, a special character, and one\n                            number."
+        },
+        "ConfirmChanges": {
+            "Disclaimer": "To edit your account, you need to provide your current password.",
+            "InputPassword": "Current Password",
+            "Terms": {
+                "Part-1": "I still agree with the ",
+                "Link": "Terms of Use",
+                "Part-2": " while editing my account."
+            },
+            "ButtonLoading": "Processing...",
+            "ButtonSubmit": "Edit Account"
+        }
+    },
     "DeleteAccountForm": {
         "InputUsername": "Username",
         "InputConfirmation": "To confirm, type your username followed by the word",
