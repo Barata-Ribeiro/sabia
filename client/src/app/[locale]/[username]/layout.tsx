@@ -12,7 +12,7 @@ interface UsernameLayoutProps {
 export default function UsernameLayout({ children, replyModal = null, params }: Readonly<UsernameLayoutProps>) {
     unstable_setRequestLocale(params.locale)
     return (
-        <main role="main" className="flex h-full font-body">
+        <main role="main" className="flex h-full pr-4 font-body">
             <AsideMenu />
             {children}
             {replyModal}
