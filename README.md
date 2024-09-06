@@ -4,6 +4,10 @@ Sabiá is a **full-stack** microblogging social network inspired by **X** (forme
 
 This repository contains both the backend and frontend implementations of **Sabiá**. The backend is powered by **Java Spring Boot**, ensuring reliable performance and security. The frontend is built with Next.js, offering a dynamic and responsive user interface. Together, these technologies create a fully functional and visually appealing microblogging platform.
 
+**Attention❗**
+
+This project does not include many advanced features found in commercial social networks like X (formerly Twitter). Complex algorithms and resource-intensive functionalities such as trending topics, sophisticated recommendation systems, and real-time updates are not supported. This project aims to demonstrate fundamental concepts and a scalable architecture using modern web development technologies, rather than replicating the full feature set of a production-level social network.
+
 ## Demo
 ![Sabiá](screenshot_demo.png "Sabiá")
 
